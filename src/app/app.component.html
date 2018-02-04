@@ -1,38 +1,38 @@
 <!--The content below is only a placeholder and can be replaced.-->
 
-<nav class="navbar navbar-expand-lg navbar-dark"  ng-controller="HeaderController">
-  <a class="navbar-brand mynav" routerLink="/home" >UpNext</a>
+<!--<nav class="navbar navbar-expand-lg navbar-dark">-->
+  <!--<a class="navbar-brand mynav" routerLink="/home" >UpNext</a>-->
 
-  <button class="navbar-toggler navbar-toggler-right" type="button"
-   data-toggle="collapse" data-target="#navContent" aria-controls="navContent"
-    aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navContent">
-    <ul class="navbar-nav nav-tabs mynav mr-auto">
-      <li ng-class="{ active: isActive('/home')}" class="nav-item mynav">
-        <a class="nav-link" routerLink="/home">Home</a>
-      </li>
-      <li ng-class="{ active: isActive('/radio')}" class="nav-item mynav">
-        <a class="nav-link" routerLink="/radio">Radio</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav mynav">
-      <!--TODO implement li tag below is hidden until someone logs in -->
-      <li class="nav-item" style="visibility: hidden;">
-        <p>Welcome{{title}}!</p>
-      </li>
-      <!--TODO in li tag below, put code to hide the login once someone is logged in. maybe replace it with log out-->
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/login">Login</a>
-      </li>
+  <!--<button class="navbar-toggler navbar-toggler-right" type="button"-->
+   <!--data-toggle="collapse" data-target="#navContent" aria-controls="navContent"-->
+    <!--aria-expanded="false" aria-label="Toggle navigation">-->
+    <!--<span class="navbar-toggler-icon"></span>-->
+  <!--</button>-->
+  <!--<div class="collapse navbar-collapse" id="navContent">-->
+    <!--<ul class="navbar-nav nav-tabs mynav mr-auto">-->
+      <!--<li ngClass="{ active: isActive('/home')}" class="nav-item mynav">-->
+        <!--<a class="nav-link" routerLink="/home">Home</a>-->
+      <!--</li>-->
+      <!--<li ngClass="{ active: isActive('/radio')}" class="nav-item mynav">-->
+        <!--<a class="nav-link" routerLink="/radio">Radio</a>-->
+      <!--</li>-->
+    <!--</ul>-->
+    <!--<ul class="navbar-nav mynav">-->
+      <!--&lt;!&ndash;TODO implement li tag below is hidden until someone logs in &ndash;&gt;-->
+      <!--<li  class="nav-item">-->
 
-    </ul>
-  </div>
+      <!--</li>-->
+      <!--&lt;!&ndash;TODO in li tag below, put code to hide the login once someone is logged in. maybe replace it with log out&ndash;&gt;-->
+      <!--<li class="nav-item">-->
+        <!--<a class="nav-link" routerLink="/login">Login</a>-->
+      <!--</li>-->
+
+    <!--</ul>-->
+  <!--</div>-->
 
 
-
-</nav>
+<!--</nav>-->
+<app-header ></app-header>
   <h1 align="center"> {{title}}  </h1>
 
-  <router-outlet> <!-- html is injected here --></router-outlet>
+  <router-outlet > <!-- html is injected here --></router-outlet>
