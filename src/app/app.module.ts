@@ -32,4 +32,5 @@ import { HeaderComponent } from './header/header.component';
     HeaderComponent,
   ]
 })
-export class AppModule { }
+export class AppModule {
+}
