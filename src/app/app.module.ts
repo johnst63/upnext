@@ -9,6 +9,7 @@ import { RadioComponent } from './radio/radio.component';
 import { LoginComponent } from './login/login.component';
 import { LoginService } from './login.service';
 import { HeaderComponent } from './header/header.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { HeaderComponent } from './header/header.component';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     FormsModule,
   ],

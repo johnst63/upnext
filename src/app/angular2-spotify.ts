@@ -93,7 +93,7 @@ export class SpotifyService {
     return this.api({
       method: 'get',
       url: `/artists/${artist}`
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   /**
@@ -105,7 +105,7 @@ export class SpotifyService {
       method: 'get',
       url: `/artists/`,
       search: { ids: artists.toString() }
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
 
@@ -121,7 +121,7 @@ export class SpotifyService {
       url: `/browse/featured-playlists`,
       search: options,
       headers: this.getHeaders()
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
 
@@ -131,7 +131,7 @@ export class SpotifyService {
       url: `/browse/categories`,
       search: options,
       headers: this.getHeaders()
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   getCategory(categoryId: string, options?: SpotifyOptions) {
@@ -140,7 +140,7 @@ export class SpotifyService {
       url: `/browse/categories/${categoryId}`,
       search: options,
       headers: this.getHeaders()
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   getCategoryPlaylists(categoryId: string, options?: SpotifyOptions) {
@@ -149,7 +149,7 @@ export class SpotifyService {
       url: `/browse/categories/${categoryId}/playlists`,
       search: options,
       headers: this.getHeaders()
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
 
@@ -164,7 +164,7 @@ export class SpotifyService {
       url: `/me/following/contains`,
       search: { type: type, ids: ids.toString() },
       headers: this.getHeaders()
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   followPlaylist(userId: string, playlistId: string, isPublic?: boolean) {
@@ -190,7 +190,7 @@ export class SpotifyService {
       url: `/users/${userId}/playlists/${playlistId}/followers/contains`,
       search: { ids: ids.toString() },
       headers: this.getHeaders()
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
 
@@ -204,7 +204,7 @@ export class SpotifyService {
       url: `/me/tracks`,
       headers: this.getHeaders(),
       search: options
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   userTracksContains(tracks: string | Array<string>) {
@@ -214,7 +214,7 @@ export class SpotifyService {
       url: `/me/tracks/contains`,
       headers: this.getHeaders(),
       search: { ids: trackList.toString() }
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   saveUserTracks(tracks: string | Array<string>) {
@@ -245,7 +245,7 @@ export class SpotifyService {
       url: `/me/albums`,
       headers: this.getHeaders(),
       search: options
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
 
@@ -262,7 +262,7 @@ export class SpotifyService {
       url: `/me/player/recently-played`,
       search: options,
       headers: this.getHeaders()
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   //#endregion
@@ -275,7 +275,7 @@ export class SpotifyService {
       url: `/users/${userId}/playlists`,
       headers: this.getHeaders(),
       search: options
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
 
@@ -285,7 +285,7 @@ export class SpotifyService {
       url: `/users/${userId}/playlists/${playlistId}`,
       headers: this.getHeaders(),
       search: options
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   getPlaylistTracks(userId: string, playlistId: string, options?: SpotifyOptions) {
@@ -294,7 +294,7 @@ export class SpotifyService {
       url: `/users/${userId}/playlists/${playlistId}/tracks`,
       headers: this.getHeaders(),
       search: options
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   createPlaylist(userId: string, options: { name: string, public?: boolean }) {
@@ -303,7 +303,7 @@ export class SpotifyService {
       url: `/users/${userId}/playlists`,
       headers: this.getHeaders(true),
       body: options
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   addPlaylistTracks(userId: string, playlistId: string, tracks: string | Array<string>, options?: { position: number }) {
@@ -320,7 +320,7 @@ export class SpotifyService {
       url: `/users/${userId}/playlists/${playlistId}/tracks`,
       headers: this.getHeaders(true),
       search: search
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   removePlaylistTracks(userId: string, playlistId: string, tracks: string | Array<string>) {
@@ -336,7 +336,7 @@ export class SpotifyService {
       url: `/users/${userId}/playlists/${playlistId}/tracks`,
       headers: this.getHeaders(true),
       body: { tracks: trackUris }
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   reorderPlaylistTracks(userId: string, playlistId: string, options: { range_start: number, range_length?: number, insert_before: number, snapshot_id?: string }) {
@@ -345,7 +345,7 @@ export class SpotifyService {
       url: `/users/${userId}/playlists/${playlistId}/tracks`,
       headers: this.getHeaders(true),
       body: options
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   replacePlaylistTracks(userId: string, playlistId: string, tracks: string | Array<string>) {
@@ -359,7 +359,7 @@ export class SpotifyService {
       url: `/users/${userId}/playlists/${playlistId}/tracks`,
       headers: this.getHeaders(),
       search: { uris: trackList.toString() }
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   updatePlaylistDetails(userId: string, playlistId: string, options: Object) {
@@ -379,7 +379,7 @@ export class SpotifyService {
     return this.api({
       method: 'get',
       url: `/users/${userId}`
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   getCurrentUser() {
@@ -387,7 +387,7 @@ export class SpotifyService {
       method: 'get',
       url: `/me`,
       headers: this.getHeaders()
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   //#endregion
@@ -408,7 +408,7 @@ export class SpotifyService {
       method: 'get',
       url: `/search`,
       search: options
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   //#endregion
@@ -420,7 +420,7 @@ export class SpotifyService {
     return this.api({
       method: 'get',
       url: `/tracks/${track}`
-    }).map(res => res.json());
+    }).mapTo(res => res.json());
   }
 
   getTracks(tracks: string | Array<string>) {
@@ -429,7 +429,7 @@ export class SpotifyService {
       method: 'get',
       url: `/tracks/`,
       search: { ids: trackList.toString() }
-    }).map();
+    }).mapTo(res => res.json());
   }
 
 
@@ -537,17 +537,21 @@ export class SpotifyService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    return Observable.throw(error.json() || 'Server error'); //was .json().error
   }
 
   private api(requestOptions: HttpRequestOptions) {
-    return this.http.request(new Request({
-      url: this.config.apiBase + requestOptions.url,
-      method: requestOptions.method || 'get',
-      search: this.toQueryString(requestOptions.search),
-      body: JSON.stringify(requestOptions.body),
-      headers: requestOptions.headers
-    }));
+    return this.http.request(new HttpRequest(requestOptions.method || 'get',
+      this.config.apiBase + requestOptions.url, this.toQueryString(requestOptions.search)));
+
+
+    // return this.http.request(new Request({
+    //   url: this.config.apiBase + requestOptions.url,
+    //   method: requestOptions.method || 'get',
+    //   search: this.toQueryString(requestOptions.search),
+    //   body: JSON.stringify(requestOptions.body),
+    //   headers: requestOptions.headers
+    // }));
   }
 
   //#endregion
