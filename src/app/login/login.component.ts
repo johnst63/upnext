@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {LoginService} from '../login.service';
 import {User} from '../user';
 import {$} from 'protractor';
+import {SpotifyService} from '../angular5-spotify';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ import {$} from 'protractor';
 export class LoginComponent implements OnInit {
   submitted = false;
 
-user: User;
+  user: User;
   constructor(private loginService: LoginService) {
 
   }
@@ -23,6 +24,7 @@ user: User;
   ngOnInit() {
   this.getUsername();
   }
+
   getUsername(): void {
     this.user = this.loginService.getUsername();
   }
@@ -36,7 +38,6 @@ user: User;
     this.user.loggedIn = true; // change later
     this.getUsername();
     console.log(JSON.stringify(this.user));
-
 
   }
 

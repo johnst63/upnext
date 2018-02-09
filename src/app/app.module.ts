@@ -10,7 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { LoginService } from './login.service';
 import { HeaderComponent } from './header/header.component';
 import { HttpClientModule } from '@angular/common/http';
-
+import { SpotifyService } from './angular5-spotify';
 
 @NgModule({
   declarations: [
