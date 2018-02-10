@@ -7,16 +7,15 @@ import {SpotifyService} from '../angular5-spotify';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-
   styleUrls: ['./login.component.css']
 })
 
 
 export class LoginComponent implements OnInit {
   submitted = false;
-
+  results;
   user: User;
-  constructor(private loginService: LoginService) {
+  constructor(private loginService: LoginService, private spotifyService: SpotifyService) {
 
   }
   get diagnostic() { return JSON.stringify(this.user); }
@@ -38,7 +37,6 @@ export class LoginComponent implements OnInit {
     this.user.loggedIn = true; // change later
     this.getUsername();
     console.log(JSON.stringify(this.user));
-
   }
 
 

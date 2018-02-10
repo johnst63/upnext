@@ -1,15 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-
+import {SpotifyService} from '../angular5-spotify';
+import {ActivatedRoute} from '@angular/router';
+import {Track} from '../track';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+
 })
 export class HomeComponent implements OnInit {
   title = 'UpNext';
-  constructor() { }
+  track: Track;
+  constructor(private spotifyService: SpotifyService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    // this.route.params.map(params => params['id']).subscribe((id) =>
+    // { this.spotifyService.getTrack(id).subscribe(track => this.track = track); })
+    console.log('working');
+    this.spotifyService.getTrack('6rqhFgbbKwnb9MLmUQDhG6').subscribe(track => this.track = track);
   }
 
 }

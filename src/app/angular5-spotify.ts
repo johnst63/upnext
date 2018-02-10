@@ -1,5 +1,5 @@
 import { Injectable} from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
@@ -26,6 +26,8 @@ export class SpotifyService {
   private artist_url: string;
   private albums_url: string;
   private album_url: string;
+  private track_url: string;
+
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
   private secret_key = 'c1988f4fc8f347918e0ac41b7409163b';
 
@@ -38,15 +40,32 @@ export class SpotifyService {
     let headers = new HttpHeaders().set('Authorization', 'Bearer' + this.client_id);
 
     this.search_url = this.url_base + 'search?q=' + artistName + '&type=artist&market=US&limit=20&offset=0';
-    return this.httpClient.get(this.search_url, {headers: headers}).map(res => res);
+    return this.httpClient.get(this.search_url, {headers: headers}).map(res => res).catch(this.handleError);
   }
 
   getArtist(artistID: string) {
     let headers = new HttpHeaders().set('Authorization', 'Bearer' + this.client_id);
 
     this.artist_url = this.url_base + 'artists/' + artistID;
-    return this.httpClient.get(this.artist_url, {headers: headers}).map(res => res);
+    return this.httpClient.get(this.artist_url, {headers: headers}).map(res => res).catch(this.handleError);
 
   }
 
+  getTrack(trackId: string) {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer' + this.client_id);
+
+    this.track_url = this.url_base + 'tracks/' + trackId;
+    return this.httpClient.get(this.track_url, {headers: headers}).map(res => res).catch(this.handleError);
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = '';
+    if(error.error instanceof Error) {
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      errorMessage = `Server returned code: ${error.status} with message: ${error.message}`;
+    }
+    console.error(errorMessage);
+    return Observable.throw(errorMessage);
+  }
 }
