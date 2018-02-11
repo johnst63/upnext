@@ -45,7 +45,6 @@ export class LoginComponent implements OnInit {
     this.spotifyService.authenticate();
 
 
-    console.log(this.authContainer);
     console.log('Requesting Tokens');
     // this.spotifyService.requestTokens(this.authContainer.BON[2]).subscribe( data => console.log(data.toJson()));
     console.log('Done Requesting Tokens');

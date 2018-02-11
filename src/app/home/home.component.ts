@@ -25,7 +25,9 @@ export class HomeComponent implements OnInit {
 
   onClick() {
     //TODO figure out
-    this.spotifyService.getTrack('3n3Ppam7vgaVa1iaRUc9Lp').subscribe(data => this.track = {
+    // this.spotifyService.getTrack('3n3Ppam7vgaVa1iaRUc9Lp').subscribe(data => console.log(data));
+
+      this.spotifyService.getTrack('3n3Ppam7vgaVa1iaRUc9Lp').subscribe(data => this.track = {
       name: data['name'],
       artists: data['artists'],
       available_markets: data['available_markets'],
@@ -43,11 +45,15 @@ export class HomeComponent implements OnInit {
       uri: data['uri']
     });
 
-    console.log(JSON.parse(JSON.stringify(this.track)));
+
+    // console.log(JSON.parse(JSON.stringify(this.track)));
     //console.log(JSON.stringify(this.track));
 
     console.log(this.spotifyService);
 
   }
 
+  displayTrack() {
+    console.log(this.track);
+  }
 }
