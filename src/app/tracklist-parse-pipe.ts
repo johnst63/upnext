@@ -5,8 +5,18 @@ export class TracklistParsePipe implements PipeTransform {
   transform(value: any[]): string {
     console.log('value:' + value['name']);
     let str = '';
-    str += value['name'];
-    str += '-' + value['artists'][0]['name'];
+    if (value == null) {
+      str = 'Track Not Found';
+      return str;
+    }
+
+    str += (value['name'] != null ? value['name'] : 'Unknown Song');
+
+    if (value != null && value['artists'] != null && value['artists'][0]['name'] != null) {
+      str += ' - ' + value['artists'][0]['name'];
+    } else {
+      str += 'Unknown Artist';
+    }
     return str;
   }
 }
