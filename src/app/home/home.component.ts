@@ -3,7 +3,6 @@ import {SpotifyService} from '../angular5-spotify';
 import {ActivatedRoute} from '@angular/router';
 import {Track} from '../track';
 import {Album} from '../../Album';
-import {parseHttpResponse} from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-home',

@@ -14,6 +14,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {LoginService} from '../login.service';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
+import {TracklistParsePipe} from '../tracklist-parse-pipe';
 
 describe('RadioComponent', () => {
   let component: RadioComponent;
@@ -28,6 +29,7 @@ describe('RadioComponent', () => {
         LoginComponent,
         HeaderComponent,
         CallbackComponent,
+        TracklistParsePipe,
       ],
       imports: [
         BrowserModule,

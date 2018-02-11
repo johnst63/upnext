@@ -15,6 +15,7 @@ import {InterceptorModule} from '../interceptor.module';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {APP_BASE_HREF} from '@angular/common';
+import {TracklistParsePipe} from './tracklist-parse-pipe';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -26,6 +27,7 @@ describe('AppComponent', () => {
         LoginComponent,
         HeaderComponent,
         CallbackComponent,
+        TracklistParsePipe,
       ],
       imports: [
         BrowserModule,

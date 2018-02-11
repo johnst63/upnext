@@ -15,6 +15,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {LoginService} from '../login.service';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
+import {TracklistParsePipe} from '../tracklist-parse-pipe';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -29,6 +30,7 @@ describe('HeaderComponent', () => {
         LoginComponent,
         HeaderComponent,
         CallbackComponent,
+        TracklistParsePipe,
       ],
       imports: [
         BrowserModule,
