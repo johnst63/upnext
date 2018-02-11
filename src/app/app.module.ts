@@ -24,7 +24,7 @@ import {TracklistParsePipe} from './tracklist-parse-pipe';
     LoginComponent,
     HeaderComponent,
     CallbackComponent,
-    TracklistParsePipe
+    TracklistParsePipe,
   ],
   imports: [
     BrowserModule,
