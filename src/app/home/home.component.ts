@@ -10,14 +10,23 @@ import {Track} from '../track';
 })
 export class HomeComponent implements OnInit {
   title = 'UpNext';
-  track: Track;
+  track: any;
   constructor(private spotifyService: SpotifyService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    // this.route.params.map(params => params['id']).subscribe((id) =>
-    // { this.spotifyService.getTrack(id).subscribe(track => this.track = track); })
-    console.log('working');
+   //  // this.route.params.map(params => params['id']).subscribe((id) =>
+   //  // { this.spotifyService.getTrack(id).subscribe(track => this.track = track); })
+   //  console.log('working');
+   //  // this.spotifyService.getTrack('6rqhFgbbKwnb9MLmUQDhG6').subscribe(track => this.track = track);
+   // // console.log(this.track.name);
+  }
+  onClick() {
+    //this.spotifyService.getTrack();
+
     this.spotifyService.getTrack('6rqhFgbbKwnb9MLmUQDhG6').subscribe(track => this.track = track);
+    console.log(this.track.stringify());
+
+
   }
 
 }
