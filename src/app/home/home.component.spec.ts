@@ -16,6 +16,7 @@ import {AppRoutingModule} from '../app-routing.module';
 import {InterceptorModule} from '../../interceptor.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
+import {TracklistParsePipe} from '../tracklist-parse-pipe';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -30,13 +31,16 @@ describe('HomeComponent', () => {
         LoginComponent,
         HeaderComponent,
         CallbackComponent,
+        TracklistParsePipe,
+
       ],
       imports: [
         BrowserModule,
         HttpClientModule,
         AppRoutingModule,
         FormsModule,
-        InterceptorModule
+        InterceptorModule,
+
       ],
       providers: [LoginService, SpotifyService,
         {provide: APP_BASE_HREF, useValue: '/'}],
