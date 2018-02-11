@@ -46,8 +46,7 @@ export class HomeComponent implements OnInit {
     });
 
 
-    // console.log(JSON.parse(JSON.stringify(this.track)));
-    //console.log(JSON.stringify(this.track));
+
 
     console.log(this.spotifyService);
 
