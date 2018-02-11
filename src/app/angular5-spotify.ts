@@ -27,7 +27,7 @@ export class SpotifyService {
   private albums_url: string;
   private album_url: string;
   private track_url: string;
-  private auth_url: string = 'https://accounts.spotify.com/authorize?';
+  private auth_url: string = 'https://accounts.spotify.com/authorize';
   private token_url: string = 'https://accounts.spotify.com/api/token';
 
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
@@ -62,16 +62,19 @@ export class SpotifyService {
 
   authenticate() {
     let headers = new HttpHeaders().set('client_id', this.client_id);
-    headers.set('response_type', 'code');
-    headers.set('redirect_uri', 'http://localhost:4200/login');
+    headers.set('response_type', 'token');
+    headers.set('redirect_uri', 'http://localhost:4200/');
+    headers.set('Content-Type', 'application/x-www-form-urlencoded');
+
 
     return this.httpClient.get(this.auth_url, {headers: headers}).map(res => res).catch(this.handleError);
   }
 
   requestTokens() {
-    let headers = new HttpHeaders().set('grand_type', 'authorization_code');
+    let headers = new HttpHeaders().set('grant_type', 'authorization_code');
     headers.set('code', 'Unknown');
-    headers.set('redirect_uri', 'http://localhost:4200/login');
+    headers.set('redirect_uri', 'http://localhost:4200/');
+    headers.set('Content-Type', 'html');
 
     return this.httpClient.post(this.token_url, {headers: headers}).subscribe(res => res);
   }
