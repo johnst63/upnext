@@ -18,12 +18,7 @@
   <p *ngIf="tracks_string == null"> No Tracks Found </p>
   <ng-container *ngIf="tracks_string">
     <div class="track_container" *ngFor="let t of tracks_string">
-
-      <p> TrackList:{{ t | tracklistparsepipe}} </p>
-      <!--<ng-container>{{t.name}}</ng-container>-->
-      <!--<ng-container *ngIf="t.artists">-->
-        <!--<ng-container *ngFor="let artist of t.artists"> - {{artist['name']}}</ng-container>-->
-      <!--</ng-container>-->
+      <p> {{ t | tracklistparsepipe}} </p>
     </div>
   </ng-container>
 </div>
