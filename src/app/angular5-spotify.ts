@@ -27,6 +27,7 @@ export class SpotifyService {
   private albums_url: string;
   private album_url: string;
   private track_url: string;
+  private auth_url = 'https://accounts.spotify.com/authorize';
 
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
   private secret_key = 'c1988f4fc8f347918e0ac41b7409163b';
@@ -58,6 +59,14 @@ export class SpotifyService {
     return this.httpClient.get(this.track_url, {headers: headers}).map(res => res).catch(this.handleError);
   }
 
+  authenticate() {
+    let headers = new HttpHeaders().set('client_id', this.client_id);
+    headers.set('response_type', 'code');
+    headers.set('redirect_uri', 'https://localhost:4200');
+
+    return this.httpClient.get(this.auth_url, {headers: headers}).map(res => res).catch(this.handleError);
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errorMessage = '';
     if(error.error instanceof Error) {
@@ -68,4 +77,5 @@ export class SpotifyService {
     console.error(errorMessage);
     return Observable.throw(errorMessage);
   }
+
 }

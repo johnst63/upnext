@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit {
     this.user.loggedIn = true; // change later
     this.getUsername();
     console.log(JSON.stringify(this.user));
+    this.spotifyService.authenticate();
   }
 
 
