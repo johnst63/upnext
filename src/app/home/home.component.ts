@@ -14,6 +14,9 @@ import {parseHttpResponse} from 'selenium-webdriver/http';
 export class HomeComponent implements OnInit {
   title = 'UpNext';
   track: Track;
+  trackList: any;
+  tracks_string: any[];
+  tracks: any;
   album: Album[];
 
   constructor(private spotifyService: SpotifyService, private route: ActivatedRoute) {
@@ -45,9 +48,11 @@ export class HomeComponent implements OnInit {
       uri: data['uri']
     });
 
-
+    let arr = ['3n3Ppam7vgaVa1iaRUc9Lp', '6rPO02ozF3bM7NnOV4h6s2'];
+    // this.spotifyService.getTracks(arr).subscribe(data => this.tracks_string = JSON.stringify(data['tracks']));
     // console.log(JSON.parse(JSON.stringify(this.track)));
-    //console.log(JSON.stringify(this.track));
+
+    this.spotifyService.getTracks(arr).subscribe(data => this.tracks_string = JSON.parse(JSON.stringify(data['tracks'])));
 
     console.log(this.spotifyService);
 
@@ -55,5 +60,9 @@ export class HomeComponent implements OnInit {
 
   displayTrack() {
     console.log(this.track);
+    console.log('Display Tracks: ');
+    console.log(this.tracks_string);
+
+
   }
 }

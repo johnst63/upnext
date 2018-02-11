@@ -14,6 +14,7 @@ import { SpotifyService } from './angular5-spotify';
 import {ActivatedRoute} from '@angular/router';
 import {InterceptorModule} from '../interceptor.module';
 import { CallbackComponent } from './callback/callback.component';
+import {TracklistParsePipe} from './tracklist-parse-pipe';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { CallbackComponent } from './callback/callback.component';
     LoginComponent,
     HeaderComponent,
     CallbackComponent,
+    TracklistParsePipe
   ],
   imports: [
     BrowserModule,

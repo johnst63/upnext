@@ -101,11 +101,20 @@ export class SpotifyService {
       .append('Content-Type', 'application/json')
       .append('Accept', 'application/json');
 
-
-
     this.track_url = this.url_base + 'tracks/' + trackId;
     return this.httpClient.get(this.track_url, {headers: headers}).map(res => res).catch(this.handleError);
   }
+
+  getTracks(trackIds: string[]) {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token)
+      .append('Content-Type', 'application/json')
+      .append('Accept', 'application/json');
+
+    this.track_url = this.url_base + 'tracks?ids=' + trackIds.join(',');
+    return this.httpClient.get(this.track_url, {headers: headers}).map(res => res).catch(this.handleError);
+  }
+
+
   getAlbum(id: string){
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token )
       .append('Content-Type', 'application/json')
@@ -117,6 +126,7 @@ export class SpotifyService {
     return this.httpClient.get(this.albums_url, {headers: headers}, )
       .subscribe(res => res);
   }
+
   requestTokens(auth_key: any) {
     let params = new HttpParams().set('grant_type', 'authorization_code');
     params = params.append('code', 'Unknown');

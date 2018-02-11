@@ -1,11 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LoginService} from '../login.service';
 import {User} from '../user';
-import {$} from 'protractor';
 import {SpotifyService} from '../angular5-spotify';
 import { AuthContainer} from '../auth-container';
-import {EventListener} from '@angular/core/src/debug/debug_node';
-import {rootRoute} from '@angular/router/src/router_module';
 import {Router} from '@angular/router';
 
 @Component({

@@ -5,14 +5,26 @@
 <button (click)="onClick()"> click me</button>
 <button (click)="displayTrack()"> Display Track</button>
 
-<div id="tracks_list">
-  <div class="track_container" *ngIf="track">
-    <ng-container>{{track.name}}</ng-container>
-    <ng-container *ngIf="track.artists">
-      <ng-container *ngFor="let artist of track.artists"> - {{artist['name']}}</ng-container>
-    </ng-container>
-    <ng-container *ngIf="track.available_markets">
-      <li *ngFor="let market of track.available_markets"> {{market}}</li>
-    </ng-container>
-  </div>
+<div id="single_track_container" *ngIf="track">
+  <p>SingleTrackDiv:</p>
+  <ng-container>{{track.name}}</ng-container>
+  <ng-container *ngIf="track.artists">
+    <ng-container *ngFor="let artist of track.artists"> - {{artist['name']}}</ng-container>
+  </ng-container>
+  <p>:EndofSingleTrackDiv</p>
 </div>
+
+<div id="tracks_list">
+  <p *ngIf="tracks_string == null"> No Tracks Found </p>
+  <ng-container *ngIf="tracks_string">
+    <div class="track_container" *ngFor="let t of tracks_string">
+
+      <p> TrackList:{{t | tracklistparsepipe }} </p>
+      <!--<ng-container>{{t.name}}</ng-container>-->
+      <!--<ng-container *ngIf="t.artists">-->
+        <!--<ng-container *ngFor="let artist of t.artists"> - {{artist['name']}}</ng-container>-->
+      <!--</ng-container>-->
+    </div>
+  </ng-container>
+</div>
+
