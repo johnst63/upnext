@@ -1,5 +1,5 @@
 import { Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import {catchError} from 'rxjs/operators';
@@ -62,18 +62,16 @@ export class SpotifyService {
   }
 
   authenticate() {
-    let headers = new HttpHeaders();
-    headers = headers.set('client_id', this.client_id);
-    headers = headers.set('response_type', 'code');
-    headers = headers.set('redirect_uri', 'http://localhost:4200/login/');
-    return this.httpClient.get(this.auth_url, {headers: headers}).subscribe( data => console.log(data));
+    let params = new HttpParams().set('client_id', this.client_id);
+    params = params.append('response_type', 'code');
+    params = params.append('redirect_uri', 'http://localhost:4200/login/');
+    return this.httpClient.get(this.auth_url, {params: params}).subscribe( data => console.log(data));
   }
 
   requestTokens() {
-    let headers = new HttpHeaders();
-    headers = headers.set('grand_type', 'authorization_code');
-    headers = headers.set('code', 'Unknown');
-    headers = headers.set('redirect_uri', 'http://localhost:4200/login');
+    let headers = new HttpHeaders().set('grand_type', 'authorization_code');
+    headers = headers.append('code', 'Unknown');
+    headers = headers.append('redirect_uri', 'http://localhost:4200/login');
 
     return this.httpClient.post(this.token_url, {
 
