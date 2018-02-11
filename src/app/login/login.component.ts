@@ -41,17 +41,24 @@ export class LoginComponent implements OnInit {
     this.getUsername();
     // console.log(JSON.stringify(this.user));
     console.log('Authenticating');
+    this.getAuthentication();
+    // this.results = this.spotifyService.authenticate().subscribe( data => this.authContainer = {
+    //   client: data['client'],
+    //   BON: data['BON']
+    // });
+    // this.results = this.spotifyService.authenticate().subscribe( data => console.log(JSON.stringify(data)));
+
+    console.log(this.authContainer);
+    console.log('Requesting Tokens');
+    // this.spotifyService.requestTokens(this.authContainer.BON[0]);
+    console.log('Done Requesting Tokens');
+  }
+
+  getAuthentication() {
     this.results = this.spotifyService.authenticate().subscribe( data => this.authContainer = {
       client: data['client'],
       BON: data['BON']
     });
-    this.results = this.spotifyService.authenticate().subscribe( data => console.log(JSON.stringify(data)));
-    console.log(this.authContainer);
-    console.log('Requesting Tokens');
-    this.spotifyService.requestTokens(this.authContainer.BON[0]);
-    console.log('Done Requesting Tokens');
   }
-
-
 
 }
