@@ -30,6 +30,7 @@ export class SpotifyService {
   private track_url: string;
   private auth_url: string = 'https://accounts.spotify.com/authorize';
   private token_url: string = 'https://accounts.spotify.com/api/token';
+  private redirect_url: string = 'http://localhost:4200';
 
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
   private secret_key = 'c1988f4fc8f347918e0ac41b7409163b';
@@ -64,18 +65,21 @@ export class SpotifyService {
   authenticate() {
     let params = new HttpParams().set('client_id', this.client_id);
     params = params.append('response_type', 'code');
-    params = params.append('redirect_uri', 'http://localhost:4200/login/');
-    return this.httpClient.get(this.auth_url, {params: params}).subscribe( data => console.log(data));
+    params = params.append('redirect_uri', this.redirect_url + '/login');
+    return this.httpClient.get(this.auth_url, {params: params});
   }
 
   requestTokens() {
-    let headers = new HttpHeaders().set('grand_type', 'authorization_code');
-    headers = headers.append('code', 'Unknown');
-    headers = headers.append('redirect_uri', 'http://localhost:4200/login');
+    let params = new HttpParams().set('grant_type', 'authorization_code');
+    params = params.append('code', 'Unknown');
+    params = params.append('redirect_uri', this.redirect_url + '/login');
 
+    let headers = new HttpHeaders().set('Authorization', 'Bearer' + this.client_id);
     return this.httpClient.post(this.token_url, {
-
-    }).pipe(catchError(this.handleError));
+      grant_type: 'authorization_code',
+      code: 'Unknown',
+      redirect_uri: 'http://localhost:4200/login'
+    }, {headers: headers}).pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse) {

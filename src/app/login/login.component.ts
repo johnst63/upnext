@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit {
     console.log(JSON.stringify(this.user));
     console.log('Authenticating');
     this.results = this.spotifyService.authenticate();
-    console.log(this.results);
     console.log('Requesting Tokens');
     // this.spotifyService.requestTokens();
     console.log('Done Requesting Tokens');
