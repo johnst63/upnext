@@ -2,6 +2,7 @@ import { Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
+import {catchError} from 'rxjs/operators';
 
 // export interface SpotifyConfig {
 //   clientId: string ;
@@ -27,7 +28,7 @@ export class SpotifyService {
   private albums_url: string;
   private album_url: string;
   private track_url: string;
-  private auth_url: string = 'https://accounts.spotify.com/authorize?';
+  private auth_url: string = 'https://accounts.spotify.com/authorize';
   private token_url: string = 'https://accounts.spotify.com/api/token';
 
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
@@ -61,19 +62,22 @@ export class SpotifyService {
   }
 
   authenticate() {
-    let headers = new HttpHeaders().set('client_id', this.client_id);
-    headers.set('response_type', 'code');
-    headers.set('redirect_uri', 'http://localhost:4200/login');
-
-    return this.httpClient.get(this.auth_url, {headers: headers}).map(res => res).catch(this.handleError);
+    let headers = new HttpHeaders();
+    headers = headers.set('client_id', this.client_id);
+    headers = headers.set('response_type', 'code');
+    headers = headers.set('redirect_uri', 'http://localhost:4200/login/');
+    return this.httpClient.get(this.auth_url, {headers: headers}).subscribe( data => console.log(data));
   }
 
   requestTokens() {
-    let headers = new HttpHeaders().set('grand_type', 'authorization_code');
-    headers.set('code', 'Unknown');
-    headers.set('redirect_uri', 'http://localhost:4200/login');
+    let headers = new HttpHeaders();
+    headers = headers.set('grand_type', 'authorization_code');
+    headers = headers.set('code', 'Unknown');
+    headers = headers.set('redirect_uri', 'http://localhost:4200/login');
 
-    return this.httpClient.post(this.token_url, {headers: headers}).subscribe(res => res);
+    return this.httpClient.post(this.token_url, {
+
+    }).pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse) {

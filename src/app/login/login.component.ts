@@ -14,6 +14,7 @@ import {SpotifyService} from '../angular5-spotify';
 export class LoginComponent implements OnInit {
   submitted = false;
   results;
+  stringResults: string;
   user: User;
   constructor(private loginService: LoginService, private spotifyService: SpotifyService) {
 
@@ -37,9 +38,12 @@ export class LoginComponent implements OnInit {
     this.user.loggedIn = true; // change later
     this.getUsername();
     console.log(JSON.stringify(this.user));
-    this.spotifyService.authenticate();
-
-    this.spotifyService.requestTokens();
+    console.log('Authenticating');
+    this.results = this.spotifyService.authenticate();
+    console.log(this.results);
+    console.log('Requesting Tokens');
+    // this.spotifyService.requestTokens();
+    console.log('Done Requesting Tokens');
   }
 
 

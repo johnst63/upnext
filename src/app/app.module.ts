@@ -12,6 +12,7 @@ import { HeaderComponent } from './header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SpotifyService } from './angular5-spotify';
 import {ActivatedRoute} from '@angular/router';
+import {InterceptorModule} from '../interceptor.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {ActivatedRoute} from '@angular/router';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
+    InterceptorModule
   ],
   providers: [LoginService, SpotifyService],
   bootstrap: [
