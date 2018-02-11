@@ -38,6 +38,8 @@ export class LoginComponent implements OnInit {
     this.getUsername();
     console.log(JSON.stringify(this.user));
     this.spotifyService.authenticate();
+
+    this.spotifyService.requestTokens();
   }
 
 
