@@ -4,6 +4,7 @@ import {User} from '../user';
 import {$} from 'protractor';
 import {SpotifyService} from '../angular5-spotify';
 import { AuthContainer} from '../auth-container';
+import {EventListener} from '@angular/core/src/debug/debug_node';
 
 @Component({
   selector: 'app-login',
@@ -72,10 +73,12 @@ export class LoginComponent implements OnInit {
       'https://accounts.spotify.com/authorize?' + 'client_id=' + params.client_id +
       '&redirect_uri=' + params.redirect_uri + '&response_type=' + params.response_type,
       'Spotify',
-      'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + 800 + ',height=' + 800 + ',top=' + 100 + ',left=' + 100,
+        'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + 600 + ',height=' + 400 + ',top=' + 100 + ',left=' + 100,
       function () {
+        console.log('Auth Callback');
       }
     );
+
   }
 
 
