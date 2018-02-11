@@ -69,7 +69,7 @@ export class SpotifyService {
     return this.httpClient.get(this.auth_url, {params: params});
   }
 
-  requestTokens() {
+  requestTokens(auth_key: any) {
     let params = new HttpParams().set('grant_type', 'authorization_code');
     params = params.append('code', 'Unknown');
     params = params.append('redirect_uri', this.redirect_url + '/login');
@@ -77,7 +77,7 @@ export class SpotifyService {
     let headers = new HttpHeaders().set('Authorization', 'Bearer' + this.client_id);
     return this.httpClient.post(this.token_url, {
       grant_type: 'authorization_code',
-      code: 'Unknown',
+      code: auth_key,
       redirect_uri: 'http://localhost:4200/login'
     }, {headers: headers}).pipe(catchError(this.handleError));
   }
