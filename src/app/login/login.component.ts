@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
 
   openDialog (uri, name, options, cb) {
     let win = window.open(uri, name, options);
+
     let interval = window.setInterval(function () {
       try {
         if (!win || win.closed) {
@@ -65,7 +66,7 @@ export class LoginComponent implements OnInit {
     let params = {
       client_id: 'd4800b9ac98e4e09a15db22fc6a33f9f',
       redirect_uri: 'http://localhost:4200/callback',
-      response_type: 'code'
+      response_type: 'token'
     };
 
     let authCompleted = false;
@@ -75,7 +76,11 @@ export class LoginComponent implements OnInit {
       'Spotify',
         'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + 600 + ',height=' + 400 + ',top=' + 100 + ',left=' + 100,
       function () {
+
         console.log('Auth Callback');
+        console.log('token: bitches!    ' + localStorage.getItem('spotify-token'));
+
+
       }
     );
 

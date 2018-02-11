@@ -34,7 +34,7 @@ export class SpotifyService {
 
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
   private secret_key = 'c1988f4fc8f347918e0ac41b7409163b';
-
+  public token;
 
   constructor(private httpClient: HttpClient) {
   }
@@ -61,7 +61,12 @@ export class SpotifyService {
     this.track_url = this.url_base + 'tracks/' + trackId;
     return this.httpClient.get(this.track_url, {headers: headers}).map(res => res).catch(this.handleError);
   }
-
+  callback() {
+    let token = window.location.hash.split('&')[0].split('=')[1];
+    localStorage.setItem('spotify-token', token);
+    window.close();
+    console.log(localStorage.getItem('spotify-token'));
+  }
   authenticate() {
     let params = new HttpParams().set('client_id', this.client_id);
     params = params.append('response_type', 'code');
@@ -82,7 +87,7 @@ export class SpotifyService {
       grant_type: 'authorization_code',
       code: auth_key,
       redirect_uri: 'http://localhost:4200/login'
-    }, {headers: headers}).pipe(catchError(this.handleError));
+    }, {headers: headers}).pipe(catchError(this.handleError)).subscribe();
   }
 
   private handleError(error: HttpErrorResponse) {

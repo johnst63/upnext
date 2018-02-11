@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SpotifyService } from './angular5-spotify';
 import {ActivatedRoute} from '@angular/router';
 import {InterceptorModule} from '../interceptor.module';
+import { CallbackComponent } from './callback/callback.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {InterceptorModule} from '../interceptor.module';
     RadioComponent,
     LoginComponent,
     HeaderComponent,
+    CallbackComponent,
   ],
   imports: [
     BrowserModule,
