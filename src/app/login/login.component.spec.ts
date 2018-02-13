@@ -53,4 +53,15 @@ describe('LoginComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('should redirect to home',  () => {
+    const fixture = TestBed.createComponent(LoginComponent);
+    component.onSubmit();
+    const fix2 = TestBed.createComponent(HomeComponent);
+    fix2.detectChanges();
+    const compiled = fix2.debugElement.nativeElement;
+
+    expect(compiled.querySelector('p').textContent).toBeTruthy('home works!');
+
+
+  });
 });

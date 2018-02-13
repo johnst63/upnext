@@ -8,7 +8,7 @@ const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'radio', component: RadioComponent},
   {path: 'login', component: LoginComponent},
-  {path: '', component: LoginComponent},
+  {path: '', redirectTo: 'home', pathMatch: 'full'}, //generally don't want to have two paths to the same component, so using redirect to go to the component instead.
   {path: 'callback', component: CallbackComponent},
 
 

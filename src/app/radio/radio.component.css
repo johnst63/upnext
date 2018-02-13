@@ -1,0 +1,13 @@
+#search_results {
+  font-weight: bold;
+  text-align: center;
+}
+
+.track_container {
+  margin: auto;
+  text-align: left;
+  /*border-bottom: .1em solid black;*/
+  width: 50%;
+  padding-left: 2em;
+  padding-top: .6em;
+}

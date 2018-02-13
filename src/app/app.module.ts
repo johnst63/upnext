@@ -36,9 +36,6 @@ import {TracklistParsePipe} from './tracklist-parse-pipe';
   providers: [LoginService, SpotifyService],
   bootstrap: [
     AppComponent,
-  HomeComponent,
-  RadioComponent,
-    HeaderComponent,
   ]
 })
 export class AppModule {

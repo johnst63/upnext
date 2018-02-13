@@ -86,7 +86,7 @@ export class SpotifyService {
       function () {
 
         console.log('Auth Callback');
-        console.log('token: bitches!    ' + localStorage.getItem('spotify-token')); //TODO WED DIFOSDFJOIWEJ
+        console.log('token: bitches! ' + localStorage.getItem('spotify-token')); //TODO WED DIFOSDFJOIWEJ
 
 
       }
@@ -114,6 +114,17 @@ export class SpotifyService {
     return this.httpClient.get(this.track_url, {headers: headers}).map(res => res).catch(this.handleError);
   }
 
+  searchForTrack(keyword: string) {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token)
+      .append('Content-Type', 'application/json')
+      .append('Accept', 'application/json');
+
+    let params = new HttpParams().set('q', keyword);
+    params = params.append('type', 'track');
+
+    this.track_url = this.url_base + 'search';
+    return this.httpClient.get(this.track_url, {params: params, headers: headers}).map(res => res).catch(this.handleError);
+  }
 
   getAlbum(id: string){
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token )

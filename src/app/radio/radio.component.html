@@ -1,3 +1,17 @@
 <p align="center">
   radio works!
 </p>
+<input [(ngModel)]="queryterm"/>
+<button (click)="onSearch()"> Search </button>
+<div id="search_results">
+  <p id="tracks_dne" *ngIf="trackSearchResults == null"> No Tracks Found </p>
+  <ng-container *ngIf="trackSearchResults">
+    <p> </p>
+    <div class="track_container" *ngFor="let t of trackSearchResults">
+      <p> {{ t | json }} </p>
+    </div>
+  </ng-container>
+
+</div>
+<p>Queryterm: {{queryterm}}</p>
+<!--<button (click)="displayTrack()"> Display Track</button>-->

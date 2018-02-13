@@ -15,6 +15,8 @@ import {LoginService} from '../login.service';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {TracklistParsePipe} from '../tracklist-parse-pipe';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {by, element} from 'protractor';
 
 describe('RadioComponent', () => {
   let component: RadioComponent;
@@ -40,6 +42,7 @@ describe('RadioComponent', () => {
       ],
       providers: [LoginService, SpotifyService,
         {provide: APP_BASE_HREF, useValue: '/'}],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   }));

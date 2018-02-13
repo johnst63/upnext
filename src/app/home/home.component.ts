@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {SpotifyService} from '../angular5-spotify';
 import {ActivatedRoute} from '@angular/router';
-import {Track} from '../track';
 import {Album} from '../../Album';
+import {Track, Tracks} from '../track';
 
 @Component({
   selector: 'app-home',
@@ -13,10 +13,9 @@ import {Album} from '../../Album';
 export class HomeComponent implements OnInit {
   title = 'UpNext';
   track: Track;
-  trackList: any;
+  trackList: Tracks;
   tracks_string: any[];
   tracks: any;
-  album: Album[];
 
   constructor(private spotifyService: SpotifyService, private route: ActivatedRoute) {
   }
@@ -30,38 +29,32 @@ export class HomeComponent implements OnInit {
     // this.spotifyService.getTrack('3n3Ppam7vgaVa1iaRUc9Lp').subscribe(data => console.log(data));
 
       this.spotifyService.getTrack('3n3Ppam7vgaVa1iaRUc9Lp').subscribe(data => this.track = {
-      name: data['name'],
-      artists: data['artists'],
-      available_markets: data['available_markets'],
-      disc_number: data['disc_number'],
-      duration_ms: data['duration_ms'],
-      explicit: data['explicit'],
-      external_urls: data['external_urls'],
-      href: data['href'],
-      id: data['id'],
-      is_playable: data['is_playable'],
-      linked_from: data['linked_from'],
-      preview_url: data['preview_url'],
-      track_number: data['track_number'],
-      type: data['type'],
-      uri: data['uri']
-    });
+        name: data.name,
+        artist: data.artists['0'].name,
+        id: data.id
+      }
+    );
 
     let arr = ['3n3Ppam7vgaVa1iaRUc9Lp', '6rPO02ozF3bM7NnOV4h6s2'];
-    // this.spotifyService.getTracks(arr).subscribe(data => this.tracks_string = JSON.stringify(data['tracks']));
-    // console.log(JSON.parse(JSON.stringify(this.track)));
 
-    this.spotifyService.getTracks(arr).subscribe(data => this.tracks_string = JSON.parse(JSON.stringify(data['tracks'])));
-
+    // this.spotifyService.getTracks(arr).subscribe(data => console.log(JSON.parse(JSON.stringify(data['tracks']))));
+    this.spotifyService.getTracks(arr)
+      .subscribe((data: Tracks) => { this.trackList = data; } );
+    // this.spotifyService.getTracks(arr)
+    //   .subscribe((data: Track[]) => {
+    //     this.trackList = data;
+    //     console.log(this.trackList[0]);
+    //   })
     console.log(this.spotifyService);
 
   }
 
   displayTrack() {
-    console.log(this.track);
-    console.log('Display Tracks: ');
-    console.log(this.tracks_string);
-
-
+    // console.log(this.track);
+    // console.log('Display Tracks: ');
+    // console.log(this.trackList);
+    // console.log('Display::' + this.tracktest.tracks);
   }
 }
+
+
