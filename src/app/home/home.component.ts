@@ -31,7 +31,8 @@ export class HomeComponent implements OnInit {
       this.spotifyService.getTrack('3n3Ppam7vgaVa1iaRUc9Lp').subscribe(data => this.track = {
         name: data.name,
         artist: data.artists['0'].name,
-        id: data.id
+        id: data.id,
+        uri: data.uri
       }
     );
 
