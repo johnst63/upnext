@@ -9,10 +9,10 @@
     <p> </p>
     <div class="track_container" *ngFor="let t of trackSearchResults.items">
       <p> {{ t | tracklistparsepipe }} </p>
-      <iframe *ngIf="t.uri" [attr-src]="'https://open.spotify.com/embed?uri=spotify:user:' + t.uri" width="250" height="80" frameborder="0" allowtransparency="true"></iframe>
+      <!--<iframe *ngIf="t.uri" ng-src="{{'https://open.spotify.com/embed?uri=spotify:user:' + t.uri | trustHtml}}"  width="250" height="80" frameborder="0" allowtransparency="true"></iframe>-->
     </div>
   </ng-container>
-
+  <!--https://open.spotify.com/embed?uri=spotify:user:-->
 </div>
 <p>Queryterm: {{queryterm}}</p>
 <!--<button (click)="displayTrack()"> Display Track</button>-->

@@ -16,11 +16,7 @@ export class RadioComponent implements OnInit {
   }
 
   onSearch() {
-    // this.spotifyService.searchForTrack(this.queryterm)
-    //   .subscribe(
-    //     data => this.trackSearchResults = JSON.parse(JSON.stringify(data['tracks']['items'])),
-    //     error => console.log(error)
-    //   );
+
     this.spotifyService.searchForTrack(this.queryterm)
       .subscribe(
         (data: TrackSearchResults) => {
@@ -29,6 +25,7 @@ export class RadioComponent implements OnInit {
         },
         error => console.log(error)
       );
+
   }
 
 }
