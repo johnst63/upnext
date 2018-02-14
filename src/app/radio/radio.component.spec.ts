@@ -15,13 +15,14 @@ import {LoginService} from '../login.service';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {TracklistParsePipe} from '../tracklist-parse-pipe';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
 import {by, element} from 'protractor';
 
 describe('RadioComponent', () => {
   let component: RadioComponent;
   let fixture: ComponentFixture<RadioComponent>;
-
+  let de: DebugElement;
+  let elem: HTMLElement;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [

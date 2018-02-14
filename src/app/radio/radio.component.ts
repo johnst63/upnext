@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {SpotifyService} from '../angular5-spotify';
+import {Tracks, TrackSearchResults} from '../track';
 
 @Component({
   selector: 'app-radio',
@@ -8,7 +9,7 @@ import {SpotifyService} from '../angular5-spotify';
 })
 export class RadioComponent implements OnInit {
   queryterm: string;
-  trackSearchResults = [];
+  trackSearchResults: TrackSearchResults;
   constructor(private spotifyService: SpotifyService) { }
 
   ngOnInit() {
@@ -17,23 +18,18 @@ export class RadioComponent implements OnInit {
   onSearch() {
     // this.spotifyService.searchForTrack(this.queryterm)
     //   .subscribe(
-    //     ,
-    //       error => console.log(error)
+    //     data => this.trackSearchResults = JSON.parse(JSON.stringify(data['tracks']['items'])),
+    //     error => console.log(error)
     //   );
     this.spotifyService.searchForTrack(this.queryterm)
       .subscribe(
-        data => this.trackSearchResults = JSON.parse(JSON.stringify(data['tracks']['items'])),
+        (data: TrackSearchResults) => {
+          this.trackSearchResults = data['tracks'];
+          console.log(this.trackSearchResults.items);
+        },
         error => console.log(error)
       );
   }
 
 }
 
-export interface Track {
-  name: string;
-  artist: string;
-}
-
-export interface TrackList {
-  tracks: any[];
-}

@@ -21,8 +21,13 @@ export interface Track {
   name: string;
   artist: string;
   id: string;
+  uri: string;
 }
 
 export interface Tracks {
   tracks: Array<Track>;
+}
+
+export interface TrackSearchResults {
+  items: Array<Track>;
 }

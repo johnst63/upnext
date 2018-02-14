@@ -39,7 +39,10 @@ export class HomeComponent implements OnInit {
 
     // this.spotifyService.getTracks(arr).subscribe(data => console.log(JSON.parse(JSON.stringify(data['tracks']))));
     this.spotifyService.getTracks(arr)
-      .subscribe((data: Tracks) => { this.trackList = data; } );
+      .subscribe((data: Tracks) => {
+        this.trackList = data;
+        console.log(this.trackList.tracks);
+      } );
     // this.spotifyService.getTracks(arr)
     //   .subscribe((data: Track[]) => {
     //     this.trackList = data;

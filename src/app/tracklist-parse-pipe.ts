@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({name: 'tracklistparsepipe'})
 export class TracklistParsePipe implements PipeTransform {
   transform(value: any[]): string {
-    console.log('value:' + value['name']);
+    // console.log('value:' + value['name']);
     let str = '';
     if (value == null) {
       str = 'Track Not Found';
@@ -17,6 +17,7 @@ export class TracklistParsePipe implements PipeTransform {
     } else {
       str += 'Unknown Artist';
     }
+
     return str;
   }
 }
