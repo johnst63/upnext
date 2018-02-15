@@ -16,13 +16,15 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {TracklistParsePipe} from '../tracklist-parse-pipe';
 import {DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
-import {by, element} from 'protractor';
+import {$, by, element} from 'protractor';
+import {DataService} from '../data-service';
 
 describe('RadioComponent', () => {
   let component: RadioComponent;
   let fixture: ComponentFixture<RadioComponent>;
   let de: DebugElement;
   let elem: HTMLElement;
+  let service: SpotifyService;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -41,7 +43,7 @@ describe('RadioComponent', () => {
         FormsModule,
         InterceptorModule
       ],
-      providers: [LoginService, SpotifyService,
+      providers: [LoginService, SpotifyService, DataService,
         {provide: APP_BASE_HREF, useValue: '/'}],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -51,10 +53,20 @@ describe('RadioComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RadioComponent);
     component = fixture.componentInstance;
+    service = component.spotifyService;
+    elem = fixture.debugElement.nativeElement;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+  it('should authenticate ', () => {
+
+    //service.authenticate();
+    component.queryterm = 'abc';
+    fixture.detectChanges();
+
+   expect().nothing();
   });
 });

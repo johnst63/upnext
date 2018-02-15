@@ -15,6 +15,7 @@ import {LoginService} from '../login.service';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {TracklistParsePipe} from '../tracklist-parse-pipe';
+import {DataService} from '../data-service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -38,7 +39,7 @@ describe('LoginComponent', () => {
         FormsModule,
         InterceptorModule
       ],
-      providers: [LoginService, SpotifyService,
+      providers: [LoginService, SpotifyService, DataService,
         {provide: APP_BASE_HREF, useValue: '/'}],
     })
     .compileComponents();

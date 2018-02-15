@@ -1,20 +1,30 @@
 <p align="center">
   radio works!
 </p>
-<input [(ngModel)]="queryterm"/>
-<button (click)="onSearch()"> Search </button>
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <form class=" input-group" (submit)="onSearch()">
+      <input  class="form-control" id="searchterm" [(ngModel)]="queryterm" (submit)="onSearch()" [ngModelOptions]="{standalone: true}">
+      <button class="btn btn-outline-secondary" (click)="onSearch()"> Search </button>
+    </form>
+  </div>
+  <div class="col-md-4"></div>
+
+</div>
+
+
 <div id="search_results">
   <p id="tracks_dne" *ngIf="trackSearchResults == null"> No Tracks Found </p>
-  <ng-container *ngIf="trackSearchResults">
-    <p> </p>
+  <ng-container id ="trackslist" *ngIf="trackSearchResults">
+    <p id="list"></p>
     <div class="track_container" *ngFor="let t of trackSearchResults.items">
       <button class="add_track_button" (click)="onAddTrack(t)"> + </button>
-      <p class="track_text"> {{ t | tracklistparsepipe }} </p>
-      <!--<p>Url: {{updateTrackUrl(t)}}{{t.url}}</p>-->
-      <!--<iframe *ngIf="t.url" [src]="t.url"  width="250" height="80" frameborder="0" allowtransparency="true"></iframe>-->
+      <p class="track_text">{{t.name}} </p>
+
     </div>
   </ng-container>
-  <!--https://open.spotify.com/embed?uri=spotify:user:-->
+
 </div>
 <p>Queryterm: {{queryterm}}</p>
 <!--<button (click)="displayTrack()"> Display Track</button>-->
