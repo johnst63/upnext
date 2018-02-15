@@ -1,6 +1,6 @@
 import { Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
-import { Observable } from 'rxjs/Rx';
+import {Observable, pipe} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import {catchError} from 'rxjs/operators';
 import {Album} from '../Album';
@@ -28,6 +28,7 @@ export class SpotifyService {
   private artist_url: string;
   private albums_url: string;
   private album_url: string;
+  private user_url: string;
   private track_url: string;
   private auth_url: string = 'https://accounts.spotify.com/authorize';
   private token_url: string = 'https://accounts.spotify.com/api/token/';
@@ -77,16 +78,19 @@ export class SpotifyService {
       response_type: 'token'
     };
 
-    let authCompleted = false;
+    let authCompleted: boolean = false;
+    let scopes: string = 'playlist-modify-public user-read-currently-playing';
     let authWindow = this.openDialog(
-      'https://accounts.spotify.com/authorize?' + 'client_id=' + params.client_id +
-      '&redirect_uri=' + params.redirect_uri + '&response_type=' + params.response_type,
+      'https://accounts.spotify.com/authorize?' + 'client_id='
+      + encodeURIComponent(params.client_id) + '&redirect_uri=' +
+      encodeURIComponent(params.redirect_uri) + '&response_type='
+      + encodeURIComponent(params.response_type) + '&scope=' + encodeURIComponent(scopes),
       'Spotify',
       'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + 600 + ',height=' + 400 + ',top=' + 100 + ',left=' + 100,
       function () {
 
         console.log('Auth Callback');
-        console.log('token: bitches! ' + localStorage.getItem('spotify-token')); //TODO WED DIFOSDFJOIWEJ
+        console.log('token: ' + localStorage.getItem('spotify-token')); //TODO WED DIFOSDFJOIWEJ
 
 
       }
@@ -125,6 +129,26 @@ export class SpotifyService {
     this.track_url = this.url_base + 'search';
     return this.httpClient.get(this.track_url, {params: params, headers: headers}).map(res => res).catch(this.handleError);
   }
+
+  createPlaylist(name: string, user_id: string) {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token)
+      .append('Content-Type', 'application/json')
+      .append('Accept', 'application/json');
+    let params = new HttpParams().set('name', name);
+
+    this.albums_url = this.url_base + 'users/' + user_id + '/playlists';
+    return this.httpClient.post(this.albums_url, {
+      name: name
+    }, {headers: headers}).map(res => res).catch(this.handleError);
+  }
+
+  getUserInfo() {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
+    this.user_url = this.url_base + 'me';
+
+    return this.httpClient.get(this.user_url, {headers: headers}).map(res => res).catch(this.handleError);
+  }
+
 
   getAlbum(id: string){
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token )

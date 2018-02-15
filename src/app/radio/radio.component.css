@@ -11,3 +11,20 @@
   padding-left: 2em;
   padding-top: .6em;
 }
+
+.track_text {
+  display: inline-block;
+  border-bottom: 2px black solid;
+}
+
+.add_track_button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  text-align: center;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+
+}

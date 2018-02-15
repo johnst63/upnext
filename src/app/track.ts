@@ -17,11 +17,14 @@
 //
 //
 // }
+import {SafeResourceUrl} from '@angular/platform-browser';
+
 export interface Track {
   name: string;
   artist: string;
   id: string;
   uri: string;
+  // url: SafeResourceUrl;
 }
 
 export interface Tracks {
