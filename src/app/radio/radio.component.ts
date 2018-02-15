@@ -1,16 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import {SpotifyService} from '../angular5-spotify';
-import {Tracks, TrackSearchResults} from '../track';
+import {Track, Tracks, TrackSearchResults} from '../models/track';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-radio',
   templateUrl: './radio.component.html',
   styleUrls: ['./radio.component.css']
 })
+
+
 export class RadioComponent implements OnInit {
   queryterm: string;
   trackSearchResults: TrackSearchResults;
-  constructor(private spotifyService: SpotifyService) { }
+  // private dangerousTrackUrl: string;
+  // private validUrl: SafeResourceUrl;
+
+  constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
   }
@@ -27,6 +33,29 @@ export class RadioComponent implements OnInit {
       );
 
   }
+
+
+  /**
+   * Needs to add a track to the database and a spotify playlist
+   * AND
+   * Needs to add a track to a list that can be shared with HomeComponent (https://angular.io/guide/component-interaction)
+   * to allow the name/etc to be accessed/displayed on the HomeComponent.
+   * @param {Track} track - The track to add
+   */
+  onAddTrack(track: Track) {
+    console.log('Track ID: ' + track.id);
+    this.spotifyService.createPlaylist('PlaylistX', 'mojomaster96').subscribe(
+      data => console.log(data),
+      error => console.log(error));
+
+  }
+  //
+  // updateTrackUrl(track: Track) {
+  //   this.dangerousTrackUrl = 'https://open.spotify.com/embed?uri=spotify:user:' + track.uri;
+  //   this.validUrl =
+  //     this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousTrackUrl);
+  //   return this.validUrl;
+  // }
 
 }
 

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {SpotifyService} from '../angular5-spotify';
 import {ActivatedRoute} from '@angular/router';
 import {Album} from '../../Album';
-import {Track, Tracks} from '../track';
+import {Track, Tracks} from '../models/track';
 
 @Component({
   selector: 'app-home',

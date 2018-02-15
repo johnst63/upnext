@@ -8,8 +8,10 @@
   <ng-container *ngIf="trackSearchResults">
     <p> </p>
     <div class="track_container" *ngFor="let t of trackSearchResults.items">
-      <p> {{ t | tracklistparsepipe }} </p>
-      <!--<iframe *ngIf="t.uri" ng-src="{{'https://open.spotify.com/embed?uri=spotify:user:' + t.uri | trustHtml}}"  width="250" height="80" frameborder="0" allowtransparency="true"></iframe>-->
+      <button class="add_track_button" (click)="onAddTrack(t)"> + </button>
+      <p class="track_text"> {{ t | tracklistparsepipe }} </p>
+      <!--<p>Url: {{updateTrackUrl(t)}}{{t.url}}</p>-->
+      <!--<iframe *ngIf="t.url" [src]="t.url"  width="250" height="80" frameborder="0" allowtransparency="true"></iframe>-->
     </div>
   </ng-container>
   <!--https://open.spotify.com/embed?uri=spotify:user:-->

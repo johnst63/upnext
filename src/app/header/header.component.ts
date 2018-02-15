@@ -1,8 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {LoginComponent} from '../login/login.component';
 import {LoginService} from '../login.service';
-import {User} from '../user';
-import {$} from 'protractor';
+import {User} from '../models/user.interface';
 
 @Component({
   selector: 'app-header',

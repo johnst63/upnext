@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {LoginService} from './login.service';
-import {User} from './user';
+import {SpotifyUser} from './models/user.interface';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,11 @@ export class AppComponent    {
    client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f'; // Your client id
    client_secret = 'c1988f4fc8f347918e0ac41b7409163b'; // Your secret
    redirect_uri = 'http://localhost:4200/callback'; // Your redirect uri
-
+  spotifyUser: SpotifyUser;
+  obtainUserID(spotifyUser: SpotifyUser) {
+    console.log('Passed spotify user from login component to app component');
+    this.spotifyUser = spotifyUser;
+  }
 
 
 
