@@ -52,7 +52,7 @@ export class RadioComponent implements OnInit {
     console.log('Track ID: ' + track.id);
     //if playlist does not already exist create a playlist
     let playlistSearchResults: TrackSearchResults;
-    let alreadyExists: boolean = true;
+    let alreadyExists: boolean = false;
     this.spotifyService.getUserPlaylists().subscribe(data => {
       playlistSearchResults = data;
       playlistSearchResults.items.forEach(f => {
