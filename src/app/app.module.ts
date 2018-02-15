@@ -15,6 +15,7 @@ import {ActivatedRoute} from '@angular/router';
 import {InterceptorModule} from '../interceptor.module';
 import { CallbackComponent } from './callback/callback.component';
 import {TracklistParsePipe} from './tracklist-parse-pipe';
+import {DataService} from './data-service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import {TracklistParsePipe} from './tracklist-parse-pipe';
     FormsModule,
     InterceptorModule
   ],
-  providers: [LoginService, SpotifyService],
+  providers: [LoginService, SpotifyService, DataService],
   bootstrap: [
     AppComponent,
   ]

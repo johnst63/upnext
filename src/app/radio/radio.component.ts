@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {SpotifyService} from '../angular5-spotify';
 import {Track, Tracks, TrackSearchResults} from '../models/track';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {DataService} from '../data-service';
+import {SpotifyUser} from '../models/user.interface';
 
 @Component({
   selector: 'app-radio',
@@ -13,17 +15,19 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 export class RadioComponent implements OnInit {
   queryterm: string;
   trackSearchResults: TrackSearchResults;
+  spotifyUser: SpotifyUser;
   // private dangerousTrackUrl: string;
   // private validUrl: SafeResourceUrl;
 
-  constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer) { }
+  constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer, private dataService: DataService) { }
 
   ngOnInit() {
   }
 
   onSearch() {
-
-    this.spotifyService.searchForTrack(this.queryterm)
+    this.dataService.getData().subscribe((data: SpotifyUser) => this.spotifyUser = data);
+    console.log('Logging Data: ' + this.spotifyUser.id);
+      this.spotifyService.searchForTrack(this.queryterm)
       .subscribe(
         (data: TrackSearchResults) => {
           this.trackSearchResults = data['tracks'];

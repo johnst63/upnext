@@ -1,9 +1,9 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {LoginService} from '../login.service';
 import {SpotifyService} from '../angular5-spotify';
-import { AuthContainer} from '../auth-container';
 import {Router} from '@angular/router';
 import {SpotifyUser, User} from '../models/user.interface';
+import {DataService} from '../data-service';
 
 @Component({
   selector: 'app-login',
@@ -16,15 +16,14 @@ export class LoginComponent implements OnInit {
   submitted = false;
   spotifyUser: SpotifyUser; //holds spotify id
   user: User;
-  @Output() obtainUserID = new EventEmitter <SpotifyUser>();
-  private; authContainer: AuthContainer;
-  constructor(private loginService: LoginService, private spotifyService: SpotifyService, private router: Router) {
+
+  constructor(private loginService: LoginService, private spotifyService: SpotifyService, private router: Router, private dataService: DataService) {
 
   }
   get diagnostic() { return JSON.stringify(this.user); }
 
   ngOnInit() {
-  this.getUsername();
+    this.getUsername();
   }
 
 
@@ -45,9 +44,12 @@ export class LoginComponent implements OnInit {
     console.log('Requesting Tokens');
     console.log('Done Requesting Tokens');
     this.router.navigate(['/home']);
-    this.spotifyService.getUserInfo().subscribe((data: SpotifyUser) => this.spotifyUser = data);
+    this.spotifyService.getUserInfo().subscribe((data: SpotifyUser) => {
+      this.spotifyUser = data,
+      this.dataService.updateData(this.spotifyUser);
+    });
     this.spotifyService.getUserPlaylists().subscribe(data => console.log(data));
-    this.obtainUserID.emit(this.spotifyUser);
+
   }
 
 
