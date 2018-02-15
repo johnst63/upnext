@@ -1,67 +1,62 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
-import {SpotifyService} from '../angular5-spotify';
-import {AppComponent} from '../app.component';
 import {RadioComponent} from '../radio/radio.component';
-import {CallbackComponent} from '../callback/callback.component';
-import {HomeComponent} from '../home/home.component';
-import {HeaderComponent} from '../header/header.component';
-import {APP_BASE_HREF} from '@angular/common';
-import {AppRoutingModule} from '../app-routing.module';
-import {InterceptorModule} from '../../interceptor.module';
-import {BrowserModule} from '@angular/platform-browser';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {LoginService} from '../login.service';
-import {HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
+import {SpotifyService} from '../angular5-spotify';
+import {HttpClient, HttpHandler} from '@angular/common/http';
+import {Router, RouterModule} from '@angular/router';
+import {AppRoutingModule} from '../app-routing.module';
+import {HomeComponent} from '../home/home.component';
+import {CallbackComponent} from '../callback/callback.component';
 import {TracklistParsePipe} from '../tracklist-parse-pipe';
+import {APP_BASE_HREF} from '@angular/common';
 
+class RouterStub {
+  navigateByUrl(url: string) { return url; }
+}
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let router;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent,
-        HomeComponent,
-        RadioComponent,
-        LoginComponent,
-        HeaderComponent,
-        CallbackComponent,
-        TracklistParsePipe,
+        LoginComponent, HomeComponent, RadioComponent, CallbackComponent, TracklistParsePipe,
       ],
-      imports: [
-        BrowserModule,
-        HttpClientModule,
-        AppRoutingModule,
-        FormsModule,
-        InterceptorModule
-      ],
-      providers: [LoginService, SpotifyService,
-        {provide: APP_BASE_HREF, useValue: '/'}],
-    })
-    .compileComponents();
+      imports: [AppRoutingModule],
+      providers: [LoginService, SpotifyService, HttpClient, HttpHandler,
+        {provide: APP_BASE_HREF, useValue: '/'},
+
+  ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
+    let router = fixture.debugElement.injector.get(Router);
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
+
     expect(component).toBeTruthy();
   });
-  it('should redirect to home',  () => {
-    const fixture = TestBed.createComponent(LoginComponent);
-    component.onSubmit();
-    const fix2 = TestBed.createComponent(HomeComponent);
-    fix2.detectChanges();
-    const compiled = fix2.debugElement.nativeElement;
+  it('should navigate to login', async() => {
 
-    expect(compiled.querySelector('p').textContent).toBeTruthy('home works!');
+    component.onTest();
+    expect(HomeComponent).toBeTruthy();
+  });
+  it('should get an auth token', async() => {
+    component.onTest();
 
 
   });
+
+
 });

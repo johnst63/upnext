@@ -1,21 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderComponent } from './header.component';
-import {AppComponent} from '../app.component';
-import {RouterLink, RouterModule} from '@angular/router';
-import {SpotifyService} from '../angular5-spotify';
 import {RadioComponent} from '../radio/radio.component';
-import {CallbackComponent} from '../callback/callback.component';
-import {HomeComponent} from '../home/home.component';
-import {LoginComponent} from '../login/login.component';
-import {APP_BASE_HREF} from '@angular/common';
-import {AppRoutingModule} from '../app-routing.module';
-import {InterceptorModule} from '../../interceptor.module';
-import {BrowserModule} from '@angular/platform-browser';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {LoginService} from '../login.service';
-import {HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
-import {TracklistParsePipe} from '../tracklist-parse-pipe';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -24,26 +12,11 @@ describe('HeaderComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent,
-        HomeComponent,
-        RadioComponent,
-        LoginComponent,
-        HeaderComponent,
-        CallbackComponent,
-        TracklistParsePipe,
+        HeaderComponent
       ],
-      imports: [
-        BrowserModule,
-        HttpClientModule,
-        AppRoutingModule,
-        FormsModule,
-        InterceptorModule
-      ],
-      providers: [LoginService, SpotifyService,
-        {provide: APP_BASE_HREF, useValue: '/'}],
-
-    })
-    .compileComponents();
+      providers: [LoginService],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
