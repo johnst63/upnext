@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {SpotifyService} from '../angular5-spotify';
-import {Track, Tracks, TrackSearchResults} from '../track';
+import {Track, Tracks, TrackSearchResults} from '../models/track';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
-import {UpNextUser} from '../models/user.interface';
 
 @Component({
   selector: 'app-radio',
@@ -14,7 +13,6 @@ import {UpNextUser} from '../models/user.interface';
 export class RadioComponent implements OnInit {
   queryterm: string;
   trackSearchResults: TrackSearchResults;
-  private user: UpNextUser;
   // private dangerousTrackUrl: string;
   // private validUrl: SafeResourceUrl;
 
@@ -46,10 +44,9 @@ export class RadioComponent implements OnInit {
    */
   onAddTrack(track: Track) {
     console.log('Track ID: ' + track.id);
-    this.spotifyService.getUserInfo().subscribe((data: UpNextUser) => this.user = data);
-    // this.spotifyService.createPlaylist('PlaylistX', 'mojomaster96').subscribe(
-    //   data => console.log(data),
-    //   error => console.log(error));
+    this.spotifyService.createPlaylist('PlaylistX', 'mojomaster96').subscribe(
+      data => console.log(data),
+      error => console.log(error));
 
   }
   //

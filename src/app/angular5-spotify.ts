@@ -130,6 +130,12 @@ export class SpotifyService {
     return this.httpClient.get(this.track_url, {params: params, headers: headers}).map(res => res).catch(this.handleError);
   }
 
+  getUserPlaylists() {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
+    this.album_url = this.url_base + 'me/playlists';
+    return this.httpClient.get(this.album_url, {headers: headers}).map(res => res).catch(this.handleError);
+  }
+
   createPlaylist(name: string, user_id: string) {
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token)
       .append('Content-Type', 'application/json')

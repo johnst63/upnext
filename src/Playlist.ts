@@ -1,4 +1,4 @@
-import {Track} from './app/track';
+import {Track} from './app/models/track';
 
 export class Playlist {
   collaborative: boolean;
