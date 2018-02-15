@@ -4,6 +4,9 @@ import {Track, Tracks, TrackSearchResults} from '../models/track';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {DataService} from '../data-service';
 import {SpotifyUser} from '../models/user.interface';
+import {AngularFirestore} from 'angularfire2/firestore';
+import {Observable} from 'rxjs/Observable';
+import {AngularFireDatabase} from 'angularfire2/database';
 
 @Component({
   selector: 'app-radio',
@@ -17,17 +20,21 @@ export class RadioComponent implements OnInit {
   trackSearchResults: TrackSearchResults;
   spotifyUser: SpotifyUser;
   playlistToCreate: string = 'UpNextPlaylist';
-  // private dangerousTrackUrl: string;
-  // private validUrl: SafeResourceUrl;
+  tracksFromFirestore: Observable<any[]>;
 
-  constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer, private dataService: DataService) { }
+
+  constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer,
+              private dataService: DataService, private db: AngularFireDatabase) {
+    this.tracksFromFirestore = db.list('tracks').valueChanges();
+
+  }
 
   ngOnInit() {
   }
 
   onSearch() {
 
-    this.spotifyService.searchForTrack(this.queryterm)
+      this.spotifyService.searchForTrack(this.queryterm)
       .subscribe(
         (data: TrackSearchResults) => {
           this.trackSearchResults = data['tracks'];
@@ -67,6 +74,9 @@ export class RadioComponent implements OnInit {
         data => console.log('Successfully Created Playlist!'),
         error => console.log(error));
     }
+    const items = this.db.list('tracks');
+
+    items.push(track.id);
   }
   //
   // updateTrackUrl(track: Track) {

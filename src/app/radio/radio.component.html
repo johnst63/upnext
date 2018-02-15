@@ -18,3 +18,10 @@
 </div>
 <p>Queryterm: {{queryterm}}</p>
 <!--<button (click)="displayTrack()"> Display Track</button>-->
+
+
+<ul>
+  <li class="text" *ngFor="let item of tracksFromFirestore | async">
+    {{item.name}}
+  </li>
+</ul>
