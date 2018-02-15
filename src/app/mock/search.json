@@ -1,0 +1,139 @@
+{
+  "tracks" : {
+    "href" : "https://api.spotify.com/v1/search?query=abc&type=track&market=US&offset=0&limit=20",
+    "items" : [ {
+      "album" : {
+        "album_type" : "album",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/2iE18Oxc8YSumAU232n4rW"
+          },
+          "href" : "https://api.spotify.com/v1/artists/2iE18Oxc8YSumAU232n4rW",
+          "id" : "2iE18Oxc8YSumAU232n4rW",
+          "name" : "The Jackson 5",
+          "type" : "artist",
+          "uri" : "spotify:artist:2iE18Oxc8YSumAU232n4rW"
+        } ],
+        "available_markets" : [ "AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CO", "CR", "CY", "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "GT", "HK", "HN", "HU", "ID", "IE", "IS", "IT", "JP", "LI", "LT", "LU", "LV", "MC", "MT", "MX", "MY", "NI", "NL", "NO", "NZ", "PA", "PE", "PH", "PL", "PT", "PY", "SE", "SG", "SK", "SV", "TH", "TR", "TW", "US", "UY" ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/3btVhknqDeGAEd1Qj7lL57"
+        },
+        "href" : "https://api.spotify.com/v1/albums/3btVhknqDeGAEd1Qj7lL57",
+        "id" : "3btVhknqDeGAEd1Qj7lL57",
+        "images" : [ {
+          "height" : 640,
+          "url" : "https://i.scdn.co/image/aa695769a003591911e34b4af4939e0a54775366",
+          "width" : 640
+        }, {
+          "height" : 300,
+          "url" : "https://i.scdn.co/image/782afbed1001c706404b13bad0a62eea69a6dddf",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/f02a2fe4759ee5aabfd50f9ad52457501a279a68",
+          "width" : 64
+        } ],
+        "name" : "ABC",
+        "type" : "album",
+        "uri" : "spotify:album:3btVhknqDeGAEd1Qj7lL57"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/2iE18Oxc8YSumAU232n4rW"
+        },
+        "href" : "https://api.spotify.com/v1/artists/2iE18Oxc8YSumAU232n4rW",
+        "id" : "2iE18Oxc8YSumAU232n4rW",
+        "name" : "The Jackson 5",
+        "type" : "artist",
+        "uri" : "spotify:artist:2iE18Oxc8YSumAU232n4rW"
+      } ],
+      "available_markets" : [ "AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CO", "CR", "CY", "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "GT", "HK", "HN", "HU", "ID", "IE", "IS", "IT", "JP", "LI", "LT", "LU", "LV", "MC", "MT", "MX", "MY", "NI", "NL", "NO", "NZ", "PA", "PE", "PH", "PL", "PT", "PY", "SE", "SG", "SK", "SV", "TH", "TR", "TW", "US", "UY" ],
+      "disc_number" : 1,
+      "duration_ms" : 177733,
+      "explicit" : false,
+      "external_ids" : {
+        "isrc" : "USMO17082628"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/6wDviYDtmSDZ0S6TVMM9Vc"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/6wDviYDtmSDZ0S6TVMM9Vc",
+      "id" : "6wDviYDtmSDZ0S6TVMM9Vc",
+      "name" : "ABC",
+      "popularity" : 65,
+      "preview_url" : null,
+      "track_number" : 3,
+      "type" : "track",
+      "uri" : "spotify:track:6wDviYDtmSDZ0S6TVMM9Vc"
+    }, {
+      "album" : {
+        "album_type" : "compilation",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/2iE18Oxc8YSumAU232n4rW"
+          },
+          "href" : "https://api.spotify.com/v1/artists/2iE18Oxc8YSumAU232n4rW",
+          "id" : "2iE18Oxc8YSumAU232n4rW",
+          "name" : "The Jackson 5",
+          "type" : "artist",
+          "uri" : "spotify:artist:2iE18Oxc8YSumAU232n4rW"
+        } ],
+        "available_markets" : [ "AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CO", "CR", "CY", "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "GT", "HK", "HN", "HU", "ID", "IE", "IS", "IT", "JP", "LI", "LT", "LU", "LV", "MC", "MT", "MX", "MY", "NI", "NL", "NO", "NZ", "PA", "PE", "PH", "PL", "PT", "PY", "SE", "SG", "SK", "SV", "TH", "TR", "TW", "US", "UY" ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/0EwhxzV0N61hu3S3PkB2Ku"
+        },
+        "href" : "https://api.spotify.com/v1/albums/0EwhxzV0N61hu3S3PkB2Ku",
+        "id" : "0EwhxzV0N61hu3S3PkB2Ku",
+        "images" : [ {
+          "height" : 639,
+          "url" : "https://i.scdn.co/image/0604aa3ceaefd16afc5a41b8d1665aebceb1cf26",
+          "width" : 640
+        }, {
+          "height" : 299,
+          "url" : "https://i.scdn.co/image/546e97e0edc5b6f73c74a26cef833e230b46e99b",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/68d9dab9c3d592687dbe85c29ea18fcb9fd9ce19",
+          "width" : 64
+        } ],
+        "name" : "Anthology: Jackson 5",
+        "type" : "album",
+        "uri" : "spotify:album:0EwhxzV0N61hu3S3PkB2Ku"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/2iE18Oxc8YSumAU232n4rW"
+        },
+        "href" : "https://api.spotify.com/v1/artists/2iE18Oxc8YSumAU232n4rW",
+        "id" : "2iE18Oxc8YSumAU232n4rW",
+        "name" : "The Jackson 5",
+        "type" : "artist",
+        "uri" : "spotify:artist:2iE18Oxc8YSumAU232n4rW"
+      } ],
+      "available_markets" : [ "AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CO", "CR", "CY", "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "GT", "HK", "HN", "HU", "ID", "IE", "IS", "IT", "JP", "LI", "LT", "LU", "LV", "MC", "MT", "MX", "MY", "NI", "NL", "NO", "NZ", "PA", "PE", "PH", "PL", "PT", "PY", "SE", "SG", "SK", "SV", "TH", "TR", "TW", "US", "UY" ],
+      "disc_number" : 1,
+      "duration_ms" : 177426,
+      "explicit" : false,
+      "external_ids" : {
+        "isrc" : "USMO17082628"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/01gwPP2h3ajRnqiIphUtR7"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/01gwPP2h3ajRnqiIphUtR7",
+      "id" : "01gwPP2h3ajRnqiIphUtR7",
+      "name" : "ABC",
+      "popularity" : 61,
+      "preview_url" : null,
+      "track_number" : 3,
+      "type" : "track",
+      "uri" : "spotify:track:01gwPP2h3ajRnqiIphUtR7"
+    } ],
+    "limit" : 20,
+    "next" : "https://api.spotify.com/v1/search?query=abc&type=track&market=US&offset=20&limit=20",
+    "offset" : 0,
+    "previous" : null,
+    "total" : 10839
+  }
+}

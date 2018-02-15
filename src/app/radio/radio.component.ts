@@ -20,7 +20,7 @@ export class RadioComponent implements OnInit {
   // private dangerousTrackUrl: string;
   // private validUrl: SafeResourceUrl;
 
-  constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer, private dataService: DataService) { }
+  constructor(public spotifyService: SpotifyService, private sanitizer: DomSanitizer, private dataService: DataService) { }
 
   ngOnInit() {
   }
