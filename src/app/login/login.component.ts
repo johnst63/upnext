@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {LoginService} from '../login.service';
 import {SpotifyService} from '../angular5-spotify';
 import { AuthContainer} from '../auth-container';
@@ -16,7 +16,8 @@ export class LoginComponent implements OnInit {
   submitted = false;
   spotifyUser: SpotifyUser; //holds spotify id
   user: User;
-  private authContainer: AuthContainer;
+  @Output() obtainUserID = new EventEmitter <SpotifyUser>();
+  private; authContainer: AuthContainer;
   constructor(private loginService: LoginService, private spotifyService: SpotifyService, private router: Router) {
 
   }
@@ -46,6 +47,7 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/home']);
     this.spotifyService.getUserInfo().subscribe((data: SpotifyUser) => this.spotifyUser = data);
     this.spotifyService.getUserPlaylists().subscribe(data => console.log(data));
+    this.obtainUserID.emit(this.spotifyUser);
   }
 
 
