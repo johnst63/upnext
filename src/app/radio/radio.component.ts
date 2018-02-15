@@ -16,6 +16,7 @@ export class RadioComponent implements OnInit {
   queryterm: string;
   trackSearchResults: TrackSearchResults;
   spotifyUser: SpotifyUser;
+  playlistToCreate: string = 'UpNextPlaylist';
   // private dangerousTrackUrl: string;
   // private validUrl: SafeResourceUrl;
 
@@ -25,9 +26,8 @@ export class RadioComponent implements OnInit {
   }
 
   onSearch() {
-    this.dataService.getData().subscribe((data: SpotifyUser) => this.spotifyUser = data);
-    console.log('Logging Data: ' + this.spotifyUser.id);
-      this.spotifyService.searchForTrack(this.queryterm)
+
+    this.spotifyService.searchForTrack(this.queryterm)
       .subscribe(
         (data: TrackSearchResults) => {
           this.trackSearchResults = data['tracks'];
@@ -47,11 +47,26 @@ export class RadioComponent implements OnInit {
    * @param {Track} track - The track to add
    */
   onAddTrack(track: Track) {
+    this.dataService.getData().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
+    console.log('Logging Data: ' + this.spotifyUser.id);
     console.log('Track ID: ' + track.id);
-    this.spotifyService.createPlaylist('PlaylistX', 'mojomaster96').subscribe(
-      data => console.log(data),
-      error => console.log(error));
-
+    //if playlist does not already exist create a playlist
+    let playlistSearchResults: TrackSearchResults;
+    let alreadyExists: boolean = true;
+    this.spotifyService.getUserPlaylists().subscribe(data => {
+      playlistSearchResults = data;
+      playlistSearchResults.items.forEach(f => {
+          if (f.name === this.playlistToCreate) {
+            alreadyExists = true;
+          }
+        }
+      );
+    });
+    if (!alreadyExists) {
+      this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id).subscribe(
+        data => console.log('Successfully Created Playlist!'),
+        error => console.log(error));
+    }
   }
   //
   // updateTrackUrl(track: Track) {

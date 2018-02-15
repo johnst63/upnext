@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit {
       this.spotifyUser = data,
       this.dataService.updateData(this.spotifyUser);
     });
-    this.spotifyService.getUserPlaylists().subscribe(data => console.log(data));
 
   }
 
