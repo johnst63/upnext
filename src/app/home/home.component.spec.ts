@@ -1,21 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
-import {AppComponent} from '../app.component';
-import {SpotifyService} from '../angular5-spotify';
-import {LoginService} from '../login.service';
-import {RouterModule} from '@angular/router';
-import {HeaderComponent} from '../header/header.component';
-import {HttpClient, HttpClientModule, HttpHandler} from '@angular/common/http';
-import {Browser} from 'selenium-webdriver';
 import {RadioComponent} from '../radio/radio.component';
-import {CallbackComponent} from '../callback/callback.component';
-import {LoginComponent} from '../login/login.component';
-import {APP_BASE_HREF} from '@angular/common';
-import {AppRoutingModule} from '../app-routing.module';
-import {InterceptorModule} from '../../interceptor.module';
-import {BrowserModule} from '@angular/platform-browser';
-import {FormsModule} from '@angular/forms';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {SpotifyService} from '../angular5-spotify';
+import {HttpClient, HttpHandler} from '@angular/common/http';
+import {ActivatedRoute} from '@angular/router';
+import {AppComponent} from '../app.component';
 import {TracklistParsePipe} from '../tracklist-parse-pipe';
 
 describe('HomeComponent', () => {
@@ -25,28 +16,12 @@ describe('HomeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent,
-        HomeComponent,
-        RadioComponent,
-        LoginComponent,
-        HeaderComponent,
-        CallbackComponent,
-        TracklistParsePipe,
-
+        HomeComponent, TracklistParsePipe,
       ],
-      imports: [
-        BrowserModule,
-        HttpClientModule,
-        AppRoutingModule,
-        FormsModule,
-        InterceptorModule,
+      providers: [SpotifyService, HttpClient, HttpHandler],
 
-      ],
-      providers: [LoginService, SpotifyService,
-        {provide: APP_BASE_HREF, useValue: '/'}],
-
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -58,4 +33,5 @@ describe('HomeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });
