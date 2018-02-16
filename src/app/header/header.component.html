@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
-  <a class="navbar-brand mynav" routerLink="/home" >UpNext</a>
+  <a id="apphome" class="navbar-brand mynav" routerLink="/home" >UpNext</a>
 
   <button class="navbar-toggler navbar-toggler-right" type="button"
           data-toggle="collapse" data-target="#navContent" aria-controls="navContent"
@@ -9,10 +9,10 @@
   <div class="collapse navbar-collapse" id="navContent">
     <ul class="navbar-nav nav-tabs mynav mr-auto">
       <li ngClass="{ active: isActive('/home')}" class="nav-item mynav">
-        <a class="nav-link" routerLink="/home">Home</a>
+        <a  id= "home" class="nav-link" routerLink="/home">Home</a>
       </li>
       <li ngClass="{ active: isActive('/radio')}" class="nav-item mynav">
-        <a class="nav-link" routerLink="/radio">Radio</a>
+        <a id ="radio" class="nav-link" routerLink="/radio">Radio</a>
       </li>
     </ul>
     <ul class="navbar-nav mynav">
@@ -22,7 +22,7 @@
       </li>
       <!--TODO in li tag below, put code to hide the login once someone is logged in. maybe replace it with log out-->
       <li class="nav-item">
-        <a class="nav-link" routerLink="/login">Login</a>
+        <a id= "login" class="nav-link" routerLink="/login">Login</a>
       </li>
 
     </ul>

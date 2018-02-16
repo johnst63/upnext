@@ -101,6 +101,7 @@ export class SpotifyService {
 
   }
 
+
   getTrack(trackId: string) {
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token)
       .append('Content-Type', 'application/json')

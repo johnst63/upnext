@@ -18,6 +18,13 @@ import {TracklistParsePipe} from '../tracklist-parse-pipe';
 import {DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
 import {$, by, element} from 'protractor';
 import {DataService} from '../data-service';
+import {AngularFireDatabase, AngularFireDatabaseModule} from 'angularfire2/database';
+import {AngularFireModule, FirebaseApp} from 'angularfire2';
+import {AngularFireAuthModule} from 'angularfire2/auth';
+import {AngularFirestoreModule} from 'angularfire2/firestore';
+import {environment} from '../../environments/environment';
+
+
 
 describe('RadioComponent', () => {
   let component: RadioComponent;
@@ -41,7 +48,11 @@ describe('RadioComponent', () => {
         HttpClientModule,
         AppRoutingModule,
         FormsModule,
-        InterceptorModule
+        InterceptorModule,
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFirestoreModule, // imports firebase/firestore, only needed for database features
+        AngularFireDatabaseModule,
+        AngularFireAuthModule,
       ],
       providers: [LoginService, SpotifyService, DataService,
         {provide: APP_BASE_HREF, useValue: '/'}],
@@ -53,20 +64,46 @@ describe('RadioComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RadioComponent);
     component = fixture.componentInstance;
-    service = component.spotifyService;
+    // service = component.spotifyService;
     elem = fixture.debugElement.nativeElement;
     fixture.detectChanges();
   });
 
   it('should create', () => {
+
     expect(component).toBeTruthy();
   });
-  it('should authenticate ', () => {
+  it('should open the login window', function () {
+    spyOn(window, 'open');
 
-    //service.authenticate();
+    component.spotifyService.authenticate();
+
+    let w = 400,
+      h = 500,
+      left = (screen.width / 2) - (w / 2),
+      top = (screen.height / 2) - (h / 2);
+
+    let params = {
+      client_id: null,
+      redirect_uri: null,
+      scope: '',
+      response_type: 'token'
+    };
+    expect(window.open).toHaveBeenCalled();
+    // expect(window.open).toHaveBeenCalledWith('https://accounts.spotify.com/authorize?' + service.toQueryString(params),
+    //   'Spotify',
+    //   'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left);
+  });
+  it('should authenticate ', async() => {
+
+    component.spotifyService.authenticate();
+
+    //TODO use interval here maybe ************************
+
     component.queryterm = 'abc';
     fixture.detectChanges();
-
+    component.onSearch();
    expect().nothing();
   });
 });
+
