@@ -4,6 +4,7 @@ import {Observable, pipe} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import {catchError} from 'rxjs/operators';
 import {Album} from '../Album';
+import {TrackSearchResults} from './models/track';
 
 // export interface SpotifyConfig {
 //   clientId: string ;
@@ -149,6 +150,13 @@ export class SpotifyService {
     }, {headers: headers}).map(res => res).catch(this.handleError);
   }
 
+  getPlaylist(user_id: string, playlist_id: string) {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
+
+    this.albums_url = this.url_base + 'users/' + user_id + '/playlists/' + playlist_id;
+    return this.httpClient.get(this.albums_url, {headers: headers}).map(res => res).catch(this.handleError);
+  }
+
   getUserInfo() {
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
     this.user_url = this.url_base + 'me';
@@ -184,6 +192,31 @@ export class SpotifyService {
       redirect_uri: 'http://localhost:4200/login'
     }, {headers: headers}).pipe(catchError(this.handleError)).subscribe();
   }
+
+
+
+  // createPlaylistIfDoesNotExist(playlistToCreate: string, spotifyUserID: string) {
+  //   let playlistSearchResults: TrackSearchResults;
+  //   let alreadyExists: boolean = false;
+  //     this.getUserPlaylists().subscribe(data => {
+  //     playlistSearchResults = data;
+  //     playlistSearchResults.items.forEach(f => {
+  //         if (f.name === playlistToCreate) {
+  //           alreadyExists = true;
+  //           // this.playlist_id = f.id;
+  //         }
+  //       }
+  //     );
+  //   });
+  //   if (!alreadyExists) {
+  //     this.createPlaylist(playlistToCreate, spotifyUserID).subscribe(
+  //       data => {
+  //         // this.playlist_id = data.id;
+  //         console.log('Successfully Created Playlist!');
+  //       },
+  //       error => console.log(error));
+  //   }
+  // }
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = '';
