@@ -25,7 +25,7 @@ export class RadioComponent implements OnInit {
 
   constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer,
               private dataService: DataService, private db: AngularFireDatabase) {
-    this.tracksFromFirestore = db.list('tracks').valueChanges();
+    // this.tracksFromFirestore = db.list('tracks').valueChanges();
 
   }
 
@@ -38,7 +38,7 @@ export class RadioComponent implements OnInit {
       .subscribe(
         (data: TrackSearchResults) => {
           this.trackSearchResults = data['tracks'];
-          console.log(this.trackSearchResults.items);
+          // console.log('Track Search Results: ' + JSON.stringify(this.trackSearchResults.items));
         },
         error => console.log(error)
       );
@@ -75,8 +75,7 @@ export class RadioComponent implements OnInit {
         error => console.log(error));
     }
     const items = this.db.list('tracks');
-
-    items.push(track.id);
+    items.push(track);
   }
   //
   // updateTrackUrl(track: Track) {

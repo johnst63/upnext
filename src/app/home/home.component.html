@@ -2,14 +2,24 @@
 <p align="center">
   home works!
 </p>
+
 <div id="tracks_list">
-  <p *ngIf="tracks_string == null"> No Tracks Found </p>
-  <ng-container *ngIf="tracks_string">
-    <div class="track_container" *ngFor="let t of tracks_string">
-      <p> {{ t | tracklistparsepipe}} </p>
-    </div>
-  </ng-container>
+<p *ngIf="dbTrackList == null"> No Tracks Found </p>
+<ng-container *ngIf="dbTrackList">
+<div class="track_container" *ngFor="let t of dbTrackList">
+<p> {{ t | tracklistparsepipe}} </p>
 </div>
+</ng-container>
+</div>
+
+<!--<div id="tracks_list">-->
+  <!--<p *ngIf="tracks_string == null"> No Tracks Found </p>-->
+  <!--<ng-container *ngIf="tracks_string">-->
+    <!--<div class="track_container" *ngFor="let t of tracks_string">-->
+      <!--<p> {{ t | tracklistparsepipe}} </p>-->
+    <!--</div>-->
+  <!--</ng-container>-->
+<!--</div>-->
 
 <button (click)="onClick()"> click me </button>
 <button (click)="displayTrack()"> Display Track</button>

@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {SpotifyService} from '../angular5-spotify';
 import {ActivatedRoute} from '@angular/router';
 import {Album} from '../../Album';
-import {Track, Tracks} from '../models/track';
+import {Track, Tracks, TrackSearchResults} from '../models/track';
+import {AngularFireDatabase} from 'angularfire2/database';
 
 @Component({
   selector: 'app-home',
@@ -16,12 +17,24 @@ export class HomeComponent implements OnInit {
   trackList: Tracks;
   tracks_string: any[];
   tracks: any;
+  dbTrackList: Array<Track>;
 
-  constructor(private spotifyService: SpotifyService, private route: ActivatedRoute) {
+  constructor(private spotifyService: SpotifyService, private route: ActivatedRoute, private db: AngularFireDatabase) {
+
   }
 
   ngOnInit() {
 
+    this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
+      this.dbTrackList = data;
+      console.log(data);
+      // console.log('NGONINIT: ' + this.dbTrackList[0].id);
+    });
+    // this.spotifyService.getTracks()
+    //   .subscribe((data: Tracks) => {
+    //     this.trackList = data;
+    //     console.log(this.trackList.tracks);
+    //   } );
   }
 
   onClick() {
