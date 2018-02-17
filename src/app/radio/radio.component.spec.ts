@@ -1,18 +1,18 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 
-import { RadioComponent } from './radio.component';
+import {RadioComponent} from './radio.component';
 import {SpotifyService} from '../angular5-spotify';
 import {AppComponent} from '../app.component';
 import {CallbackComponent} from '../callback/callback.component';
 import {HomeComponent} from '../home/home.component';
 import {LoginComponent} from '../login/login.component';
 import {HeaderComponent} from '../header/header.component';
-import {APP_BASE_HREF} from '@angular/common';
+import {APP_BASE_HREF, JsonPipe} from '@angular/common';
 import {AppRoutingModule} from '../app-routing.module';
 import {InterceptorModule} from '../../interceptor.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {LoginService} from '../login.service';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, JsonpClientBackend} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {TracklistParsePipe} from '../tracklist-parse-pipe';
 import {DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
@@ -23,7 +23,10 @@ import {AngularFireModule, FirebaseApp} from 'angularfire2';
 import {AngularFireAuthModule} from 'angularfire2/auth';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
 import {environment} from '../../environments/environment';
-
+import {TrackSearchResults} from '../models/track';
+import {JSONPBackend} from '@angular/http';
+import {forEach} from '@angular/router/src/utils/collection';
+import createSpyObj = jasmine.createSpyObj;
 
 
 describe('RadioComponent', () => {
@@ -32,6 +35,11 @@ describe('RadioComponent', () => {
   let de: DebugElement;
   let elem: HTMLElement;
   let service: SpotifyService;
+  let spy: any;
+
+  let database: any = require('../mock/search.json');
+
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -58,15 +66,16 @@ describe('RadioComponent', () => {
         {provide: APP_BASE_HREF, useValue: '/'}],
       schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
+
     fixture = TestBed.createComponent(RadioComponent);
     component = fixture.componentInstance;
-    // service = component.spotifyService;
     elem = fixture.debugElement.nativeElement;
     fixture.detectChanges();
+
   });
 
   it('should create', () => {
@@ -94,16 +103,23 @@ describe('RadioComponent', () => {
     //   'Spotify',
     //   'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left);
   });
-  it('should authenticate ', async() => {
-
+  it('should authenticate ', async(() => {
+    let spy = spyOn(component.spotifyService, 'authenticate');
+    setInterval(component.spotifyService.authenticate, 5000);
     component.spotifyService.authenticate();
+    expect(component.spotifyService.authenticate).toHaveBeenCalled();
+  }));
+  it('should get search results back ', async(() => {
 
-    //TODO use interval here maybe ************************
-
+    setInterval(component.spotifyService.authenticate, 5000);
+    component.spotifyService.authenticate();
     component.queryterm = 'abc';
     fixture.detectChanges();
+    setInterval(component.onSearch, 2000);
     component.onSearch();
-   expect().nothing();
-  });
+    fixture.detectChanges();
+
+    expect(component.trackSearchResults).toBeDefined();
+  }));
 });
 

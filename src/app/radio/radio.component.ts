@@ -16,12 +16,13 @@ import {AngularFireDatabase} from 'angularfire2/database';
 
 
 export class RadioComponent implements OnInit {
+
   queryterm: string;
   trackSearchResults: TrackSearchResults;
   spotifyUser: SpotifyUser;
   playlistToCreate: string = 'UpNextPlaylist';
   tracksFromFirestore: Observable<any[]>;
-
+   success: boolean = false;
 
   constructor(public spotifyService: SpotifyService, private sanitizer: DomSanitizer,
               private dataService: DataService, private db: AngularFireDatabase) {
@@ -32,17 +33,20 @@ export class RadioComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSearch() {
-
+  onSearch(): boolean {
       this.spotifyService.searchForTrack(this.queryterm)
       .subscribe(
         (data: TrackSearchResults) => {
+
           this.trackSearchResults = data['tracks'];
+          if (this.trackSearchResults.items !== null) {
+            this.success = true;
+          }
           console.log(this.trackSearchResults.items);
         },
         error => console.log(error)
       );
-
+  return this.success;
   }
 
 

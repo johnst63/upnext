@@ -30,6 +30,7 @@ export class SpotifyService {
   private album_url: string;
   private user_url: string;
   private track_url: string;
+  private ready: boolean = false;
   private auth_url: string = 'https://accounts.spotify.com/authorize';
   private token_url: string = 'https://accounts.spotify.com/api/token/';
   private redirect_url: string = 'http://localhost:4200';
@@ -37,6 +38,7 @@ export class SpotifyService {
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
   private secret_key = 'c1988f4fc8f347918e0ac41b7409163b';
   private access_token: string;
+  public searchDone: boolean;
   album: Album;
   constructor(private httpClient: HttpClient) {
   }
