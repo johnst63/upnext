@@ -46,6 +46,10 @@ export class RadioComponent implements OnInit {
         },
         error => console.log(error)
       );
+      if (this.success === false) {
+        this.spotifyService.authenticate();
+
+      }
   return this.success;
   }
 

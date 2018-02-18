@@ -23,10 +23,7 @@ import {AngularFireModule, FirebaseApp} from 'angularfire2';
 import {AngularFireAuthModule} from 'angularfire2/auth';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
 import {environment} from '../../environments/environment';
-import {TrackSearchResults} from '../models/track';
-import {JSONPBackend} from '@angular/http';
-import {forEach} from '@angular/router/src/utils/collection';
-import createSpyObj = jasmine.createSpyObj;
+
 
 
 describe('RadioComponent', () => {
@@ -79,14 +76,17 @@ describe('RadioComponent', () => {
   });
 
   it('should create', () => {
-
+      setInterval(component.spotifyService.authenticate, 5000);
+      component.spotifyService.authenticate();
+      fixture.detectChanges();
     expect(component).toBeTruthy();
   });
-  it('should open the login window', function () {
+  it('should open the login window', async(() => {
     spyOn(window, 'open');
+    setInterval(component.spotifyService.authenticate, 3000);
 
     component.spotifyService.authenticate();
-
+    fixture.detectChanges();
     let w = 400,
       h = 500,
       left = (screen.width / 2) - (w / 2),
@@ -102,7 +102,7 @@ describe('RadioComponent', () => {
     // expect(window.open).toHaveBeenCalledWith('https://accounts.spotify.com/authorize?' + service.toQueryString(params),
     //   'Spotify',
     //   'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left);
-  });
+  }));
   it('should authenticate ', async(() => {
     let spy = spyOn(component.spotifyService, 'authenticate');
     setInterval(component.spotifyService.authenticate, 5000);
@@ -119,7 +119,26 @@ describe('RadioComponent', () => {
     component.onSearch();
     fixture.detectChanges();
 
+    //TODO figure out alternative to this
+
     expect(component.trackSearchResults).toBeDefined();
+  }));
+  it('should authenticate when error 401 occurs', async(() => {
+    fixture = TestBed.createComponent(RadioComponent);
+    component = fixture.componentInstance;
+    component.queryterm = 'lose';
+    fixture.detectChanges();
+    console.log(component.spotifyService);
+    spyOn(component.spotifyService, 'authenticate');
+    setInterval(component.onSearch, 3000);
+    component.onSearch();
+    expect(component.spotifyService.authenticate).toHaveBeenCalled();
+    setInterval(component.onSearch, 2000);
+    component.onSearch();
+
+    //TODO figure out alternative to this
+    expect(component.trackSearchResults).toBeFalsy();
+
   }));
 });
 
