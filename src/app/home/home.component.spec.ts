@@ -1,27 +1,55 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
-import {RadioComponent} from '../radio/radio.component';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SpotifyService} from '../angular5-spotify';
-import {HttpClient, HttpHandler} from '@angular/common/http';
-import {ActivatedRoute} from '@angular/router';
 import {AppComponent} from '../app.component';
+import {SpotifyService} from '../angular5-spotify';
+import {LoginService} from '../login.service';
+import {RouterModule} from '@angular/router';
+import {HeaderComponent} from '../header/header.component';
+import {HttpClient, HttpClientModule, HttpHandler} from '@angular/common/http';
+import {Browser} from 'selenium-webdriver';
+import {RadioComponent} from '../radio/radio.component';
+import {CallbackComponent} from '../callback/callback.component';
+import {LoginComponent} from '../login/login.component';
+import {APP_BASE_HREF} from '@angular/common';
+import {AppRoutingModule} from '../app-routing.module';
+import {InterceptorModule} from '../../interceptor.module';
+import {BrowserModule} from '@angular/platform-browser';
+import {FormsModule} from '@angular/forms';
 import {TracklistParsePipe} from '../tracklist-parse-pipe';
+import {DebugElement} from '@angular/core';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
+  let elem: HTMLElement;
+  let de: DebugElement;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        HomeComponent, TracklistParsePipe,
-      ],
-      providers: [SpotifyService, HttpClient, HttpHandler],
+        AppComponent,
+        HomeComponent,
+        RadioComponent,
+        LoginComponent,
+        HeaderComponent,
+        CallbackComponent,
+        TracklistParsePipe,
 
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
+      ],
+      imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        FormsModule,
+        InterceptorModule,
+
+      ],
+      providers: [LoginService, SpotifyService,
+        {provide: APP_BASE_HREF, useValue: '/'}],
+
+    })
+    .compileComponents();
   }));
 
   beforeEach(() => {
@@ -33,5 +61,21 @@ describe('HomeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('should update playlist', async(() => {
+    let radfix = TestBed.createComponent(RadioComponent);
+    let radcomp = radfix.componentInstance;
+
+    //TODO login somehow
+
+    radcomp.queryterm = 'somebody';
+    fixture.detectChanges();
+    setInterval(radcomp.onSearch, 3000);
+    radcomp.onSearch();
+
+
+
+  }));
+
+
 
 });
