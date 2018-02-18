@@ -21,7 +21,7 @@ export class RadioComponent implements OnInit {
   spotifyUser: SpotifyUser;
   playlistToCreate: string = 'UpNextPlaylist';
   tracksFromFirestore: Observable<any[]>;
-
+  // playlist_id: string;
 
   constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer,
               private dataService: DataService, private db: AngularFireDatabase) {
@@ -54,24 +54,29 @@ export class RadioComponent implements OnInit {
    * @param {Track} track - The track to add
    */
   onAddTrack(track: Track) {
-    this.dataService.getData().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
+    this.dataService.getUserID().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
     console.log('Logging Data: ' + this.spotifyUser.id);
     console.log('Track ID: ' + track.id);
-    //if playlist does not already exist create a playlist
+    // this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id); //if can get angular5-spotify to work with createPlaylist
+    // if playlist does not already exist create a playlist
     let playlistSearchResults: TrackSearchResults;
-    let alreadyExists: boolean = false;
+    let alreadyExists: boolean = false; //this is not preventing a new playlist from being created currently
     this.spotifyService.getUserPlaylists().subscribe(data => {
       playlistSearchResults = data;
       playlistSearchResults.items.forEach(f => {
           if (f.name === this.playlistToCreate) {
             alreadyExists = true;
+            // this.playlist_id = f.id;
           }
         }
       );
     });
     if (!alreadyExists) {
       this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id).subscribe(
-        data => console.log('Successfully Created Playlist!'),
+        data => {
+          // this.playlist_id = data.id;
+          console.log('Successfully Created Playlist!');
+        },
         error => console.log(error));
     }
     const items = this.db.list('tracks');

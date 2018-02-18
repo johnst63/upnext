@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/home']);
     this.spotifyService.getUserInfo().subscribe((data: SpotifyUser) => {
       this.spotifyUser = data,
-      this.dataService.updateData(this.spotifyUser);
+      this.dataService.updateUserID(this.spotifyUser);
     });
 
   }
