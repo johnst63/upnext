@@ -120,7 +120,7 @@ describe('RadioComponent', () => {
     fixture.detectChanges();
 
     //TODO figure out alternative to this
-
+    console.log(component.trackSearchResults);
     expect(component.trackSearchResults).toBeDefined();
   }));
   it('should authenticate when error 401 occurs', async(() => {
