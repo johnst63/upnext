@@ -3,9 +3,9 @@
   home works!
 </p>
 <div id="tracks_list">
-  <p id="debugSelector" *ngIf="tracks_string == null"> No Tracks Found </p>
-  <ng-container *ngIf="tracks_string">
-    <div class="track_container" *ngFor="let t of tracks_string">
+  <p id="debugSelector" *ngIf="dbTrackList == null"> No Tracks Found </p>
+  <ng-container *ngIf="dbTrackList">
+    <div class="track_container" *ngFor="let t of dbTrackList">
       <p> {{ t | tracklistparsepipe}} </p>
     </div>
   </ng-container>
