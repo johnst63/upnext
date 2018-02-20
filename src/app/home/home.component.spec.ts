@@ -17,7 +17,13 @@ import {InterceptorModule} from '../../interceptor.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {TracklistParsePipe} from '../tracklist-parse-pipe';
-import {DebugElement} from '@angular/core';
+import {DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
+import {DataService} from '../data-service';
+import {AngularFireDatabaseModule} from 'angularfire2/database';
+import {AngularFireModule} from 'angularfire2';
+import {AngularFireAuthModule} from 'angularfire2/auth';
+import {environment} from '../../environments/environment';
+import {AngularFirestoreModule} from 'angularfire2/firestore';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -35,7 +41,6 @@ describe('HomeComponent', () => {
         HeaderComponent,
         CallbackComponent,
         TracklistParsePipe,
-
       ],
       imports: [
         BrowserModule,
@@ -43,11 +48,14 @@ describe('HomeComponent', () => {
         AppRoutingModule,
         FormsModule,
         InterceptorModule,
-
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFirestoreModule, // imports firebase/firestore, only needed for database features
+        AngularFireDatabaseModule,
+        AngularFireAuthModule,
       ],
-      providers: [LoginService, SpotifyService,
+      providers: [LoginService, SpotifyService, DataService,
         {provide: APP_BASE_HREF, useValue: '/'}],
-
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   }));

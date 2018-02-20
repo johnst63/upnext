@@ -17,7 +17,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {TracklistParsePipe} from '../tracklist-parse-pipe';
 import {$} from 'protractor';
-import {DebugElement} from '@angular/core';
+import {DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
 import {DataService} from '../data-service';
 import {AngularFireDatabase, AngularFireDatabaseModule} from 'angularfire2/database';
 import {AngularFireModule, FirebaseApp} from 'angularfire2';
@@ -53,13 +53,10 @@ describe('HeaderComponent', () => {
         AngularFirestoreModule, // imports firebase/firestore, only needed for database features
         AngularFireDatabaseModule,
         AngularFireAuthModule,
-
       ],
-
-
       providers: [LoginService, SpotifyService, DataService,
         {provide: APP_BASE_HREF, useValue: '/'}],
-
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   }));
