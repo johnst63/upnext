@@ -65,6 +65,7 @@ export class RadioComponent implements OnInit {
       playlistSearchResults.items.forEach(f => {
           if (f.name === this.playlistToCreate) {
             alreadyExists = true;
+            console.log(data.playlist_id);
             // this.playlist_id = f.id;
           }
         }

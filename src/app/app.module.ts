@@ -12,7 +12,7 @@ import { HeaderComponent } from './header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SpotifyService } from './angular5-spotify';
 import {ActivatedRoute} from '@angular/router';
-import {InterceptorModule} from '../interceptor.module';
+//import {InterceptorModule} from '../interceptor.module';
 import { CallbackComponent } from './callback/callback.component';
 import {TracklistParsePipe} from './tracklist-parse-pipe';
 import {DataService} from './data-service';
@@ -38,7 +38,7 @@ import {AngularFireAuthModule} from 'angularfire2/auth';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    InterceptorModule,
+   // InterceptorModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireDatabaseModule,

@@ -34,7 +34,7 @@ export class SpotifyService {
   private ready: boolean = false;
   private auth_url: string = 'https://accounts.spotify.com/authorize';
   private token_url: string = 'https://accounts.spotify.com/api/token/';
-  private redirect_url: string = 'http://localhost:4200';
+  private redirect_url: string = 'https://upnext-efec3.firebaseapp.com/callback';
 
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
   private secret_key = 'c1988f4fc8f347918e0ac41b7409163b';
@@ -77,7 +77,7 @@ export class SpotifyService {
   authenticate() {
     let params = {
       client_id: 'd4800b9ac98e4e09a15db22fc6a33f9f',
-      redirect_uri: 'http://localhost:4200/callback',
+      redirect_uri: 'https://upnext-efec3.firebaseapp.com/callback',
       response_type: 'token'
     };
 
@@ -192,7 +192,7 @@ export class SpotifyService {
     return this.httpClient.post(this.token_url, {
       grant_type: 'authorization_code',
       code: auth_key,
-      redirect_uri: 'http://localhost:4200/login'
+      redirect_uri: 'https://upnext-efec3.firebaseapp.com/callback'
     }, {headers: headers}).pipe(catchError(this.handleError)).subscribe();
   }
 
