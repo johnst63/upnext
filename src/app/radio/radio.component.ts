@@ -59,36 +59,42 @@ export class RadioComponent implements OnInit {
     console.log('Track ID: ' + track.id);
     // this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id); //if can get angular5-spotify to work with createPlaylist
     // if playlist does not already exist create a playlist
-    let playlistSearchResults: TrackSearchResults;
-    let alreadyExists: boolean = false; //this is not preventing a new playlist from being created currently
-    this.spotifyService.getUserPlaylists().subscribe(data => {
-      playlistSearchResults = data;
-      playlistSearchResults.items.forEach(f => {
-          if (f.name === this.playlistToCreate) {
-            alreadyExists = true;
-            // this.playlist_id = f.id;
-          }
-        }
-      );
+    this.containsPlaylist(this.playlistToCreate).subscribe(playlistExists => {
+      console.log('playlist exists: ' + playlistExists);
+      if (!playlistExists) {
+        this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id);
+      }
     });
-    if (!alreadyExists) {
-      this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id).subscribe(
-        data => {
-          // this.playlist_id = data.id;
-          console.log('Successfully Created Playlist!');
-        },
-        error => console.log(error));
-    }
     const items = this.db.list('tracks');
     items.push(track);
   }
-  //
-  // updateTrackUrl(track: Track) {
-  //   this.dangerousTrackUrl = 'https://open.spotify.com/embed?uri=spotify:user:' + track.uri;
-  //   this.validUrl =
-  //     this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousTrackUrl);
-  //   return this.validUrl;
-  // }
 
+  containsPlaylist(playlistToCreate: string): Observable<any> {
+    this.spotifyService.getUserPlaylists().flatMap(data => data.items).map((item: Track) => item.name).subscribe(name => {
+      console.log(name);
+      if (name === playlistToCreate) {
+        console.log('returning true');
+        return Observable.of(true);
+      }
+    });
+    console.log('returning false');
+    return Observable.of(false);
+    // return this.spotifyService.getUserPlaylists().map(data => data.items).first(
+    //   names => names.indexOf(playlistToCreate) !== -1).map(val => !!val);
+  }
 }
 
+// this.spotifyService.getUserPlaylists().subscribe(data => {
+//   console.log(data);
+//   data.items.forEach(f => {
+//       if (f.name === playlistToCreate) {
+//         console.log('f.name: ' + f.name + (f.name === playlistToCreate));
+//         return true;
+//       }
+//   });
+//
+//   console.log('Hit: False');
+//   return Observable.of(data);
+//   console.log('Hit: True');
+//   return this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id);
+// });
