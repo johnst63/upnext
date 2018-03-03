@@ -44,7 +44,10 @@ export class RadioComponent implements OnInit {
       );
 
   }
-
+  testAdd() {
+    console.log('Adding');
+    this.spotifyService.addTracksToPlaylist('bduffy2019', '30EK8Ap4bsccAnFoKDMGwA', ['spotify:track:4iV5W9uYEdYUVa79Axb7Rh', 'spotify:track:1301WleyT98MSxVHPZCA6M']);
+  }
 
   /**
    * Needs to add a track to the database and a spotify playlist
@@ -59,30 +62,20 @@ export class RadioComponent implements OnInit {
     console.log('Track ID: ' + track.id);
     // this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id); //if can get angular5-spotify to work with createPlaylist
     // if playlist does not already exist create a playlist
-    this.containsPlaylist(this.playlistToCreate).subscribe(playlistExists => {
-      console.log('playlist exists: ' + playlistExists);
-      if (!playlistExists) {
-        this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id);
-      }
-    });
+    this.containsPlaylist(this.playlistToCreate).filter(result => !result).switchMap(() =>
+      this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id)).subscribe(() => {});
+
+
     const items = this.db.list('tracks');
     items.push(track);
   }
 
-  containsPlaylist(playlistToCreate: string): Observable<any> {
-    this.spotifyService.getUserPlaylists().flatMap(data => data.items).map((item: Track) => item.name).subscribe(name => {
-      console.log(name);
-      if (name === playlistToCreate) {
-        console.log('returning true');
-        return Observable.of(true);
-      }
-    });
-    console.log('returning false');
-    return Observable.of(false);
-    // return this.spotifyService.getUserPlaylists().map(data => data.items).first(
-    //   names => names.indexOf(playlistToCreate) !== -1).map(val => !!val);
+  containsPlaylist(playlistToCreate: string): Observable<boolean> {
+    return this.spotifyService.getUserPlaylists().map(data => data.items).map(arrayOfTracks =>
+      arrayOfTracks.some(track => track.name === playlistToCreate));
   }
 }
+
 
 // this.spotifyService.getUserPlaylists().subscribe(data => {
 //   console.log(data);
