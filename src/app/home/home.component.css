@@ -2,3 +2,14 @@
   font-weight: bold;
   text-align: center;
 }
+
+.spotify_frame_container {
+  display:block;
+  margin: auto;
+  width: 30em;
+  height: 5em;
+}
+
+.outer_spotify_frame_container {
+  border: 2px black solid;
+}

@@ -6,6 +6,7 @@ import {Track, Tracks, TrackSearchResults} from '../models/track';
 import {AngularFireDatabase} from 'angularfire2/database';
 import {DataService} from '../data-service';
 import {SpotifyUser} from '../models/user.interface';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -21,19 +22,34 @@ export class HomeComponent implements OnInit {
   tracks: any;
   dbTrackList: Array<Track>;
   private spotifyUser: SpotifyUser;
+  dangerousPlaylistURL: string;
+  playlistURL: SafeResourceUrl;
 
-  constructor(private spotifyService: SpotifyService, private route: ActivatedRoute, private db: AngularFireDatabase, private dataService: DataService) {
+  constructor(private spotifyService: SpotifyService, private route: ActivatedRoute, private sanitizer: DomSanitizer, private db: AngularFireDatabase, private dataService: DataService) {
 
   }
 
   ngOnInit() {
-
     this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
       this.dbTrackList = data;
       console.log(data);
     });
-    this.dataService.getUserID().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
+    this.dataService.getUserID().subscribe((
+      data: SpotifyUser) => {
+        console.log('Updating Spotify User\n' + data);
+        this.spotifyUser = data; //gets user_id
+        this.updatePlaylistURL();
+      },
+          error => console.log(error),
+    );
     this.spotifyService.getPlaylist(this.spotifyUser.id, '');
+  }
+
+  updatePlaylistURL() {
+    this.dangerousPlaylistURL = 'https://open.spotify.com/embed?uri=spotify:user:' + this.spotifyUser.id + ':playlist:7JSeUPTBQnojSTKFOOpSXJ&view=coverart';
+    this.playlistURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousPlaylistURL);
+    console.log('Updated:' + this.dangerousPlaylistURL);
+
   }
 }
 
