@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import {catchError} from 'rxjs/operators';
 import {Album} from '../Album';
 import {TrackSearchResults} from './models/track';
+import * as Q from 'q';
 
 // export interface SpotifyConfig {
 //   clientId: string ;
@@ -21,6 +22,9 @@ import {TrackSearchResults} from './models/track';
 //   body?: Object;
 //   headers?: Headers;
 // }
+function ensureOk(response) {
+  return response.ok ? Promise.resolve(response) : Promise.reject(new Error('Received Bad Status Code'));
+}
 
 @Injectable()
 export class SpotifyService {
@@ -33,7 +37,7 @@ export class SpotifyService {
   private track_url: string;
   private auth_url: string = 'https://accounts.spotify.com/authorize';
   private token_url: string = 'https://accounts.spotify.com/api/token/';
-  private redirect_url: string = 'http://localhost:4200';
+  private redirect_url: string = 'http://localhost:4200/callback';
 
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
   private secret_key = 'c1988f4fc8f347918e0ac41b7409163b';
@@ -59,9 +63,8 @@ export class SpotifyService {
   }
 
 
-  openDialog (uri, name, options, cb) {
+    openDialog (uri, name, options, cb): Window {
     let win = window.open(uri, name, options);
-
     let interval = window.setInterval(function () {
       try {
         if (!win || win.closed) {
@@ -70,34 +73,87 @@ export class SpotifyService {
         }
       } catch (e) {}
     }, 1000);
+
     return win;
   }
+
+
   authenticate() {
-    let params = {
-      client_id: 'd4800b9ac98e4e09a15db22fc6a33f9f',
-      redirect_uri: 'http://localhost:4200/callback',
-      response_type: 'token'
-    };
-
-    let authCompleted: boolean = false;
-    let scopes: string = 'playlist-modify-public user-read-currently-playing';
-    let authWindow = this.openDialog(
-      'https://accounts.spotify.com/authorize?' + 'client_id='
-      + encodeURIComponent(params.client_id) + '&redirect_uri=' +
-      encodeURIComponent(params.redirect_uri) + '&response_type='
-      + encodeURIComponent(params.response_type) + '&scope=' + encodeURIComponent(scopes),
-      'Spotify',
-      'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + 600 + ',height=' + 400 + ',top=' + 100 + ',left=' + 100,
-      function () {
-
-        console.log('Auth Callback');
-        console.log('token: ' + localStorage.getItem('spotify-token')); //TODO WED DIFOSDFJOIWEJ
-
-
+    return new Promise((res, rej) => {
+      const params = {
+          client_id: 'd4800b9ac98e4e09a15db22fc6a33f9f',
+          redirect_uri: 'http://localhost:4200/callback',
+          response_type: 'token'
+      };
+      let scopes: string = 'playlist-modify-public user-read-currently-playing';
+      let window_uri = 'https://accounts.spotify.com/authorize?' + 'client_id='
+        + encodeURIComponent(params.client_id) + '&redirect_uri='
+        + encodeURIComponent(params.redirect_uri) + '&response_type='
+        + encodeURIComponent(params.response_type) + '&scope=' + encodeURIComponent(scopes);
+      let name = 'Spotify';
+      let options = 'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width='
+        + 600 + ',height=' + 400 + ',top=' + 100 + ',left=' + 100;
+      function cb() {
+        console.log('Callback!');
+        return;
       }
-    );
-    this.access_token = localStorage.getItem('spotify-token');
-    console.log('Access token: ' + this.access_token);
+      let win = this.openDialog(window_uri, name, options, cb);
+      if (!win) {
+        return rej(new Error('Null Window Handle'));
+      }
+
+      const handleFunction = (/** @type MessageEvent */ev) => {
+        console.log('Handling:');
+        // if (ev.origin !== 'http://localhost') {
+        //   console.warn(`Received message from invalid domain ${ev.origin}.`);
+        //   return;
+        // }
+
+        win.close();
+
+        if (!ev.data) {
+          return rej(new Error('Received No Data with Auth Message.\n' + console.log(ev)));
+        }
+        if (ev.data.error) {
+          return rej(new Error(ev.data.error));
+        }
+        console.log(ev);
+        return res(ev.data.code);
+      };
+
+      win.addEventListener('message', handleFunction);
+    }).then(response => {console.log('ensuring ok'); return ensureOk(response); })
+      .then(response => response.json())
+      .then(response => {
+        this.access_token = response.access_token;
+        localStorage.setItem('spotify-token', response.access_token);
+        console.log('Access Token: ' + this.access_token);
+      });
+    // let params = {
+    //   client_id: 'd4800b9ac98e4e09a15db22fc6a33f9f',
+    //   redirect_uri: 'http://localhost:4200/callback',
+    //   response_type: 'token'
+    // };
+    //
+    // let authCompleted: boolean = false;
+    // let scopes: string = 'playlist-modify-public user-read-currently-playing';
+    // let authWindow = this.openDialog(
+    //   'https://accounts.spotify.com/authorize?' + 'client_id='
+    //   + encodeURIComponent(params.client_id) + '&redirect_uri=' +
+    //   encodeURIComponent(params.redirect_uri) + '&response_type='
+    //   + encodeURIComponent(params.response_type) + '&scope=' + encodeURIComponent(scopes),
+    //   'Spotify',
+    //   'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + 600 + ',height=' + 400 + ',top=' + 100 + ',left=' + 100,
+    //   function () {
+    //
+    //     console.log('Auth Callback');
+    //     console.log('token: ' + localStorage.getItem('spotify-token')); //TODO WED DIFOSDFJOIWEJ
+    //   }
+    // );
+    // // this.access_token = localStorage.getItem('spotify-token');
+    // console.log('Access token: ' + this.access_token);
+    // this.access_token = localStorage.getItem('spotify-token');
+
     //TODO do stuff with the token now
 
   }
