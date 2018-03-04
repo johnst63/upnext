@@ -8,6 +8,7 @@ import {TrackSearchResults} from './models/track';
 import {LoginComponent} from './login/login.component';
 import {LoginService} from './login.service';
 import {defer} from 'q';
+import {Router} from '@angular/router';
 
 // export interface SpotifyConfig {
 //   clientId: string ;
@@ -78,7 +79,7 @@ export class SpotifyService {
     return win;
   }
 
-   authenticate(){
+   async authenticate(){
     let deffered = defer();
     let that = this;
     let params = {

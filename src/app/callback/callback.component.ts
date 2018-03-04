@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {SpotifyService} from '../angular5-spotify';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-callback',
@@ -21,7 +22,6 @@ export class CallbackComponent implements OnInit {
         localStorage.setItem('spotify-token', token);
 
     window.close();
-
   }
 
 }

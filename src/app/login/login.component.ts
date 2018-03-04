@@ -32,14 +32,14 @@ export class LoginComponent implements OnInit {
     this.user = this.loginService.getUsername();
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
     this.user.loggedIn = true; // change later
     this.getUsername();
     // console.log(JSON.stringify(this.user));
     console.log('Authenticating');
-    this.spotifyService.authenticate();
-    this.router.navigate(['/home']);
+    await this.spotifyService.authenticate();
+     this.router.navigate(['/home']);
 
 
     console.log('Requesting Tokens');
