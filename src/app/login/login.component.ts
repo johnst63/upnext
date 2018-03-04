@@ -39,11 +39,11 @@ export class LoginComponent implements OnInit {
     // console.log(JSON.stringify(this.user));
     console.log('Authenticating');
     this.spotifyService.authenticate();
+    this.router.navigate(['/home']);
 
 
     console.log('Requesting Tokens');
     console.log('Done Requesting Tokens');
-    this.router.navigate(['/home']);
     this.spotifyService.getUserInfo().subscribe((data: SpotifyUser) => {
       this.spotifyUser = data,
       this.dataService.updateUserID(this.spotifyUser);

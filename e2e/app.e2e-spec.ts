@@ -23,21 +23,21 @@ describe('up-next App', () => {
   /* NAVIGATION TESTS */
   it('should navigate to Login', function () {
     page.clickHeaderByID('login');
-    expect(page.getURL()).toBe('https://upnext-efec3.firebaseapp.com/login');
+    expect(page.getURL()).toBe('http://localhost:5000/login');
   });
   it('should navigate to Radio', function () {
     page.clickHeaderByID('radio');
-    expect(page.getURL()).toBe('https://upnext-efec3.firebaseapp.com/radio');
+    expect(page.getURL()).toBe('http://localhost:5000/radio');
   });
   it('should navigate to Home', function () {
-    page.navigateTo('https://upnext-efec3.firebaseapp.com/login');
+    page.navigateTo('http://localhost:5000/login');
     page.clickHeaderByID('home');
-    expect(page.getURL()).toBe('https://upnext-efec3.firebaseapp.com/home');
+    expect(page.getURL()).toBe('http://localhost:5000/home');
 
   });
   it('should should default go to home', function () {
     page.navigateTo('/');
-    expect(page.getURL()).toBe('https://upnext-efec3.firebaseapp.com/home');
+    expect(page.getURL()).toBe('http://localhost:5000/home');
   });
 
   it('should authenticate',  async function () {
@@ -56,12 +56,12 @@ describe('up-next App', () => {
       browser.element(by.css('#login-password')).sendKeys(LOGIN);
       browser.element(by.cssContainingText('button', 'Log In')).click();
       // go back to the main window
-      expect(page.getURL()).not.toBe('https://upnext-efec3.firebaseapp.com/callback');
+      expect(page.getURL()).not.toBe('http://localhost:5000/callback');
       browser.switchTo().window(handles[0]);
 
     });
 
-    expect(page.getURL()).toBe('https://upnext-efec3.firebaseapp.com/home');
+    expect(page.getURL()).toBe('http://localhost:5000/home');
   });
   it('should search "abc"',  async function () {
     await page.navigateTo('/radio');

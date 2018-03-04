@@ -5,6 +5,8 @@ import 'rxjs/add/operator/map';
 import {catchError} from 'rxjs/operators';
 import {Album} from '../Album';
 import {TrackSearchResults} from './models/track';
+import {LoginComponent} from './login/login.component';
+import {LoginService} from './login.service';
 
 // export interface SpotifyConfig {
 //   clientId: string ;
@@ -34,7 +36,7 @@ export class SpotifyService {
   private ready: boolean = false;
   private auth_url: string = 'https://accounts.spotify.com/authorize';
   private token_url: string = 'https://accounts.spotify.com/api/token/';
-  private redirect_url: string = 'https://upnext-efec3.firebaseapp.com/callback';
+  private redirect_url: string = 'http://localhost:5000/callback';
 
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
   private secret_key = 'c1988f4fc8f347918e0ac41b7409163b';
@@ -61,7 +63,7 @@ export class SpotifyService {
   }
 
 
-  openDialog (uri, name, options, cb) {
+   openDialog (uri, name, options, cb) {
     let win = window.open(uri, name, options);
 
     let interval = window.setInterval(function () {
@@ -74,31 +76,30 @@ export class SpotifyService {
     }, 1000);
     return win;
   }
-  authenticate() {
+   authenticate(){
     let params = {
       client_id: 'd4800b9ac98e4e09a15db22fc6a33f9f',
-      redirect_uri: 'https://upnext-efec3.firebaseapp.com/callback',
+      redirect_uri: 'http://localhost:5000/callback',
       response_type: 'token'
     };
 
     let authCompleted: boolean = false;
     let scopes: string = 'playlist-modify-public user-read-currently-playing';
-    let authWindow = this.openDialog(
+    let authWindow =  this.openDialog(
       'https://accounts.spotify.com/authorize?' + 'client_id='
       + encodeURIComponent(params.client_id) + '&redirect_uri=' +
       encodeURIComponent(params.redirect_uri) + '&response_type='
       + encodeURIComponent(params.response_type) + '&scope=' + encodeURIComponent(scopes),
       'Spotify',
       'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + 600 + ',height=' + 400 + ',top=' + 100 + ',left=' + 100,
-      function () {
+       function () {
 
         console.log('Auth Callback');
         console.log('token: ' + localStorage.getItem('spotify-token')); //TODO WED DIFOSDFJOIWEJ
-
+        this.access_token =  localStorage.getItem('spotify-token');
 
       }
     );
-    this.access_token = localStorage.getItem('spotify-token');
     console.log('Access token: ' + this.access_token);
     //TODO do stuff with the token now
 
