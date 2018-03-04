@@ -7,6 +7,7 @@ import {Album} from '../Album';
 import {TrackSearchResults} from './models/track';
 import {LoginComponent} from './login/login.component';
 import {LoginService} from './login.service';
+import {defer} from 'q';
 
 // export interface SpotifyConfig {
 //   clientId: string ;
@@ -76,7 +77,10 @@ export class SpotifyService {
     }, 1000);
     return win;
   }
+
    authenticate(){
+    let deffered = defer();
+    let that = this;
     let params = {
       client_id: 'd4800b9ac98e4e09a15db22fc6a33f9f',
       redirect_uri: 'http://localhost:5000/callback',
@@ -93,16 +97,31 @@ export class SpotifyService {
       'Spotify',
       'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + 600 + ',height=' + 400 + ',top=' + 100 + ',left=' + 100,
        function () {
-
+        if (!authCompleted) {
+          deffered.reject('error deffered');
+        }
         console.log('Auth Callback');
         console.log('token: ' + localStorage.getItem('spotify-token')); //TODO WED DIFOSDFJOIWEJ
         this.access_token =  localStorage.getItem('spotify-token');
 
       }
     );
+
     console.log('Access token: ' + this.access_token);
     //TODO do stuff with the token now
-
+     function storageChanged(e) {
+       if (e.key === 'spotify-token') {
+         if(authWindow) {
+           authWindow.close();
+         }
+         authCompleted = true;
+         that.access_token = e.newValue;
+         window.removeEventListener('storage',storageChanged, false);
+         deffered.resolve(e.newValue);
+       }
+     }
+     window.addEventListener('storage', storageChanged,false);
+     return deffered.promise;
   }
 
 
