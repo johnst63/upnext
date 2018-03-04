@@ -10,7 +10,8 @@ export class DataService {
   };
 
   private defaultPlaylist: Playlist = {
-    id: 'unassigned_playlist'
+    id: 'unassigned_playlist',
+    name: 'unassigned_playlist'
   };
 
   // Playlist Info
@@ -26,17 +27,16 @@ export class DataService {
   }
 
   updateUserID(user: SpotifyUser) {
-    console.log('Updating User: ' + user.id);
+    console.log('Updating User: ' + user.id + ' (DataService)');
     this._data.next(user);
   }
 
-
   getPlaylistID() {
-    return new Observable(fn => this._data.subscribe(fn));
+    return new Observable(fn => this._pl_data.subscribe(fn));
   }
 
   updatePlaylistID(playlist: Playlist) {
-    console.log('Updating Playlist: ' + playlist.id);
+    console.log('Updating Playlist: ' + playlist.id + ', ' + playlist.name);
     this._pl_data.next(playlist);
   }
 

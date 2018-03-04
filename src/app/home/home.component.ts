@@ -7,6 +7,7 @@ import {AngularFireDatabase} from 'angularfire2/database';
 import {DataService} from '../data-service';
 import {SpotifyUser} from '../models/user.interface';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {Playlist} from '../../Playlist';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit {
   private spotifyUser: SpotifyUser;
   dangerousPlaylistURL: string;
   playlistURL: SafeResourceUrl;
+  private playlist: Playlist;
 
   constructor(private spotifyService: SpotifyService, private route: ActivatedRoute, private sanitizer: DomSanitizer, private db: AngularFireDatabase, private dataService: DataService) {
 
@@ -36,19 +38,21 @@ export class HomeComponent implements OnInit {
     });
     this.dataService.getUserID().subscribe((
       data: SpotifyUser) => {
-        console.log('Updating Spotify User\n' + data);
+        console.log('Updating Spotify User (HomeComponent)\n' + data);
         this.spotifyUser = data; //gets user_id
         this.updatePlaylistURL();
       },
           error => console.log(error),
     );
-    this.spotifyService.getPlaylist(this.spotifyUser.id, '');
+    // this.spotifyService.getPlaylist(this.spotifyUser.id, '');
   }
 
   updatePlaylistURL() {
-    this.dangerousPlaylistURL = 'https://open.spotify.com/embed?uri=spotify:user:' + this.spotifyUser.id + ':playlist:7JSeUPTBQnojSTKFOOpSXJ&view=coverart';
-    this.playlistURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousPlaylistURL);
-    console.log('Updated:' + this.dangerousPlaylistURL);
+    this.dataService.getPlaylistID().subscribe((playlist: Playlist) => {
+      this.dangerousPlaylistURL = 'https://open.spotify.com/embed?uri=spotify:user:' + this.spotifyUser.id + ':playlist:' + playlist.id + '&view=coverart';
+      this.playlistURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousPlaylistURL);
+      console.log('Updated:' + this.dangerousPlaylistURL);
+    });
 
   }
 }

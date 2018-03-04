@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 import {SpotifyUser, User} from '../models/user.interface';
 import {DataService} from '../data-service';
 import {Observable} from 'rxjs/Observable';
-import {Playlist} from '../models/playlist';
+import {Playlist, PlaylistSearchResults} from '../models/playlist';
 import {UserPlaylistContainer} from '../models/user-playlist-container';
 
 @Component({
@@ -55,24 +55,60 @@ export class LoginComponent implements OnInit {
     //.map(playlist => Object.assign({}, this.playlist, { id: playlist.id }));
 
     let getUserInfo = this.spotifyService.getUserInfo();
-    //.map((data: SpotifyUser)  => Object.assign({}, this.spotifyUser, { id: data.id}));
 
-    Observable.merge(getUserInfo, playlistUpdate).subscribe(
-      (res) => {
-        console.log('DATA');
-        console.log(res);
-        if (res.followers) {
-          this.spotifyUser = res;
-          this.dataService.updateUserID(res.spotifyUser);
+    getUserInfo.toPromise().then((res: SpotifyUser) => {
+            console.log('Res.User: ' + res);
+            this.spotifyUser = res;
+            this.dataService.updateUserID(res);
+    },
+      rej => console.log('Could Not Retrieve User Info')
+    ).then(() => {
+      playlistUpdate.toPromise().then((playlist) => {
+        if (playlist === undefined) {
+          //get current playlist
+
+          this.spotifyService.getUserPlaylists().map(
+            data => data.items as Playlist[]).filter(
+              (res: Playlist[], index) => res[index].name === this.playlistToCreate).subscribe(
+                (playlists: Playlist[]) => {
+                  this.playlist = playlists['0'];
+                  this.dataService.updatePlaylistID(playlists['0']);
+                });
         } else {
-          let playlist = res.next().playlist;
-          console.log(playlist);
+          console.log('Res.Playlist: ' + playlist);
           this.playlist = playlist;
           this.dataService.updatePlaylistID(playlist);
         }
-        // this.dataService.updateUserID(res.spotifyUser);
-        // this.dataService.updatePlaylistID(res.playlist);
-      });
+      },
+        rej => console.log('Could Not Retrieve Playlist Info')
+      );
+    });
+    //.map((data: SpotifyUser)  => Object.assign({}, this.spotifyUser, { id: data.id}));
+
+    // Observable.merge(getUserInfo.mapTo(this.spotifyUser), playlistUpdate.mapTo(this.playlist)).take(2).subscribe(
+    //   (res) => {
+    //     if (typeof(res) === typeof(this.playlist)) {
+    //       console.log(typeof(res));
+    //       console.log(typeof(this.playlist));
+    //       console.log('Res.Playlist: ' + res);
+    //
+    //       this.playlist = res;
+    //       this.dataService.updatePlaylistID(res);
+    //     } else if (typeof(res) === typeof(this.spotifyUser)) {
+    //       console.log('Res.User: ' + res);
+    //
+    //       this.spotifyUser = res;
+    //       this.dataService.updateUserID(res);
+    //     }
+    //     // console.log('DATA>NEXT: \n' + res.next());
+    //     // this.dataService.updateUserID(res.spotifyUser);
+    //   },
+    //   err => console.log('Error: ' + err),
+    // );
+
+
+
+
     // this.spotifyService.getUserInfo().subscribe((data: SpotifyUser) => {
     //   this.spotifyUser = data,
     //   this.dataService.updateUserID(this.spotifyUser);
