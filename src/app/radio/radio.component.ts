@@ -21,7 +21,7 @@ export class RadioComponent implements OnInit {
   spotifyUser: SpotifyUser;
   playlistToCreate: string = 'UpNextPlaylist';
   tracksFromFirestore: Observable<any[]>;
-  playlist_id: string;
+  playlistID: string;
 
 
   constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer,
@@ -64,7 +64,7 @@ export class RadioComponent implements OnInit {
     // this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id); //if can get angular5-spotify to work with createPlaylist
     // if playlist does not already exist create a playlist
     this.containsPlaylist(this.playlistToCreate).filter(result => !result).switchMap(() =>
-      this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id)).subscribe(data => this.playlist_id = data.id);
+      this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id)).subscribe(data => this.playlistID = data.id);
 
 
     const items = this.db.list('tracks');
@@ -78,18 +78,3 @@ export class RadioComponent implements OnInit {
 
 }
 
-
-// this.spotifyService.getUserPlaylists().subscribe(data => {
-//   console.log(data);
-//   data.items.forEach(f => {
-//       if (f.name === playlistToCreate) {
-//         console.log('f.name: ' + f.name + (f.name === playlistToCreate));
-//         return true;
-//       }
-//   });
-//
-//   console.log('Hit: False');
-//   return Observable.of(data);
-//   console.log('Hit: True');
-//   return this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id);
-// });

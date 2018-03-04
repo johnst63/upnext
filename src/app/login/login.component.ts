@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
       this.spotifyUser = data,
       this.dataService.updateUserID(this.spotifyUser);
     });
+    //now need to get playlists and if the name does not already exist create a playlist and populate it with songs from database
 
   }
 

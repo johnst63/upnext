@@ -11,5 +11,7 @@
 }
 
 .outer_spotify_frame_container {
+  margin-top: 1em;
   border: 2px black solid;
+  background-color: grey;
 }
