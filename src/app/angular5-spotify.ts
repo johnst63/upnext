@@ -158,6 +158,8 @@ export class SpotifyService {
 
   getUserPlaylists() {
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
+    headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
     this.album_url = this.url_base + 'me/playlists';
     return this.httpClient.get(this.album_url, {headers: headers}).map(res => res).catch(this.handleError);
   }
@@ -179,6 +181,16 @@ export class SpotifyService {
 
     this.albums_url = this.url_base + 'users/' + user_id + '/playlists/' + playlist_id;
     return this.httpClient.get(this.albums_url, {headers: headers}).map(res => res).catch(this.handleError);
+  }
+
+  addTracksToPlaylist(user_id: string, playlist_id: string, trackURIs: string[]) {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
+    headers = headers.append('Content-Type', 'application/json');
+
+    this.track_url = this.url_base + 'users/' + user_id + '/playlists/' + playlist_id + '/tracks';
+    return this.httpClient.post(this.track_url, {
+      uris: trackURIs,
+    }, {headers: headers}).pipe(catchError(this.handleError)).subscribe(data => console.log(data));
   }
 
   getUserInfo() {

@@ -1,7 +1,15 @@
 
-<p align="center">
-  home works!
-</p>
+<!--<p> Playlist URL: {{dangerousPlaylistURL}} USER: {{spotifyUser.id}} </p>-->
+<div class="outer_spotify_frame_container">
+<div class="spotify_frame_container" *ngIf="playlistURL != null && spotifyUser.id != 'unidentified_user'">
+  <iframe [src]="playlistURL"
+          frameborder="0" width="500px" height="200px" allow="encrypted-media" allowtransparency="true"></iframe>
+</div>
+</div>
+<!--<p align="center">-->
+  <!--home works!-->
+<!--</p>-->
+
 <div id="tracks_list">
   <p id="debugSelector" *ngIf="dbTrackList == null"> No Tracks Found </p>
   <ng-container *ngIf="dbTrackList">

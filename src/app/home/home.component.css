@@ -2,3 +2,16 @@
   font-weight: bold;
   text-align: center;
 }
+
+.spotify_frame_container {
+  display:block;
+  margin: auto;
+  width: 30em;
+  height: 5em;
+}
+
+.outer_spotify_frame_container {
+  margin-top: 1em;
+  border: 2px black solid;
+  background-color: grey;
+}

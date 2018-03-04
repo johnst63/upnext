@@ -21,9 +21,10 @@ export class RadioComponent implements OnInit {
   spotifyUser: SpotifyUser;
   playlistToCreate: string = 'UpNextPlaylist';
   tracksFromFirestore: Observable<any[]>;
-   success: boolean = false;
+  playlistID: string;
 
-  constructor(public spotifyService: SpotifyService, private sanitizer: DomSanitizer,
+
+  constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer,
               private dataService: DataService, private db: AngularFireDatabase) {
     // this.tracksFromFirestore = db.list('tracks').valueChanges();
 
@@ -44,7 +45,10 @@ export class RadioComponent implements OnInit {
       );
 
   }
-
+  testAdd() {
+    console.log('Adding');
+    this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, '7JSeUPTBQnojSTKFOOpSXJ', ['spotify:track:4iV5W9uYEdYUVa79Axb7Rh', 'spotify:track:1301WleyT98MSxVHPZCA6M']);
+  }
 
   /**
    * Needs to add a track to the database and a spotify playlist
@@ -57,38 +61,20 @@ export class RadioComponent implements OnInit {
     this.dataService.getUserID().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
     console.log('Logging Data: ' + this.spotifyUser.id);
     console.log('Track ID: ' + track.id);
-    //if playlist does not already exist create a playlist
-    let playlistSearchResults: TrackSearchResults;
-    let alreadyExists: boolean = false; //this is not preventing a new playlist from being created currently
-    this.spotifyService.getUserPlaylists().subscribe(data => {
-      playlistSearchResults = data;
-      playlistSearchResults.items.forEach(f => {
-          if (f.name === this.playlistToCreate) {
-            alreadyExists = true;
-            console.log(data.playlist_id);
-            // this.playlist_id = f.id;
-          }
-        }
-      );
-    });
-    if (!alreadyExists) {
-      this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id).subscribe(
-        data => {
-          // this.playlist_id = data.id;
-          console.log('Successfully Created Playlist!');
-        },
-        error => console.log(error));
-    }
+    // this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id); //if can get angular5-spotify to work with createPlaylist
+    // if playlist does not already exist create a playlist
+    this.containsPlaylist(this.playlistToCreate).filter(result => !result).switchMap(() =>
+      this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id)).subscribe(data => this.dataService.updatePlaylistID(data.id));
+
+
     const items = this.db.list('tracks');
     items.push(track);
   }
-  //
-  // updateTrackUrl(track: Track) {
-  //   this.dangerousTrackUrl = 'https://open.spotify.com/embed?uri=spotify:user:' + track.uri;
-  //   this.validUrl =
-  //     this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousTrackUrl);
-  //   return this.validUrl;
-  // }
+
+  containsPlaylist(playlistToCreate: string): Observable<boolean> {
+    return this.spotifyService.getUserPlaylists().map(data => data.items).map(arrayOfTracks =>
+      arrayOfTracks.some(track => track.name === playlistToCreate));
+  }
 
 }
 
