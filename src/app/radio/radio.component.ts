@@ -64,7 +64,7 @@ export class RadioComponent implements OnInit {
     // this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id); //if can get angular5-spotify to work with createPlaylist
     // if playlist does not already exist create a playlist
     this.containsPlaylist(this.playlistToCreate).filter(result => !result).switchMap(() =>
-      this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id)).subscribe(data => this.playlistID = data.id);
+      this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id)).subscribe(data => this.dataService.updatePlaylistID(data.id));
 
 
     const items = this.db.list('tracks');

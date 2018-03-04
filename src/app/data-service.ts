@@ -2,14 +2,24 @@ import {Subject} from 'rxjs/Subject';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {SpotifyUser} from './models/user.interface';
 import {Observable} from 'rxjs/Observable';
+import {Playlist} from './models/playlist';
 
 export class DataService {
   private defaultUser: SpotifyUser = {
     id: 'unidentified_user'
   };
 
+  private defaultPlaylist: Playlist = {
+    id: 'unassigned_playlist'
+  };
+
+  // Playlist Info
+  private _pl_data: BehaviorSubject<Playlist> = new BehaviorSubject<Playlist>(this.defaultPlaylist);
+
+  //User Info
   private _data: BehaviorSubject<SpotifyUser> = new BehaviorSubject(this.defaultUser);
   public readonly data: Observable<SpotifyUser> = this._data.asObservable();
+
 
   getUserID() {
     return new Observable(fn => this._data.subscribe(fn));
@@ -20,15 +30,15 @@ export class DataService {
     this._data.next(user);
   }
 
-  // private playlist_id = 'undefined playlist id';
-  // private _pl_data: BehaviorSubject<string> = new BehaviorSubject<string>(this.playlist_id);
-  // getPlaylistID() {
-  //   return new Observable(fn => this._data.subscribe(fn));
-  // }
-  //
-  // updatePlaylistID(playlist_id: string) {
-  //   this._pl_data.next(playlist_id);
-  // }
+
+  getPlaylistID() {
+    return new Observable(fn => this._data.subscribe(fn));
+  }
+
+  updatePlaylistID(playlist: Playlist) {
+    console.log('Updating Playlist: ' + playlist.id);
+    this._pl_data.next(playlist);
+  }
 
 
 }
