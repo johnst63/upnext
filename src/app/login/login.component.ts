@@ -44,6 +44,12 @@ export class LoginComponent implements OnInit {
     this.user = this.loginService.getUsername();
   }
 
+  updateUser(user: SpotifyUser) {
+    this.spotifyUser = user;
+    this.dataService.updateUserID(user);
+    return Promise.resolve(user.id);
+  }
+
   onSubmit() {
     this.submitted = true;
     this.user.loggedIn = true; // change later
@@ -62,34 +68,40 @@ export class LoginComponent implements OnInit {
     //.map(playlist => Object.assign({}, this.playlist, { id: playlist.id }));
 
     let getUserInfo = this.spotifyService.getUserInfo();
-    let getDBInfo = this.db.list<Track>('tracks').valueChanges();
+    let getDBInfo = this.db.list<Track>('tracks').valueChanges().map(res => res);
+
+    //Get User Info
+    //Delete old playlist and create new playlist
+    //Add tracks into playlist
+    let that = this;
 
     //Get User ID
     getUserInfo.toPromise().then((res: SpotifyUser) => {
-        console.log('Login: GetUser: ' + res);
+        console.log('Login: GetUser: ' + res.id);
         this.spotifyUser = res;
         this.dataService.updateUserID(res);
       },
       rej => console.log('Could Not Retrieve User Info')
     ).then(() => {
       //Determine whether playlist exists or not
-      playlistUpdate.toPromise().then((playlist) => {
+      return playlistUpdate.toPromise().then((playlist) => {
           if (playlist === undefined) {
             //If the playlist exists, get it
-            this.spotifyService.getUserPlaylists().map(
+            return this.spotifyService.getUserPlaylists().map(
               data => data.items as Playlist[]).filter(
               (res: Playlist[], index) => res[index].name === this.playlistToCreate).toPromise().then(
               (playlists: Playlist[]) => {
                 this.playlist = playlists['0'];
                 console.log(playlists['0']);
               }).then(() => {
-              this.spotifyService.unfollowPlaylist(this.spotifyUser.id, this.playlist.id).toPromise().then(() => {
+              return this.spotifyService.unfollowPlaylist(this.spotifyUser.id, this.playlist.id).toPromise().then(() => {
                 console.log('Unfollowing Playlist');
               }).then(() => {
-                this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id).toPromise().then((data: Playlist) => {
+                return this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id).toPromise().then((data: Playlist) => {
                   this.playlist = data;
                   this.dataService.updatePlaylistID(data);
-                  console.log('New Playlist: ' + data);
+                  console.log('New Playlist: ' + data.id);
+                  return data;
                 });
               });
             });
@@ -97,23 +109,45 @@ export class LoginComponent implements OnInit {
             console.log('Res.Playlist: ' + playlist);
             this.playlist = playlist;
             this.dataService.updatePlaylistID(playlist);
+            return playlist;
           }
         },
-        rej => console.log('Could Not Retrieve Playlist Info')
+        rej => {
+          console.log('rejected: ' + rej);
+        }
       );
-    }).then(() => {
-      console.log('Populate Playlist');
-      let dbTrackList: Track[] = [];
-      getDBInfo.toPromise().then((data: Track[]) => {
-        dbTrackList = data;
+    }).then(res => {
+      console.log('Populate Playlist: \n' + typeof res + ': ' + res.id);
+      return this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
+        let trackArray: Array<string> = [];
+        data.forEach(f => trackArray.push('spotify:track:' + f.id));
+        console.log(trackArray);
+        return this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, res.id, trackArray);
       });
-      return dbTrackList;
-    }).then(dbTrackList => {
-      let trackArray: Array<string> = [];
-      dbTrackList.forEach(f => trackArray.push(f.id));
-      this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, this.playlist.id, trackArray);
     });
-    //.map((data: SpotifyUser)  => Object.assign({}, this.spotifyUser, { id: data.id}));
+
+    /*
+    .then(res => {
+      console.log('Populate Playlist: \n' + typeof res + ': ' + res.id);
+      return this.db.list<Track>('tracks').valueChanges().toPromise().then((data: Track[]) => {
+        console.log('Test');
+        let trackArray: Array<string> = [];
+        data.forEach(f => trackArray.push(f.id));
+        console.log(trackArray);
+        return trackArray;
+      }).then(trackArray => {
+        console.log('Called Add Function: ' + trackArray);
+
+        return this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, res[0].id, trackArray).toPromise().then(() => { console.log('added'); });
+      });
+    });
+
+     */
+
+
+
+
+    // .map((data: SpotifyUser)  => Object.assign({}, this.spotifyUser, { id: data.id}));
 
     // Observable.merge(getUserInfo.mapTo(this.spotifyUser), playlistUpdate.mapTo(this.playlist)).take(2).subscribe(
     //   (res) => {
@@ -152,4 +186,25 @@ export class LoginComponent implements OnInit {
     return this.spotifyService.getUserPlaylists().map(data => data.items).map(arrayOfTracks =>
       arrayOfTracks.some(track => track.name === playlistToCreate));
   }
+
+
 }
+
+/*
+
+getUserInfo.toPromise().then((user: SpotifyUser) => {
+        return this.updateUser(user);
+    }).then(function(res) {
+      console.log('spotifyUser.id: ' + res);
+      let updatePlaylist = function () {
+        return typeof that.containsPlaylist(that.playlistToCreate).filter(result => !result).switchMap(() =>
+          that.spotifyService.createPlaylist(that.playlistToCreate, that.spotifyUser.id)).toPromise()
+          .catch(err => { console.log(err); return Promise.reject('Error'); });
+      };
+      return updatePlaylist();
+    }).then((data: Playlist) => {
+      console.log('Second: ' + typeof data + ': ' + data.id);
+      return 'abc';
+    }).catch(err => console.log(err));
+
+ */

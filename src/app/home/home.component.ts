@@ -36,9 +36,9 @@ export class HomeComponent implements OnInit {
       this.dbTrackList = data;
       console.log(data);
     });
-    this.dataService.getUserID().subscribe((
-      data: SpotifyUser) => {
-        console.log('Updating Spotify User (HomeComponent)\n' + data);
+    this.dataService.getUserID().subscribe(
+      (data: SpotifyUser) => {
+        console.log('Updating Spotify User (HomeComponent)\n' + data.id);
         this.spotifyUser = data; //gets user_id
         this.updatePlaylistURL();
       },

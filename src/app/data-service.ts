@@ -27,7 +27,7 @@ export class DataService {
   }
 
   updateUserID(user: SpotifyUser) {
-    console.log('Updating User: ' + user.id + ' (DataService)');
+    //console.log('Updating User: ' + user.id + ' (DataService)');
     this._data.next(user);
   }
 

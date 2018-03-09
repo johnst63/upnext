@@ -176,7 +176,7 @@ export class SpotifyService {
     this.track_url = this.url_base + 'users/' + user_id + '/playlists/' + playlist_id + '/tracks';
     return this.httpClient.post(this.track_url, {
       uris: trackURIs,
-    }, {headers: headers}).pipe(catchError(this.handleError)).subscribe(data => console.log(data));
+    }, {headers: headers}).pipe(catchError(this.handleError)).map(res => res).subscribe(data => console.log(data));
   }
 
   getUserInfo() {
