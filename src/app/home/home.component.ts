@@ -27,7 +27,8 @@ export class HomeComponent implements OnInit {
   playlistURL: SafeResourceUrl;
   private playlist: Playlist;
 
-  constructor(private spotifyService: SpotifyService, private route: ActivatedRoute, private sanitizer: DomSanitizer, private db: AngularFireDatabase, private dataService: DataService) {
+  constructor(private spotifyService: SpotifyService, private route: ActivatedRoute, private sanitizer: DomSanitizer,
+              private db: AngularFireDatabase, private dataService: DataService) {
 
   }
 
@@ -36,24 +37,26 @@ export class HomeComponent implements OnInit {
       this.dbTrackList = data;
       console.log(data);
     });
-    this.dataService.getUserID().subscribe((
-      data: SpotifyUser) => {
+    this.dataService.getUserID().subscribe((data: SpotifyUser) => {
         console.log('Updating Spotify User (HomeComponent)\n' + data);
         this.spotifyUser = data; //gets user_id
         this.updatePlaylistURL();
       },
-          error => console.log(error),
+      error => console.log(error),
     );
-    // this.spotifyService.getPlaylist(this.spotifyUser.id, '');
   }
 
   updatePlaylistURL() {
     this.dataService.getPlaylistID().subscribe((playlist: Playlist) => {
-      this.dangerousPlaylistURL = 'https://open.spotify.com/embed?uri=spotify:user:' + this.spotifyUser.id + ':playlist:' + playlist.id + '&view=coverart';
+      this.dangerousPlaylistURL = 'https://open.spotify.com/embed?uri=spotify:user:'
+        + this.spotifyUser.id
+        + ':playlist:'
+        + playlist.id
+        + '&view=coverart';
       this.playlistURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousPlaylistURL);
       console.log('Updated:' + this.dangerousPlaylistURL);
     });
-
+    this.spotifyService.getPlaylist(this.spotifyUser.id,this.playlist.id);
   }
 }
 

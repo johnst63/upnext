@@ -1,21 +1,34 @@
-
-<!--<p> Playlist URL: {{dangerousPlaylistURL}} USER: {{spotifyUser.id}} </p>-->
-<div class="outer_spotify_frame_container">
-<div class="spotify_frame_container" *ngIf="playlistURL != null && spotifyUser.id != 'unidentified_user'">
-  <iframe [src]="playlistURL"
-          frameborder="0" width="500px" height="200px" allow="encrypted-media" allowtransparency="true"></iframe>
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-4 text-center">
+    <p *ngIf="spotifyUser.id == 'unidentified_user'">
+      <button class="btn btn-primary" routerLink="/login">Please Login</button>
+    </p>
+  </div>
+  <div class="col-md-4"></div>
 </div>
-</div>
-<!--<p align="center">-->
-  <!--home works!-->
-<!--</p>-->
-
-<div id="tracks_list">
-  <p id="debugSelector" *ngIf="dbTrackList == null"> No Tracks Found </p>
-  <ng-container *ngIf="dbTrackList">
-    <div class="track_container" *ngFor="let t of dbTrackList">
-      <p> {{ t | tracklistparsepipe}} </p>
+<div *ngIf="spotifyUser.id != 'unidentified_user'">
+  <div class="outer_spotify_frame_container row">
+    <div class="col-md-2">
     </div>
-  </ng-container>
+    <div class="col-md-2">
+      <div id="tracks_list">
+        <p id="debugSelector" *ngIf="playlist == null"> No Tracks Found </p>
+        <ng-container *ngIf="spotifyUser.id != 'unidentified_user'">
+          <div class="track_container" *ngFor="let t of playlist">
+            <p> {{ t.name }} </p>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="spotify_frame_container col-md-6" *ngIf="playlistURL != null && spotifyUser.id != 'unidentified_user'">
+      <iframe [src]="playlistURL"
+              frameborder="0" width="500px" height="200px" allow="encrypted-media" allowtransparency="true"></iframe>
+    </div>
+    <div class="col-md-2"></div>
+
+  </div>
 </div>
+
+
 

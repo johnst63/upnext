@@ -9,6 +9,7 @@ import {LoginComponent} from './login/login.component';
 import {LoginService} from './login.service';
 import {defer} from 'q';
 import {Router} from '@angular/router';
+import {JsonPipe} from '@angular/common';
 
 // export interface SpotifyConfig {
 //   clientId: string ;
@@ -75,7 +76,7 @@ export class SpotifyService {
           cb(win);
         }
       } catch (e) {}
-    }, 1000);
+    }, 2000);
     return win;
   }
 
@@ -180,7 +181,8 @@ export class SpotifyService {
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
 
     this.albums_url = this.url_base + 'users/' + user_id + '/playlists/' + playlist_id;
-    return this.httpClient.get(this.albums_url, {headers: headers}).map(res => res).catch(this.handleError);
+    return this.httpClient.get(this.albums_url, {headers: headers}).map(res => res
+    ).catch(this.handleError);
   }
 
   addTracksToPlaylist(user_id: string, playlist_id: string, trackURIs: string[]) {

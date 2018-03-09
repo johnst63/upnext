@@ -21,9 +21,4 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  // getUsername(): void {
-  //   this.loginService.getUsername()
-  //     .subscribe(user => this.user = user);
-  // }
-
 }
