@@ -159,6 +159,16 @@ export class SpotifyService {
     return this.httpClient.get(this.albums_url, {headers: headers}).map(res => res).catch(this.handleError);
   }
 
+
+  unfollowPlaylist(user_id: string, playlist_id: string) {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
+    headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    this.album_url = this.url_base + 'users/' + user_id + '/playlists/' + playlist_id + '/followers';
+    return this.httpClient.delete(this.album_url, {headers: headers}).catch(this.handleError);
+  }
+
   addTracksToPlaylist(user_id: string, playlist_id: string, trackURIs: string[]) {
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
     headers = headers.append('Content-Type', 'application/json');
@@ -204,7 +214,6 @@ export class SpotifyService {
       redirect_uri: 'http://localhost:4200/login'
     }, {headers: headers}).pipe(catchError(this.handleError)).subscribe();
   }
-
 
 
   // createPlaylistIfDoesNotExist(playlistToCreate: string, spotifyUserID: string) {
