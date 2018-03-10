@@ -24,7 +24,7 @@ export class RadioComponent implements OnInit {
   playlistID: string;
 
 
-  constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer,
+  constructor(public spotifyService: SpotifyService, private sanitizer: DomSanitizer,
               private dataService: DataService, private db: AngularFireDatabase) {
     // this.tracksFromFirestore = db.list('tracks').valueChanges();
 
