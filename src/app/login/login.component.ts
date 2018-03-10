@@ -1,12 +1,11 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LoginService} from '../login.service';
 import {SpotifyService} from '../angular5-spotify';
 import {Router} from '@angular/router';
 import {SpotifyUser, User} from '../models/user.interface';
 import {DataService} from '../data-service';
 import {Observable} from 'rxjs/Observable';
-import {Playlist, PlaylistSearchResults} from '../models/playlist';
-import {UserPlaylistContainer} from '../models/user-playlist-container';
+import {Playlist} from '../models/playlist';
 
 @Component({
   selector: 'app-login',
@@ -47,12 +46,10 @@ export class LoginComponent implements OnInit {
     // console.log(JSON.stringify(this.user));
     console.log('Authenticating');
     await this.spotifyService.authenticate();
-    this.router.navigate(['/home']);
 
 
     console.log('Requesting Tokens');
     console.log('Done Requesting Tokens');
-    // this.router.navigate(['/home']);
 
     let playlistUpdate = this.containsPlaylist(this.playlistToCreate).filter(result => !result).switchMap(() =>
       this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id));
@@ -60,7 +57,7 @@ export class LoginComponent implements OnInit {
 
     let getUserInfo = this.spotifyService.getUserInfo();
 
-    getUserInfo.toPromise().then((res: SpotifyUser) => {
+    await getUserInfo.toPromise().then((res: SpotifyUser) => {
         console.log('Res.User: ' + res);
         this.spotifyUser = res;
         this.dataService.updateUserID(res);
@@ -75,18 +72,19 @@ export class LoginComponent implements OnInit {
               data => data.items as Playlist[]).filter(
               (res: Playlist[], index) => res[index].name === this.playlistToCreate).subscribe(
               (playlists: Playlist[]) => {
-                this.playlist = playlists['0'];
+                this.spotifyService.playlist = playlists['0'];
                 this.dataService.updatePlaylistID(playlists['0']);
               });
           } else {
             console.log('Res.Playlist: ' + playlist);
-            this.playlist = playlist;
+            this.spotifyService.playlist = playlist;
             this.dataService.updatePlaylistID(playlist);
           }
         },
         rej => console.log('Could Not Retrieve Playlist Info')
       );
     });
+    this.router.navigate(['/home']);
 
     // playlistUpdate.subscribe(
     //   (data: Playlist) => { console.log('Updating Playlist ID'); this.dataService.updatePlaylistID(data); });

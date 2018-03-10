@@ -10,6 +10,7 @@ import {LoginService} from './login.service';
 import {defer} from 'q';
 import {Router} from '@angular/router';
 import {JsonPipe} from '@angular/common';
+import {Playlist} from '../Playlist';
 
 // export interface SpotifyConfig {
 //   clientId: string ;
@@ -46,6 +47,7 @@ export class SpotifyService {
   private access_token: string;
   public searchDone: boolean;
   album: Album;
+  playlist: Playlist;
   constructor(private httpClient: HttpClient) {
   }
 
@@ -90,7 +92,7 @@ export class SpotifyService {
     };
 
     let authCompleted: boolean = false;
-    let scopes: string = 'playlist-modify-public user-read-currently-playing';
+    let scopes: string = 'playlist-modify-public playlist-modify-private user-read-currently-playing';
     let authWindow =  this.openDialog(
       'https://accounts.spotify.com/authorize?' + 'client_id='
       + encodeURIComponent(params.client_id) + '&redirect_uri=' +

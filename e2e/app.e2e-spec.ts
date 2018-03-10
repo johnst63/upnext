@@ -66,26 +66,80 @@ describe('up-next App', () => {
 
 
   it('should search "abc"', function () {
-    browser.executeScript('window.localStorage.clear();');
+    //browser.executeScript('window.localStorage.clear();');
     page.navigateTo('/login');
-    element(by.css('#login_here')).click();
-    browser.getAllWindowHandles().then(function (handles) {
-
-
-    }).then(function () {
-      page.navigateTo('/radio');
-      browser.driver.sleep(100);
-      browser.element(by.css('#searchterm')).sendKeys('abc');
-      browser.driver.sleep(100);
-      browser.element(by.css('#searchbutton')).click();
-      browser.driver.sleep(300);
-
-      let elem = browser.element(by.cssContainingText('#list', 'abc')); // css selector might be causing issues
-      browser.driver.sleep(100);
-      expect(elem).toBe('abc');
+    element(by.css('#login_here')).click().then(function () {
+      return expect(page.getURL()).toBe('http://localhost:5000/login');
     });
-    expect();
+    browser.driver.sleep(1000);
+    expect(page.getURL()).toBe('http://localhost:5000/home');
+    browser.element(by.id('radio')).click();
+    browser.driver.sleep(100);
+    expect(page.getURL()).toBe('http://localhost:5000/radio');
+    browser.element(by.css('#searchterm')).sendKeys('abc');
+    //browser.driver.sleep(100);
+    browser.element(by.css('#searchbutton')).click();
+    browser.driver.sleep(1000);
+    expect(browser.element(by.cssContainingText('p', 'ABC')).isPresent()).toBe(true);
 
+  });
+
+  it('should not show full home page', function () {
+    page.navigateTo('/home');
+    browser.driver.sleep(1000);
+    expect(browser.element(by.id('loginnow')).isPresent()).toBe(true);
+    page.navigateTo('/login');
+    browser.element(by.id('login_here')).click().then(function () {
+      return expect(page.getURL()).toBe('http://localhost:5000/login');
+    });
+    browser.driver.sleep(2000);
+    expect(page.getURL()).toBe('http://localhost:5000/home');
+
+  });
+  // it('should add to database', function () {
+  //   page.navigateTo('/login');
+  //   browser.element(by.id('login_here')).click();
+  //   browser.driver.sleep(2000);
+  //   expect(page.getURL()).toBe('http://localhost:5000/home');
+  //   browser.element(by.id('radio')).click();
+  //   browser.driver.sleep(100);
+  //   browser.element(by.css('#searchterm')).sendKeys('dark necessities');
+  //
+  //   browser.element(by.css('#searchbutton')).click();
+  //   browser.driver.sleep(1000);
+  //   browser.element(by.className('add_track_button')).click();
+  //   browser.element(by.id('home')).click();
+  //   browser.driver.sleep(1000);
+  //   expect(browser.element(by.cssContainingText('p','Dark Necessities')).isPresent()).toBe(true);
+  //
+  // });
+  it('should search multiple times', function () {
+    page.navigateTo('/radio');
+    browser.driver.sleep(100);
+    browser.element(by.css('#searchterm')).sendKeys('123');
+    browser.element(by.css('#searchbutton')).click();
+    let EC = protractor.ExpectedConditions;
+    browser.wait(EC.alertIsPresent(), 5000, 'Alert is not getting present');
+    let temp = browser.switchTo().alert();
+    expect(temp.getText()).toBe('Error: Please login before searching a term!');
+    temp.accept();
+    browser.driver.sleep(1000);
+    expect(browser.element(by.id('tracks_dne')).isPresent()).toBe(true);
+    page.clickHeaderByID('login');
+    browser.element(by.id('login_here')).click();
+    browser.driver.sleep(1000);
+    expect(page.getURL()).toBe('http://localhost:5000/home');
+    page.clickHeaderByID('radio');
+    browser.element(by.id('searchbutton')).click();
+    temp = browser.switchTo().alert();
+    expect(temp.getText()).toBe('Error: Please type a search term in!');
+    temp.accept();
+    browser.driver.sleep(100);
+    browser.element(by.id('searchterm')).sendKeys('scar tissue');
+    browser.element(by.id('searchbutton')).click();
+    browser.driver.sleep(1000);
+    expect(browser.element(by.id('tracks_dne')).isPresent()).toBe(false);
+    expect(browser.element(by.cssContainingText('p', 'Scar Tissue')).isPresent()).toBe(true);
 
   });
 });

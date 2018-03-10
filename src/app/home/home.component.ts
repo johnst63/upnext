@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
   private spotifyUser: SpotifyUser;
   dangerousPlaylistURL: string;
   playlistURL: SafeResourceUrl;
-  private playlist: Playlist;
+   playlist: Playlist;
 
   constructor(private spotifyService: SpotifyService, private route: ActivatedRoute, private sanitizer: DomSanitizer,
               private db: AngularFireDatabase, private dataService: DataService) {
@@ -51,8 +51,7 @@ export class HomeComponent implements OnInit {
       this.dangerousPlaylistURL = 'https://open.spotify.com/embed?uri=spotify:user:'
         + this.spotifyUser.id
         + ':playlist:'
-        + playlist.id
-        + '&view=coverart';
+        + playlist.id;
       this.playlistURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousPlaylistURL);
       console.log('Updated:' + this.dangerousPlaylistURL);
     });

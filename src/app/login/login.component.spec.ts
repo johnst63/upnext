@@ -22,7 +22,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {environment} from '../../environments/environment';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
 import {FormsModule} from '@angular/forms';
-import {InterceptorModule} from '../../interceptor.module';
 
 class RouterStub {
   navigateByUrl(url: string) { return url; }
@@ -48,7 +47,6 @@ describe('LoginComponent', () => {
         HttpClientModule,
         AppRoutingModule,
         FormsModule,
-        InterceptorModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule, // imports firebase/firestore, only needed for database features
         AngularFireDatabaseModule,
