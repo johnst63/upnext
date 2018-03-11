@@ -34,7 +34,7 @@ export class RadioComponent implements OnInit {
   }
 
   onSearch() {
-    if (this.queryterm === undefined) {
+    if (this.queryterm === undefined || this.queryterm === '') {
       alert('Error: Please type a search term in!');
       return;
     }
