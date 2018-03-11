@@ -1,8 +1,18 @@
+
 nav {
-  background-color: rgb(69, 75, 84);
-  /* color: rgb(0,0,0); */
-  color: white;
+  background-color: #005b7c;
+  /* color: rgb(0,0,0)rgb(69, 75, 84); */
+  color: #efefee;
 }
 .mynav {
-  color: white;
+  color: #efefee;
 }
+
+#app_title {
+  color: #721a45;
+  font-weight: bold;
+  padding-top: .4em;
+
+}
+
+

@@ -1,4 +1,3 @@
-
 <!--<p> Playlist URL: {{dangerousPlaylistURL}} USER: {{spotifyUser.id}} </p>-->
 <div class="outer_spotify_frame_container">
 <div class="spotify_frame_container" *ngIf="playlistURL != null && spotifyUser.id != 'unidentified_user'">
@@ -6,9 +5,10 @@
           frameborder="0" width="500px" height="200px" allow="encrypted-media" allowtransparency="true"></iframe>
 </div>
 </div>
-<!--<p align="center">-->
-  <!--home works!-->
-<!--</p>-->
+
+<div id="current_song_container" *ngIf="currentSong != null && currentSong.name != null">
+  <p id="current_song"> Now Playing: <em>{{currentSong.name}}</em> </p>
+</div>
 
 <div id="tracks_list">
 <p *ngIf="dbTrackList == null"> No Tracks Found </p>
@@ -18,4 +18,3 @@
 </div>
 </ng-container>
 </div>
-

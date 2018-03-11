@@ -169,6 +169,15 @@ export class SpotifyService {
     return this.httpClient.delete(this.album_url, {headers: headers}).catch(this.handleError);
   }
 
+  getCurrentSong() {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
+    headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    this.track_url = this.url_base + 'me/player/currently-playing';
+    return this.httpClient.get(this.track_url, {headers: headers}).map(res => res).catch(this.handleError);
+  }
+
   addTracksToPlaylist(user_id: string, playlist_id: string, trackURIs: string[]) {
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
     headers = headers.append('Content-Type', 'application/json');

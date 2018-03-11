@@ -26,6 +26,7 @@ export class HomeComponent implements OnInit {
   dangerousPlaylistURL: string;
   playlistURL: SafeResourceUrl;
   private playlist: Playlist;
+  private currentSong: Track;
 
   constructor(private spotifyService: SpotifyService, private route: ActivatedRoute, private sanitizer: DomSanitizer, private db: AngularFireDatabase, private dataService: DataService) {
 
@@ -45,13 +46,21 @@ export class HomeComponent implements OnInit {
           error => console.log(error),
     );
     // this.spotifyService.getPlaylist(this.spotifyUser.id, '');
+    this.spotifyService.getCurrentSong().subscribe(
+      (data) => { console.log('Current Track: ' + data['item'].name); this.currentSong = data['item'];
+    },
+        err => console.log('Waiting on valid user id')
+    );
+
   }
 
   updatePlaylistURL() {
     this.dataService.getPlaylistID().subscribe((playlist: Playlist) => {
-      this.dangerousPlaylistURL = 'https://open.spotify.com/embed?uri=spotify:user:' + this.spotifyUser.id + ':playlist:' + playlist.id + '&view=coverart';
-      this.playlistURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousPlaylistURL);
-      console.log('Updated:' + this.dangerousPlaylistURL);
+      if (playlist.id !== 'unassigned_playlist') {
+        this.dangerousPlaylistURL = 'https://open.spotify.com/embed?uri=spotify:user:' + this.spotifyUser.id + ':playlist:' + playlist.id + '&view=coverart';
+        this.playlistURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousPlaylistURL);
+        console.log('Updated:' + this.dangerousPlaylistURL);
+      }
     });
 
   }
