@@ -21,7 +21,6 @@ export class RadioComponent implements OnInit {
   spotifyUser: SpotifyUser;
   playlistToCreate: string = 'UpNextPlaylist';
   tracksFromFirestore: Observable<any[]>;
-  playlistID: string;
 
 
   constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer,
