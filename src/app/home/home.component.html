@@ -1,44 +1,30 @@
-<br>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4 text-center">
-      <p *ngIf="spotifyUser.id == 'unidentified_user'">
-        <button class="btn btn-primary" id="loginnow" routerLink="/login">Please Login</button>
-      </p>
-    </div>
-    <div class="col-md-4"></div>
-  </div>
-  <div *ngIf="spotifyUser.id != 'unidentified_user'" id="webplayer">
-    <div class="outer_spotify_frame_container row">
-      <!--<div class="col-md-2">-->
-      <!--</div>-->
-      <div class="col-md-6">
-        <div id="tracks_list">
-          <p id="debugSelector" *ngIf="dbTrackList == null"> No Tracks Found </p>
-          <ng-container *ngIf="spotifyUser.id != 'unidentified_user'">
-            <div class="track_container row" *ngFor="let t of dbTrackList">
-              <div class="col-md-4" style="text-align: right">
-                <button class="btn btn-primary" type="button" data-toggle="button" aria-pressed="false">Like</button>
-              </div>
-              <div class="col-md-8">
-                <p> {{ t.name }} </p>
-
-              </div>
-            </div>
-          </ng-container>
-        </div>
-      </div>
-      <div class="spotify_frame_container col-md-5" *ngIf="playlistURL != null && spotifyUser.id != 'unidentified_user'">
-        <iframe [src]="playlistURL"
-                frameborder="0" width="500px" height="720px" allow="encrypted-media" allowtransparency="true"></iframe>
-      </div>
-      <div class="col-md-1"></div>
-
-    </div>
-  </div>
-
+<!--<p> Playlist URL: {{dangerousPlaylistURL}} USER: {{spotifyUser.id}} </p>-->
+<div class="outer_spotify_frame_container">
+<div class="spotify_frame_container" *ngIf="playlistURL != null && spotifyUser.id != 'unidentified_user'">
+  <iframe [src]="playlistURL"
+          frameborder="0" width="500px" height="200px" allow="encrypted-media" allowtransparency="true"></iframe>
+</div>
 </div>
 
+<div id="current_song_container" *ngIf="currentSong != null && currentSong.name != null">
+  <p id="current_song"> Now Playing: <em>{{currentSong.name}}</em> </p>
+</div>
 
-
+<!--<div id="tracks_list">-->
+<!--<p *ngIf="dbTrackList == null"> No Tracks Found </p>-->
+<!--<ng-container *ngIf="dbTrackList">-->
+<!--<div class="track_container" *ngFor="let t of dbTrackList">-->
+<!--<p> {{ t | tracklistparsepipe}} </p>-->
+<!--</div>-->
+<!--</ng-container>-->
+<!--</div>-->
+<div id="tracks_list">
+  <p *ngIf="tracklistTracks == null"> No Tracks Found </p>
+  <ng-container *ngIf="tracklistTracks">
+    <div class="track_container" *ngFor="let t of tracklistTracks">
+      <button id="upvote" class="voting" (click)="upvote(t)"> ▲ </button>
+      <button id="downvote" class="voting" (click)="downvote(t)"> ▼ </button>
+      <p> {{ t | tracklistparsepipe}}: {{t.votes}}</p>
+    </div>
+  </ng-container>
+</div>

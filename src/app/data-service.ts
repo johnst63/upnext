@@ -3,6 +3,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {SpotifyUser} from './models/user.interface';
 import {Observable} from 'rxjs/Observable';
 import {Playlist} from './models/playlist';
+import {Track} from './models/track';
 
 export class DataService {
   private defaultUser: SpotifyUser = {
@@ -13,6 +14,7 @@ export class DataService {
     id: 'unassigned_playlist',
     name: 'unassigned_playlist'
   };
+
 
   // Playlist Info
   private _pl_data: BehaviorSubject<Playlist> = new BehaviorSubject<Playlist>(this.defaultPlaylist);
@@ -39,6 +41,5 @@ export class DataService {
     console.log('Updating Playlist: ' + playlist.id + ', ' + playlist.name);
     this._pl_data.next(playlist);
   }
-
 
 }

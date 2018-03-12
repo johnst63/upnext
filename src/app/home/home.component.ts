@@ -27,16 +27,34 @@ export class HomeComponent implements OnInit {
   playlistURL: SafeResourceUrl;
   private playlist: Playlist;
   private currentSong: Track;
-
+  private tracklistTracks: Track[];
+  private tracklistKeys: string[];
   constructor(private spotifyService: SpotifyService, private route: ActivatedRoute, private sanitizer: DomSanitizer, private db: AngularFireDatabase, private dataService: DataService) {
 
   }
 
   ngOnInit() {
-    this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
-      this.dbTrackList = data;
-      console.log(data);
+    // this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
+    //   this.dbTrackList = data;
+    //   console.log(data);
+    // });
+
+
+    this.db.list<Track>('tracks').snapshotChanges().map(actions => {
+      return actions.map(action => ({key: action.key, value: action.payload.val()}));
+    }).subscribe(items => {
+      this.tracklistKeys = items.map(item => item.key);
+      this.tracklistTracks = items.map(item => item.value);
+      // let trackArray: Array<string> = [];
+      // this.tracklistTracks.forEach(f => trackArray.push('spotify:track:' + f.id));
+      // console.log(items.map(item => ({key: item.key, value: item.value})));
+      // console.log(trackArray);
+      // this.dataService.updateTracks(items.map(item => ({key: item.key, value: item.value})));
+      // this.dataService.getPlaylistID().subscribe((playlist: Playlist) => {
+      //   this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, playlist.id, trackArray);
+      // });
     });
+
     this.dataService.getUserID().subscribe(
       (data: SpotifyUser) => {
         console.log('Updating Spotify User (HomeComponent)\n' + data.id);
@@ -62,7 +80,50 @@ export class HomeComponent implements OnInit {
         console.log('Updated:' + this.dangerousPlaylistURL);
       }
     });
+  }
 
+  upvote(track: Track) {
+    if (this.spotifyUser.id === 'unidentified_user') {
+      return;
+    }
+    console.log(this.tracklistKeys);
+    let values = this.tracklistTracks;
+    let index = -1;
+    for (let i = 0; i < this.tracklistTracks.length; i++) {
+      if (values[i].id === track.id) {
+        index = i;
+      }
+    }
+    if (index === -1) {
+      return;
+    }
+    track.votes += 1;
+    this.db.list('tracks').update(this.tracklistKeys[index], ({ votes: track.votes }));
+    console.log('upvote');
+    return;
+  }
+
+  downvote(track: Track) {
+    if (this.spotifyUser.id === 'unidentified_user') {
+      return;
+    }
+    console.log(this.tracklistKeys);
+    let values = this.tracklistTracks;
+    let index = -1;
+    for (let i = 0; i < this.tracklistTracks.length; i++) {
+      if (values[i].id === track.id) {
+        index = i;
+      }
+    }
+    if (index === -1) {
+      return;
+    }
+    if (track.votes > Number.MIN_SAFE_INTEGER && track.votes < Number.MAX_SAFE_INTEGER) {
+      track.votes -= 1;
+    }
+    this.db.list('tracks').update(this.tracklistKeys[index], ({ votes: track.votes }));
+    console.log('upvote');
+    return;
   }
 }
 
