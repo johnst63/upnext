@@ -43,10 +43,11 @@ describe('up-next App', () => {
   });
 
   it('should authenticate', function () {
-    browser.executeScript('window.localStorage.clear();');
-    page.navigateTo('login');
-    element(by.css('#login_here')).click();
+    // browser.executeScript('window.localStorage.clear();');
+    page.navigateTo('/login');
 
+    browser.element(by.css('#login_here')).click();
+    browser.driver.sleep(2000);
 
     browser.getAllWindowHandles().then(function (handles) {
       browser.switchTo().window(handles[1]);
@@ -68,7 +69,7 @@ describe('up-next App', () => {
   it('should search "abc"', function () {
     //browser.executeScript('window.localStorage.clear();');
     page.navigateTo('/login');
-    element(by.css('#login_here')).click().then(function () {
+    browser.element(by.css('#login_here')).click().then(function () {
       return expect(page.getURL()).toBe('http://localhost:5000/login');
     });
     browser.driver.sleep(1000);
