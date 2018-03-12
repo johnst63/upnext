@@ -122,7 +122,7 @@ export class HomeComponent implements OnInit {
       track.votes -= 1;
     }
     this.db.list('tracks').update(this.tracklistKeys[index], ({ votes: track.votes }));
-    console.log('upvote');
+    console.log('downvote');
     return;
   }
 }
