@@ -10,7 +10,6 @@ import {HomeComponent} from '../home/home.component';
 import {LoginComponent} from '../login/login.component';
 import {APP_BASE_HREF} from '@angular/common';
 import {AppRoutingModule} from '../app-routing.module';
-import {InterceptorModule} from '../../interceptor.module';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {LoginService} from '../login.service';
 import {HttpClientModule} from '@angular/common/http';
@@ -48,7 +47,6 @@ describe('HeaderComponent', () => {
         HttpClientModule,
         AppRoutingModule,
         FormsModule,
-        InterceptorModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule, // imports firebase/firestore, only needed for database features
         AngularFireDatabaseModule,
@@ -90,7 +88,7 @@ describe('HeaderComponent', () => {
     de = fixture.debugElement.query(By.css('#radio'));
     let elem = de.nativeElement;
 
-    expect(elem.textContent).toContain('Radio');
+    expect(elem.textContent).toContain('Search');
 
     let radfix = TestBed.createComponent(RadioComponent);
     fixture.detectChanges();
@@ -100,7 +98,7 @@ describe('HeaderComponent', () => {
     expect(radfix).toBeTruthy();
     de = radfix.debugElement.query(By.css('#tracks_dne'));
     elem = de.nativeElement;
-    expect(elem.textContent).toContain(' No Tracks Found ');
+    expect(elem.textContent).toContain('No Tracks Found');
   });
 
   it('should navigate to home', function () {
@@ -115,9 +113,7 @@ describe('HeaderComponent', () => {
     expect(component).toBeTruthy();
 
     expect(homfix).toBeTruthy();
-    de = homfix.debugElement.query(By.css('[id=debugSelector]'));
-    elem = de.nativeElement;
-    expect(elem.textContent).toContain(' No Tracks Found ');
+    de = fixture.debugElement.query(By.css('#loginnow'));
   });
   it('should navigate to home from navbrand', function () {
     de = fixture.debugElement.query(By.css('#apphome'));
@@ -131,9 +127,9 @@ describe('HeaderComponent', () => {
     expect(component).toBeTruthy();
 
     expect(homfix).toBeTruthy();
-    de = homfix.debugElement.query(By.css('[id=debugSelector]'));
+    de = homfix.debugElement.query(By.css('#loginnow'));
     elem = de.nativeElement;
-    expect(elem.textContent).toContain(' No Tracks Found ');
+    expect(elem.textContent).toContain('Please Login');
 
   });
 });

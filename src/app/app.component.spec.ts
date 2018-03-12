@@ -11,7 +11,6 @@ import {CallbackComponent} from './callback/callback.component';
 import {HomeComponent} from './home/home.component';
 import {LoginComponent} from './login/login.component';
 import {AppRoutingModule} from './app-routing.module';
-import {InterceptorModule} from '../interceptor.module';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {APP_BASE_HREF} from '@angular/common';
@@ -34,7 +33,6 @@ describe('AppComponent', () => {
         HttpClientModule,
         AppRoutingModule,
         FormsModule,
-        InterceptorModule
       ],
       providers: [LoginService, SpotifyService,
         {provide: APP_BASE_HREF, useValue: '/'}],

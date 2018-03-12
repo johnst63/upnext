@@ -13,7 +13,6 @@ import {CallbackComponent} from '../callback/callback.component';
 import {LoginComponent} from '../login/login.component';
 import {APP_BASE_HREF} from '@angular/common';
 import {AppRoutingModule} from '../app-routing.module';
-import {InterceptorModule} from '../../interceptor.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {TracklistParsePipe} from '../tracklist-parse-pipe';
@@ -47,7 +46,6 @@ describe('HomeComponent', () => {
         HttpClientModule,
         AppRoutingModule,
         FormsModule,
-        InterceptorModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule, // imports firebase/firestore, only needed for database features
         AngularFireDatabaseModule,

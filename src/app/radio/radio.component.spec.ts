@@ -9,7 +9,6 @@ import {LoginComponent} from '../login/login.component';
 import {HeaderComponent} from '../header/header.component';
 import {APP_BASE_HREF, JsonPipe} from '@angular/common';
 import {AppRoutingModule} from '../app-routing.module';
-import {InterceptorModule} from '../../interceptor.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {LoginService} from '../login.service';
 import {HttpClientModule, JsonpClientBackend} from '@angular/common/http';
@@ -48,7 +47,6 @@ describe('RadioComponent', () => {
         HttpClientModule,
         AppRoutingModule,
         FormsModule,
-        InterceptorModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule, // imports firebase/firestore, only needed for database features
         AngularFireDatabaseModule,
@@ -99,7 +97,7 @@ describe('RadioComponent', () => {
   it('should authenticate ', async(() => {
     let spy = spyOn(component.spotifyService, 'authenticate');
  //   setInterval(component.spotifyService.authenticate, 5000);
-  //  component.spotifyService.authenticate();
+    component.spotifyService.authenticate();
     expect(component.spotifyService.authenticate).toHaveBeenCalled();
   }));
 

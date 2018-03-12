@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SpotifyService} from '../angular5-spotify';
 import {Track, Tracks, TrackSearchResults} from '../models/track';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
@@ -7,6 +7,7 @@ import {SpotifyUser} from '../models/user.interface';
 import {AngularFirestore} from 'angularfire2/firestore';
 import {Observable} from 'rxjs/Observable';
 import {AngularFireDatabase} from 'angularfire2/database';
+import {resolveTiming} from '@angular/animations/browser/src/util';
 
 @Component({
   selector: 'app-radio',
@@ -21,21 +22,34 @@ export class RadioComponent implements OnInit {
   spotifyUser: SpotifyUser;
   playlistToCreate: string = 'UpNextPlaylist';
   tracksFromFirestore: Observable<any[]>;
-  playlistID: string;
+  private dbTrackList: Track[];
 
 
-  constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer,
+  constructor(public spotifyService: SpotifyService, private sanitizer: DomSanitizer,
               private dataService: DataService, private db: AngularFireDatabase) {
     // this.tracksFromFirestore = db.list('tracks').valueChanges();
 
   }
 
   ngOnInit() {
+    this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
+      this.dbTrackList = data;
+      console.log(data);
+    });
   }
 
   onSearch() {
+    if (this.queryterm === undefined || this.queryterm === '') {
+      alert('Error: Please type a search term in!');
+      return;
+    }
+    this.dataService.getUserID().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
 
-      this.spotifyService.searchForTrack(this.queryterm)
+    if (this.spotifyUser.id === 'unidentified_user') {
+      alert('Error: Please login before searching a term!');
+      return;
+    }
+    this.spotifyService.searchForTrack(this.queryterm)
       .subscribe(
         (data: TrackSearchResults) => {
           this.trackSearchResults = data['tracks'];
@@ -45,10 +59,7 @@ export class RadioComponent implements OnInit {
       );
 
   }
-  testAdd() {
-    console.log('Adding');
-    this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, '7JSeUPTBQnojSTKFOOpSXJ', ['spotify:track:4iV5W9uYEdYUVa79Axb7Rh', 'spotify:track:1301WleyT98MSxVHPZCA6M']);
-  }
+
 
   /**
    * Needs to add a track to the database and a spotify playlist
@@ -57,7 +68,18 @@ export class RadioComponent implements OnInit {
    * to allow the name/etc to be accessed/displayed on the HomeComponent.
    * @param {Track} track - The track to add
    */
-  onAddTrack(track: Track) {
+
+  async onAddTrack(track: Track) {
+    let check = false;
+    await this.dbTrackList.forEach(function (element) {
+      if (element.id === track.id) {
+        alert('Error: That track already exists in the playlist!');
+        check = true;
+      }
+    });
+    if (check) {
+      return;
+    }
     this.dataService.getUserID().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
     console.log('Logging Data: ' + this.spotifyUser.id);
     console.log('Track ID: ' + track.id);
@@ -68,7 +90,9 @@ export class RadioComponent implements OnInit {
 
 
     const items = this.db.list('tracks');
-    items.push(track);
+    let t2: Track = track;
+    t2.votes = 0;
+    items.push(t2);
   }
 
   containsPlaylist(playlistToCreate: string): Observable<boolean> {

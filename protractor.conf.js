@@ -12,8 +12,10 @@ exports.config = {
   capabilities: {
     'browserName': 'chrome'
   },
+  //SELENIUM_PROMISE_MANAGER: false,
+
   directConnect: true,
-  baseUrl: 'https://upnext-efec3.firebaseapp.com',
+  baseUrl: 'http://localhost:5000',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,

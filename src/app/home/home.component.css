@@ -1,6 +1,9 @@
+
 #tracks_list {
   font-weight: bold;
   text-align: center;
+  color: #0a141b;
+
 }
 
 .spotify_frame_container {
@@ -13,5 +16,24 @@
 .outer_spotify_frame_container {
   margin-top: 1em;
   border: 2px black solid;
-  background-color: grey;
+  background-color: #22688b;
+}
+
+#current_song {
+  margin: auto;
+  text-align: center;
+  color: #f6efeb;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+#current_song_container {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border: 2px black solid;
+  background-color: #721a45;
+}
+
+em {
+  text-decoration: underline;
 }

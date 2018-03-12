@@ -5,10 +5,7 @@ import 'rxjs/add/operator/map';
 import {catchError} from 'rxjs/operators';
 import {Album} from '../Album';
 import {TrackSearchResults} from './models/track';
-import {LoginComponent} from './login/login.component';
-import {LoginService} from './login.service';
 import {defer} from 'q';
-import {Router} from '@angular/router';
 
 // export interface SpotifyConfig {
 //   clientId: string ;
@@ -35,7 +32,6 @@ export class SpotifyService {
   private album_url: string;
   private user_url: string;
   private track_url: string;
-  private ready: boolean = false;
   private auth_url: string = 'https://accounts.spotify.com/authorize';
   private token_url: string = 'https://accounts.spotify.com/api/token/';
   private redirect_url: string = 'http://localhost:5000/callback';
@@ -43,7 +39,6 @@ export class SpotifyService {
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
   private secret_key = 'c1988f4fc8f347918e0ac41b7409163b';
   private access_token: string;
-  public searchDone: boolean;
   album: Album;
   constructor(private httpClient: HttpClient) {
   }
@@ -75,7 +70,7 @@ export class SpotifyService {
           cb(win);
         }
       } catch (e) {}
-    }, 1000);
+    }, 5000);
     return win;
   }
 
@@ -89,7 +84,7 @@ export class SpotifyService {
     };
 
     let authCompleted: boolean = false;
-    let scopes: string = 'playlist-modify-public user-read-currently-playing';
+    let scopes: string = 'playlist-modify-public playlist-modify-private user-read-currently-playing';
     let authWindow =  this.openDialog(
       'https://accounts.spotify.com/authorize?' + 'client_id='
       + encodeURIComponent(params.client_id) + '&redirect_uri=' +
@@ -180,7 +175,27 @@ export class SpotifyService {
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
 
     this.albums_url = this.url_base + 'users/' + user_id + '/playlists/' + playlist_id;
-    return this.httpClient.get(this.albums_url, {headers: headers}).map(res => res).catch(this.handleError);
+    return this.httpClient.get(this.albums_url, {headers: headers}).map(res => res
+    ).catch(this.handleError);
+  }
+
+
+  unfollowPlaylist(user_id: string, playlist_id: string) {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
+    headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    this.album_url = this.url_base + 'users/' + user_id + '/playlists/' + playlist_id + '/followers';
+    return this.httpClient.delete(this.album_url, {headers: headers}).catch(this.handleError);
+  }
+
+  getCurrentSong() {
+    let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
+    headers = headers.append('Content-Type', 'application/json');
+    headers = headers.append('Accept', 'application/json');
+
+    this.track_url = this.url_base + 'me/player/currently-playing';
+    return this.httpClient.get(this.track_url, {headers: headers}).map(res => res).catch(this.handleError);
   }
 
   addTracksToPlaylist(user_id: string, playlist_id: string, trackURIs: string[]) {
@@ -190,7 +205,7 @@ export class SpotifyService {
     this.track_url = this.url_base + 'users/' + user_id + '/playlists/' + playlist_id + '/tracks';
     return this.httpClient.post(this.track_url, {
       uris: trackURIs,
-    }, {headers: headers}).pipe(catchError(this.handleError)).subscribe(data => console.log(data));
+    }, {headers: headers}).pipe(catchError(this.handleError)).map(res => res).subscribe(data => console.log('Added Tracks\n' + data));
   }
 
   getUserInfo() {
@@ -225,34 +240,11 @@ export class SpotifyService {
     return this.httpClient.post(this.token_url, {
       grant_type: 'authorization_code',
       code: auth_key,
-      redirect_uri: 'https://upnext-efec3.firebaseapp.com/callback'
+      redirect_uri: 'http://localhost:4200/login'
     }, {headers: headers}).pipe(catchError(this.handleError)).subscribe();
   }
 
 
-
-  // createPlaylistIfDoesNotExist(playlistToCreate: string, spotifyUserID: string) {
-  //   let playlistSearchResults: TrackSearchResults;
-  //   let alreadyExists: boolean = false;
-  //     this.getUserPlaylists().subscribe(data => {
-  //     playlistSearchResults = data;
-  //     playlistSearchResults.items.forEach(f => {
-  //         if (f.name === playlistToCreate) {
-  //           alreadyExists = true;
-  //           // this.playlist_id = f.id;
-  //         }
-  //       }
-  //     );
-  //   });
-  //   if (!alreadyExists) {
-  //     this.createPlaylist(playlistToCreate, spotifyUserID).subscribe(
-  //       data => {
-  //         // this.playlist_id = data.id;
-  //         console.log('Successfully Created Playlist!');
-  //       },
-  //       error => console.log(error));
-  //   }
-  // }
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = '';
