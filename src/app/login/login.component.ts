@@ -118,23 +118,32 @@ export class LoginComponent implements OnInit {
       );
     }).then(res => {
       console.log('Populate Playlist: \n' + typeof res + ': ' + res.id);
-      return this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
+      return this.db.list<Track>('tracks', ref => ref.orderByChild('votes')).valueChanges().subscribe((data: Track[]) => {
         let trackArray: Array<string> = [];
         let tracksToAdd: Array<string> = [];
-        data.forEach(f => trackArray.push('spotify:track:' + f.id));
-        this.trackArray.push('t');
+
+
+        data.reverse().forEach(f => {
+          trackArray.push('spotify:track:' + f.id);
+          console.log('TA: ' + f.name + ': ' + f.id + ': ' + f.votes);
+        });
+        // this.trackArray.push('dummy');
         console.log('Track Array\n' + trackArray);
-        for (let i = 0; i < trackArray.length; i++) {
-          let alreadyAdded: number = -1;
-          for (let j = 0; j < this.trackArray.length; j++) {
-            if (trackArray[i] === this.trackArray[j]) {
-              console.log(trackArray[i] + ', ' + this.trackArray[j]);
-              alreadyAdded = j;
+        if (this.trackArray !== []) {
+          for (let i = 0; i < trackArray.length; i++) {
+            let alreadyAdded: number = -1;
+            for (let j = 0; j < this.trackArray.length; j++) {
+              if (trackArray[i] === this.trackArray[j]) {
+                console.log(trackArray[i] + ', ' + this.trackArray[j]);
+                alreadyAdded = j;
+              }
+            }
+            if (alreadyAdded === -1) {
+              tracksToAdd.push(trackArray[i]);
             }
           }
-          if (alreadyAdded === -1) {
-            tracksToAdd.push(trackArray[i]);
-          }
+        } else {
+          tracksToAdd = trackArray;
         }
         this.trackArray = trackArray;
         if (tracksToAdd.length !== 0) {

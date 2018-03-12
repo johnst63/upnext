@@ -44,7 +44,9 @@ export class HomeComponent implements OnInit {
       return actions.map(action => ({key: action.key, value: action.payload.val()}));
     }).subscribe(items => {
       this.tracklistKeys = items.map(item => item.key);
-      this.tracklistTracks = items.map(item => item.value);
+      this.tracklistTracks = items.sort((a, b) => {
+        return a.value.votes < b.value.votes ? 1 : -1;
+      }).map(item => item.value);
       // let trackArray: Array<string> = [];
       // this.tracklistTracks.forEach(f => trackArray.push('spotify:track:' + f.id));
       // console.log(items.map(item => ({key: item.key, value: item.value})));
