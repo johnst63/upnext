@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {LoginService} from '../login.service';
 import {User} from '../models/user.interface';
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -20,5 +19,6 @@ export class HeaderComponent implements OnInit {
     this.user = this.loginService.getUsername();
 
   }
+
 
 }

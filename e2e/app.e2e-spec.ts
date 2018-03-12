@@ -42,14 +42,13 @@ describe('up-next App', () => {
     expect(page.getURL()).toBe('http://localhost:5000/home');
   });
 
-  it('should authenticate', function () {
+  it('should authenticate', async function () {
     // browser.executeScript('window.localStorage.clear();');
     page.navigateTo('/login');
 
     browser.element(by.css('#login_here')).click();
-    browser.driver.sleep(2000);
-
-    browser.getAllWindowHandles().then(function (handles) {
+    browser.driver.sleep(1500);
+    await browser.getAllWindowHandles().then(function (handles) {
       browser.switchTo().window(handles[1]);
       browser.element(by.cssContainingText('a', 'Log in to Spotify')).click();
       browser.element(by.css('#login-username')).sendKeys('bduffy2019@gmail.com');
@@ -69,10 +68,8 @@ describe('up-next App', () => {
   it('should search "abc"', function () {
     //browser.executeScript('window.localStorage.clear();');
     page.navigateTo('/login');
-    browser.element(by.css('#login_here')).click().then(function () {
-      return expect(page.getURL()).toBe('http://localhost:5000/login');
-    });
-    browser.driver.sleep(1000);
+    browser.element(by.css('#login_here')).click();
+    browser.driver.sleep(1500);
     expect(page.getURL()).toBe('http://localhost:5000/home');
     browser.element(by.id('radio')).click();
     browser.driver.sleep(100);
@@ -143,7 +140,22 @@ describe('up-next App', () => {
     expect(browser.element(by.cssContainingText('p', 'Scar Tissue')).isPresent()).toBe(true);
 
   });
+  it('should try to add duplicate', function () {
+    page.navigateTo('/login');
+    browser.element(by.id('login_here')).click();
+    browser.driver.sleep(2000);
+    expect(page.getURL()).toBe('http://localhost:5000/home');
+    browser.element(by.id('radio')).click();
+    browser.driver.sleep(100);
+    browser.element(by.id('searchterm')).sendKeys('abc');
+    browser.element(by.id('searchbutton')).click();
+    browser.element(by.className('add_track_button')).click();
+    let temp = browser.switchTo().alert();
+    expect(temp.getText()).toBe('Error: That track already exists in the playlist!');
+    temp.accept();
 
+
+  });
   it('should open up spotify', function () {
     page.navigateTo('/login');
     browser.element(by.id('login_here')).click();
@@ -157,4 +169,5 @@ describe('up-next App', () => {
     browser.driver.sleep(5000);
     expect(page.getURL()).toBe('http://localhost:5000/home');
   });
+
 });
