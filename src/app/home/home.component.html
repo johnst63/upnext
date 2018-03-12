@@ -1,18 +1,18 @@
 <br>
-  <div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4 text-center">
-      <p *ngIf="spotifyUser.id == 'unidentified_user'">
-        <button class="btn btn-primary" id="loginnow" routerLink="/login">Please Login</button>
-      </p>
-    </div>
-    <div class="col-md-4"></div>
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-4 text-center">
+    <p *ngIf="spotifyUser.id == 'unidentified_user'">
+      <button class="btn btn-primary" id="loginnow" routerLink="/login">Please Login</button>
+    </p>
   </div>
-<div class="outer_spotify_frame_container" *ngIf=" spotifyUser.id != 'unidentified_user'">
-  <div class="spotify_frame_container" *ngIf=" spotifyUser.id != 'unidentified_user'">
-    <iframe [src]="playlistURL" id="spotify_iframe"
-            frameborder="0" width="500px" height="200px" allow="encrypted-media" allowtransparency="true"></iframe>
-  </div>
+  <div class="col-md-4"></div>
+</div>
+<div class="outer_spotify_frame_container">
+<div class="spotify_frame_container" *ngIf="playlistURL != null && spotifyUser.id != 'unidentified_user'">
+  <iframe [src]="playlistURL"
+          frameborder="0" width="500px" height="200px" allow="encrypted-media" allowtransparency="true"></iframe>
+</div>
 </div>
 
 <div id="current_song_container" *ngIf="currentSong != null && currentSong.name != null">
@@ -20,10 +20,14 @@
 </div>
 
 <div id="tracks_list">
-  <p *ngIf="dbTrackList == null"> No Tracks Found </p>
-  <ng-container *ngIf="dbTrackList && spotifyUser.id != 'unidentified_user'">
-    <div class="track_container" *ngFor="let t of dbTrackList">
-      <p> {{ t | tracklistparsepipe}} </p>
+  <p *ngIf="tracklistTracks == null"> No Tracks Found </p>
+  <ng-container *ngIf="tracklistTracks">
+    <div class="track_container" *ngFor="let t of tracklistTracks">
+      <div>
+      <button id="upvote" class="voting" (click)="upvote(t)"> ▲ </button>
+      <button id="downvote" class="voting" (click)="downvote(t)"> ▼ </button>
+      <p> {{ t | tracklistparsepipe}}: {{t.votes}}</p>
+      </div>
     </div>
   </ng-container>
 </div>

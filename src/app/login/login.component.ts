@@ -6,8 +6,7 @@ import {SpotifyUser, User} from '../models/user.interface';
 import {DataService} from '../data-service';
 import {Observable} from 'rxjs/Observable';
 import {Playlist, PlaylistSearchResults} from '../models/playlist';
-import {UserPlaylistContainer} from '../models/user-playlist-container';
-import {Track} from '../models/track';
+import {DatabaseTracks, Track} from '../models/track';
 import {AngularFireDatabase} from 'angularfire2/database';
 
 @Component({
@@ -23,8 +22,8 @@ export class LoginComponent implements OnInit {
   user: User;
   playlist: Playlist;
   private playlistToCreate: string = 'UpNextPlaylist';
-  private dbTrackList: Track[];
-
+  private dbTrackList: {key: string, value: Track}[];
+  trackArray: Array<string> = [];
   //todo make this a shared variable with radio component to avoid redundancy
 
   constructor(private loginService: LoginService, private spotifyService: SpotifyService, private router: Router, private dataService: DataService, private db: AngularFireDatabase) {
@@ -117,15 +116,40 @@ export class LoginComponent implements OnInit {
       );
     }).then(res => {
       console.log('Populate Playlist: \n' + typeof res + ': ' + res.id);
-      return this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
+      return this.db.list<Track>('tracks', ref => ref.orderByChild('votes')).valueChanges().subscribe((data: Track[]) => {
         let trackArray: Array<string> = [];
-        data.forEach(f => trackArray.push('spotify:track:' + f.id));
-        console.log(trackArray);
-        return this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, res.id, trackArray);
-      });
-    });
-    this.router.navigate(['/home']);
+        let tracksToAdd: Array<string> = [];
 
+        data.reverse().forEach(f => {
+          trackArray.push('spotify:track:' + f.id);
+          console.log('TA: ' + f.name + ': ' + f.id + ': ' + f.votes);
+        });
+        console.log('--------');
+        // console.log('Track Array\n' + trackArray);
+        if (this.trackArray !== []) {
+          for (let i = 0; i < trackArray.length; i++) {
+            let alreadyAdded: number = -1;
+            for (let j = 0; j < this.trackArray.length; j++) {
+              if (trackArray[i] === this.trackArray[j]) {
+                // console.log(trackArray[i] + ', ' + this.trackArray[j]);
+                alreadyAdded = j;
+              }
+            }
+            if (alreadyAdded === -1) {
+              tracksToAdd.push(trackArray[i]);
+            }
+          }
+        } else {
+          tracksToAdd = trackArray;
+        }
+        this.trackArray = trackArray;
+
+        if (tracksToAdd.length !== 0) {
+          return this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, res.id, tracksToAdd);
+        }
+      });
+
+    });
 
   }
 
