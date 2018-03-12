@@ -10,11 +10,21 @@
   <p id="current_song"> Now Playing: <em>{{currentSong.name}}</em> </p>
 </div>
 
+<!--<div id="tracks_list">-->
+<!--<p *ngIf="dbTrackList == null"> No Tracks Found </p>-->
+<!--<ng-container *ngIf="dbTrackList">-->
+<!--<div class="track_container" *ngFor="let t of dbTrackList">-->
+<!--<p> {{ t | tracklistparsepipe}} </p>-->
+<!--</div>-->
+<!--</ng-container>-->
+<!--</div>-->
 <div id="tracks_list">
-<p *ngIf="dbTrackList == null"> No Tracks Found </p>
-<ng-container *ngIf="dbTrackList">
-<div class="track_container" *ngFor="let t of dbTrackList">
-<p> {{ t | tracklistparsepipe}} </p>
-</div>
-</ng-container>
+  <p *ngIf="tracklistTracks == null"> No Tracks Found </p>
+  <ng-container *ngIf="tracklistTracks">
+    <div class="track_container" *ngFor="let t of tracklistTracks">
+      <button id="upvote" class="voting" (click)="upvote(t)"> ▲ </button>
+      <button id="downvote" class="voting" (click)="downvote(t)"> ▼ </button>
+      <p> {{ t | tracklistparsepipe}}: {{t.votes}}</p>
+    </div>
+  </ng-container>
 </div>

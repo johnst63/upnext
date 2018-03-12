@@ -7,7 +7,7 @@ import {DataService} from '../data-service';
 import {Observable} from 'rxjs/Observable';
 import {Playlist, PlaylistSearchResults} from '../models/playlist';
 import {UserPlaylistContainer} from '../models/user-playlist-container';
-import {Track} from '../models/track';
+import {DatabaseTracks, Track} from '../models/track';
 import {AngularFireDatabase} from 'angularfire2/database';
 
 @Component({
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   user: User;
   playlist: Playlist;
   private playlistToCreate: string = 'UpNextPlaylist';
-  private dbTrackList: Track[];
+  private dbTrackList: {key: string, value: Track}[];
 
   //todo make this a shared variable with radio component to avoid redundancy
 
@@ -121,9 +121,10 @@ export class LoginComponent implements OnInit {
       return this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
         let trackArray: Array<string> = [];
         data.forEach(f => trackArray.push('spotify:track:' + f.id));
-        console.log(trackArray);
+        console.log('Track Array\n' + trackArray);
         return this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, res.id, trackArray);
       });
+
     });
 
     /*

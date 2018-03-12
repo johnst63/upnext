@@ -68,7 +68,9 @@ export class RadioComponent implements OnInit {
 
 
     const items = this.db.list('tracks');
-    items.push(track);
+    let t2: Track = track;
+    t2.votes = 0;
+    items.push(t2);
   }
 
   containsPlaylist(playlistToCreate: string): Observable<boolean> {

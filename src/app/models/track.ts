@@ -24,6 +24,7 @@ export interface Track {
   artist: string;
   id: string;
   uri: string;
+  votes: number;
   // url: SafeResourceUrl;
 }
 
@@ -33,4 +34,9 @@ export interface Tracks {
 
 export interface TrackSearchResults {
   items: Array<Track>;
+}
+
+export interface DatabaseTracks {
+  keys: string[];
+  tracks: Track[];
 }
