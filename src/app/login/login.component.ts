@@ -22,8 +22,9 @@ export class LoginComponent implements OnInit {
   user: User;
   playlist: Playlist;
   private playlistToCreate: string = 'UpNextPlaylist';
-  private dbTrackList: {key: string, value: Track}[];
+  private dbTrackList: { key: string, value: Track }[];
   trackArray: Array<string> = [];
+
   //todo make this a shared variable with radio component to avoid redundancy
 
   constructor(private loginService: LoginService, private spotifyService: SpotifyService, private router: Router, private dataService: DataService, private db: AngularFireDatabase) {
@@ -150,6 +151,7 @@ export class LoginComponent implements OnInit {
       });
 
     });
+    this.router.navigate(['/home']);
 
   }
 

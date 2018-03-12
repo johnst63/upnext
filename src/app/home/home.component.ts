@@ -53,8 +53,8 @@ export class HomeComponent implements OnInit {
     // this.spotifyService.getPlaylist(this.spotifyUser.id, '');
     this.spotifyService.getCurrentSong().subscribe(
       (data) => { this.currentSong = data['item'];
-    },
-        err => console.log('Waiting on valid user id')
+      },
+      err => console.log('Waiting on valid user id')
     );
 
   }
@@ -122,5 +122,4 @@ export class HomeComponent implements OnInit {
 
   }
 }
-
 

@@ -47,7 +47,7 @@ describe('up-next App', () => {
     page.navigateTo('/login');
 
     browser.element(by.css('#login_here')).click();
-    browser.driver.sleep(1500);
+    browser.driver.sleep(1000);
     await browser.getAllWindowHandles().then(function (handles) {
       browser.switchTo().window(handles[1]);
       browser.element(by.cssContainingText('a', 'Log in to Spotify')).click();
@@ -69,13 +69,13 @@ describe('up-next App', () => {
     //browser.executeScript('window.localStorage.clear();');
     page.navigateTo('/login');
     browser.element(by.css('#login_here')).click();
-    browser.driver.sleep(1500);
+    browser.driver.sleep(2000);
     expect(page.getURL()).toBe('http://localhost:5000/home');
     browser.element(by.id('radio')).click();
     browser.driver.sleep(100);
     expect(page.getURL()).toBe('http://localhost:5000/radio');
     browser.element(by.css('#searchterm')).sendKeys('abc');
-    //browser.driver.sleep(100);
+    browser.driver.sleep(100);
     browser.element(by.css('#searchbutton')).click();
     browser.driver.sleep(1000);
     expect(browser.element(by.cssContainingText('p', 'ABC')).isPresent()).toBe(true);
@@ -125,7 +125,7 @@ describe('up-next App', () => {
     expect(browser.element(by.id('tracks_dne')).isPresent()).toBe(true);
     page.clickHeaderByID('login');
     browser.element(by.id('login_here')).click();
-    browser.driver.sleep(1000);
+    browser.driver.sleep(2000);
     expect(page.getURL()).toBe('http://localhost:5000/home');
     page.clickHeaderByID('radio');
     browser.element(by.id('searchbutton')).click();
@@ -155,6 +155,24 @@ describe('up-next App', () => {
     temp.accept();
 
 
+  });
+  it('should upvote', function () {
+    page.navigateTo('/login');
+    browser.element(by.id('login_here')).click();
+    browser.driver.sleep(2000);
+    expect(page.getURL()).toBe('http://localhost:5000/home');
+    let top = browser.element(by.css('p')).getText();
+    browser.element(by.id('upvote')).click();
+    expect(top).not.toBe(browser.element(by.css('p')));
+  });
+  it('should downvote', function () {
+    page.navigateTo('/login');
+    browser.element(by.id('login_here')).click();
+    browser.driver.sleep(2000);
+    expect(page.getURL()).toBe('http://localhost:5000/home');
+    let top = browser.element(by.css('p')).getText();
+    browser.element(by.id('downvote')).click();
+    expect(top).not.toBe(browser.element(by.css('p')));
   });
   it('should open up spotify', function () {
     page.navigateTo('/login');

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SpotifyService} from '../angular5-spotify';
 import {Track, Tracks, TrackSearchResults} from '../models/track';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
@@ -22,6 +22,7 @@ export class RadioComponent implements OnInit {
   spotifyUser: SpotifyUser;
   playlistToCreate: string = 'UpNextPlaylist';
   tracksFromFirestore: Observable<any[]>;
+  private dbTrackList: Track[];
 
 
   constructor(public spotifyService: SpotifyService, private sanitizer: DomSanitizer,
@@ -31,6 +32,10 @@ export class RadioComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
+      this.dbTrackList = data;
+      console.log(data);
+    });
   }
 
   onSearch() {
@@ -55,10 +60,6 @@ export class RadioComponent implements OnInit {
 
   }
 
-  testAdd() {
-    console.log('Adding');
-    this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, '7JSeUPTBQnojSTKFOOpSXJ', ['spotify:track:4iV5W9uYEdYUVa79Axb7Rh', 'spotify:track:1301WleyT98MSxVHPZCA6M']);
-  }
 
   /**
    * Needs to add a track to the database and a spotify playlist
@@ -67,7 +68,18 @@ export class RadioComponent implements OnInit {
    * to allow the name/etc to be accessed/displayed on the HomeComponent.
    * @param {Track} track - The track to add
    */
-  onAddTrack(track: Track) {
+
+  async onAddTrack(track: Track) {
+    let check = false;
+    await this.dbTrackList.forEach(function (element) {
+      if (element.id === track.id) {
+        alert('Error: That track already exists in the playlist!');
+        check = true;
+      }
+    });
+    if (check) {
+      return;
+    }
     this.dataService.getUserID().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
     console.log('Logging Data: ' + this.spotifyUser.id);
     console.log('Track ID: ' + track.id);
