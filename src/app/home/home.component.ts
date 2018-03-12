@@ -16,16 +16,10 @@ import {Playlist} from '../../Playlist';
 
 })
 export class HomeComponent implements OnInit {
-  title = 'UpNext';
-  track: Track;
-  trackList: Tracks;
-  tracks_string: any[];
   tracks: any;
-  dbTrackList: Array<Track>;
   private spotifyUser: SpotifyUser;
   dangerousPlaylistURL: string;
   playlistURL: SafeResourceUrl;
-  private playlist: Playlist;
   private currentSong: Track;
   private tracklistTracks: Track[];
   private tracklistKeys: string[];
@@ -34,27 +28,18 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
-    //   this.dbTrackList = data;
-    //   console.log(data);
-    // });
-
-
     this.db.list<Track>('tracks').snapshotChanges().map(actions => {
       return actions.map(action => ({key: action.key, value: action.payload.val()}));
     }).subscribe(items => {
-      this.tracklistKeys = items.map(item => item.key);
-      this.tracklistTracks = items.sort((a, b) => {
+      this.tracklistKeys = [];
+      this.tracklistTracks = [];
+      items.sort((a, b) => {
         return a.value.votes < b.value.votes ? 1 : -1;
-      }).map(item => item.value);
-      // let trackArray: Array<string> = [];
-      // this.tracklistTracks.forEach(f => trackArray.push('spotify:track:' + f.id));
-      // console.log(items.map(item => ({key: item.key, value: item.value})));
-      // console.log(trackArray);
-      // this.dataService.updateTracks(items.map(item => ({key: item.key, value: item.value})));
-      // this.dataService.getPlaylistID().subscribe((playlist: Playlist) => {
-      //   this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, playlist.id, trackArray);
-      // });
+      }).map(item => {
+        this.tracklistTracks.push(item.value);
+        this.tracklistKeys.push(item.key);
+      });
+      this.tracklistTracks.map(v => console.log(v.name + ': ' + v.votes));
     });
 
     this.dataService.getUserID().subscribe(
@@ -67,7 +52,7 @@ export class HomeComponent implements OnInit {
     );
     // this.spotifyService.getPlaylist(this.spotifyUser.id, '');
     this.spotifyService.getCurrentSong().subscribe(
-      (data) => { console.log('Current Track: ' + data['item'].name); this.currentSong = data['item'];
+      (data) => { this.currentSong = data['item'];
     },
         err => console.log('Waiting on valid user id')
     );
@@ -79,7 +64,7 @@ export class HomeComponent implements OnInit {
       if (playlist.id !== 'unassigned_playlist') {
         this.dangerousPlaylistURL = 'https://open.spotify.com/embed?uri=spotify:user:' + this.spotifyUser.id + ':playlist:' + playlist.id + '&view=coverart';
         this.playlistURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousPlaylistURL);
-        console.log('Updated:' + this.dangerousPlaylistURL);
+        //console.log('Updated:' + this.dangerousPlaylistURL);
       }
     });
   }
@@ -88,7 +73,7 @@ export class HomeComponent implements OnInit {
     if (this.spotifyUser.id === 'unidentified_user') {
       return;
     }
-    console.log(this.tracklistKeys);
+    //console.log(this.tracklistKeys);
     let values = this.tracklistTracks;
     let index = -1;
     for (let i = 0; i < this.tracklistTracks.length; i++) {
@@ -99,17 +84,22 @@ export class HomeComponent implements OnInit {
     if (index === -1) {
       return;
     }
-    track.votes += 1;
-    this.db.list('tracks').update(this.tracklistKeys[index], ({ votes: track.votes }));
-    console.log('upvote');
-    return;
+
+    if (track.votes > Number.MIN_SAFE_INTEGER && track.votes < Number.MAX_SAFE_INTEGER) {
+      console.log(track.name + ': ' + track.votes + ' to ' + (track.votes + 1));
+      // track.votes += 1;
+      console.log('upvote');
+      console.log('Key: ' + this.tracklistKeys[index] + 'Name: ' + this.tracklistTracks[index].name);
+      return this.db.list('tracks').update(this.tracklistKeys[index], ({ votes: track.votes + 1}));
+    }
+
   }
 
   downvote(track: Track) {
     if (this.spotifyUser.id === 'unidentified_user') {
       return;
     }
-    console.log(this.tracklistKeys);
+    //console.log(this.tracklistKeys);
     let values = this.tracklistTracks;
     let index = -1;
     for (let i = 0; i < this.tracklistTracks.length; i++) {
@@ -120,12 +110,16 @@ export class HomeComponent implements OnInit {
     if (index === -1) {
       return;
     }
+
     if (track.votes > Number.MIN_SAFE_INTEGER && track.votes < Number.MAX_SAFE_INTEGER) {
-      track.votes -= 1;
+      console.log(track.name + ': ' + track.votes + ' to ' + (track.votes - 1));
+
+      // track.votes -= 1;
+      console.log('downvote');
+      console.log('Key: ' + this.tracklistKeys[index] + 'Name: ' + this.tracklistTracks[index].name);
+      return this.db.list('tracks').update(this.tracklistKeys[index], ({ votes: track.votes - 1}));
     }
-    this.db.list('tracks').update(this.tracklistKeys[index], ({ votes: track.votes }));
-    console.log('downvote');
-    return;
+
   }
 }
 
