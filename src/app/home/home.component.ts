@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
         this.spotifyUser = data; //gets user_id
         this.updatePlaylistURL();
       },
-          error => console.log(error),
+      error => console.log(error),
     );
     // this.spotifyService.getPlaylist(this.spotifyUser.id, '');
     this.spotifyService.getCurrentSong().subscribe(

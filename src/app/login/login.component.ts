@@ -50,18 +50,17 @@ export class LoginComponent implements OnInit {
     return Promise.resolve(user.id);
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
     this.user.loggedIn = true; // change later
     this.getUsername();
     // console.log(JSON.stringify(this.user));
     console.log('Authenticating');
-    this.spotifyService.authenticate();
+    await this.spotifyService.authenticate();
 
 
     console.log('Requesting Tokens');
     console.log('Done Requesting Tokens');
-    this.router.navigate(['/home']);
 
     let playlistUpdate = this.containsPlaylist(this.playlistToCreate).filter(result => !result).switchMap(() =>
       this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id));
@@ -176,6 +175,7 @@ export class LoginComponent implements OnInit {
     //   this.dataService.updateUserID(this.spotifyUser);
     // });
     //now need to get playlists and if the name does not already exist create a playlist and populate it with songs from database
+    this.router.navigate(['/home']);
 
     // playlistUpdate.subscribe(
     //   (data: Playlist) => { console.log('Updating Playlist ID'); this.dataService.updatePlaylistID(data); });
@@ -189,22 +189,3 @@ export class LoginComponent implements OnInit {
 
 
 }
-
-/*
-
-getUserInfo.toPromise().then((user: SpotifyUser) => {
-        return this.updateUser(user);
-    }).then(function(res) {
-      console.log('spotifyUser.id: ' + res);
-      let updatePlaylist = function () {
-        return typeof that.containsPlaylist(that.playlistToCreate).filter(result => !result).switchMap(() =>
-          that.spotifyService.createPlaylist(that.playlistToCreate, that.spotifyUser.id)).toPromise()
-          .catch(err => { console.log(err); return Promise.reject('Error'); });
-      };
-      return updatePlaylist();
-    }).then((data: Playlist) => {
-      console.log('Second: ' + typeof data + ': ' + data.id);
-      return 'abc';
-    }).catch(err => console.log(err));
-
- */

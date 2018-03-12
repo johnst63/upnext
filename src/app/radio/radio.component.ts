@@ -24,7 +24,7 @@ export class RadioComponent implements OnInit {
   playlistID: string;
 
 
-  constructor(private spotifyService: SpotifyService, private sanitizer: DomSanitizer,
+  constructor(public spotifyService: SpotifyService, private sanitizer: DomSanitizer,
               private dataService: DataService, private db: AngularFireDatabase) {
     // this.tracksFromFirestore = db.list('tracks').valueChanges();
 
@@ -34,8 +34,17 @@ export class RadioComponent implements OnInit {
   }
 
   onSearch() {
+    if (this.queryterm === undefined || this.queryterm === '') {
+      alert('Error: Please type a search term in!');
+      return;
+    }
+    this.dataService.getUserID().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
 
-      this.spotifyService.searchForTrack(this.queryterm)
+    if (this.spotifyUser.id === 'unidentified_user') {
+      alert('Error: Please login before searching a term!');
+      return;
+    }
+    this.spotifyService.searchForTrack(this.queryterm)
       .subscribe(
         (data: TrackSearchResults) => {
           this.trackSearchResults = data['tracks'];
@@ -45,6 +54,7 @@ export class RadioComponent implements OnInit {
       );
 
   }
+
   testAdd() {
     console.log('Adding');
     this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, '7JSeUPTBQnojSTKFOOpSXJ', ['spotify:track:4iV5W9uYEdYUVa79Axb7Rh', 'spotify:track:1301WleyT98MSxVHPZCA6M']);
@@ -61,6 +71,9 @@ export class RadioComponent implements OnInit {
     this.dataService.getUserID().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
     console.log('Logging Data: ' + this.spotifyUser.id);
     console.log('Track ID: ' + track.id);
+
+    //TODO need to now add the track to the playlist ...
+    this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, this.spotifyService.playlist.id, ['spotify:track:' + track.id]);
     // this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id); //if can get angular5-spotify to work with createPlaylist
     // if playlist does not already exist create a playlist
     this.containsPlaylist(this.playlistToCreate).filter(result => !result).switchMap(() =>

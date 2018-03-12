@@ -12,12 +12,14 @@ exports.config = {
   capabilities: {
     'browserName': 'chrome'
   },
+  //SELENIUM_PROMISE_MANAGER: false,
+
   directConnect: true,
-  baseUrl: 'http://localhost:4200/',
+  baseUrl: 'http://localhost:5000',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
-    defaultTimeoutInterval: 30000,
+    defaultTimeoutInterval: 120000,
     print: function() {}
   },
   onPrepare() {
@@ -26,4 +28,5 @@ exports.config = {
     });
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
   }
+
 };

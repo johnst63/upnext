@@ -5,6 +5,12 @@ import 'rxjs/add/operator/map';
 import {catchError} from 'rxjs/operators';
 import {Album} from '../Album';
 import {TrackSearchResults} from './models/track';
+import {LoginComponent} from './login/login.component';
+import {LoginService} from './login.service';
+import {defer} from 'q';
+import {Router} from '@angular/router';
+import {JsonPipe} from '@angular/common';
+import {Playlist} from '../Playlist';
 
 // export interface SpotifyConfig {
 //   clientId: string ;
@@ -31,14 +37,17 @@ export class SpotifyService {
   private album_url: string;
   private user_url: string;
   private track_url: string;
+  private ready: boolean = false;
   private auth_url: string = 'https://accounts.spotify.com/authorize';
   private token_url: string = 'https://accounts.spotify.com/api/token/';
-  private redirect_url: string = 'http://localhost:4200';
+  private redirect_url: string = 'http://localhost:5000/callback';
 
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
   private secret_key = 'c1988f4fc8f347918e0ac41b7409163b';
   private access_token: string;
+  public searchDone: boolean;
   album: Album;
+  playlist: Playlist;
   constructor(private httpClient: HttpClient) {
   }
 
@@ -59,7 +68,7 @@ export class SpotifyService {
   }
 
 
-  openDialog (uri, name, options, cb) {
+   openDialog (uri, name, options, cb) {
     let win = window.open(uri, name, options);
 
     let interval = window.setInterval(function () {
@@ -69,38 +78,56 @@ export class SpotifyService {
           cb(win);
         }
       } catch (e) {}
-    }, 1000);
+    }, 2000);
     return win;
   }
-  authenticate() {
+
+   async authenticate(){
+    let deffered = defer();
+    let that = this;
     let params = {
       client_id: 'd4800b9ac98e4e09a15db22fc6a33f9f',
-      redirect_uri: 'http://localhost:4200/callback',
+      redirect_uri: 'http://localhost:5000/callback',
       response_type: 'token'
     };
 
     let authCompleted: boolean = false;
-    let scopes: string = 'playlist-modify-public user-read-currently-playing';
-    let authWindow = this.openDialog(
+    let scopes: string = 'playlist-modify-public playlist-modify-private user-read-currently-playing';
+    let authWindow =  this.openDialog(
       'https://accounts.spotify.com/authorize?' + 'client_id='
       + encodeURIComponent(params.client_id) + '&redirect_uri=' +
       encodeURIComponent(params.redirect_uri) + '&response_type='
       + encodeURIComponent(params.response_type) + '&scope=' + encodeURIComponent(scopes),
       'Spotify',
       'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=' + 600 + ',height=' + 400 + ',top=' + 100 + ',left=' + 100,
-      function () {
-
+       function () {
+        if (!authCompleted) {
+          deffered.reject('error deffered');
+        }
         console.log('Auth Callback');
         console.log('token: ' + localStorage.getItem('spotify-token')); //TODO WED DIFOSDFJOIWEJ
-
+        this.access_token =  localStorage.getItem('spotify-token');
 
       }
     );
-    this.access_token = localStorage.getItem('spotify-token');
+
     console.log('Access token: ' + this.access_token);
     //TODO do stuff with the token now
-
+     function storageChanged(e) {
+       if (e.key === 'spotify-token') {
+         if(authWindow) {
+           authWindow.close();
+         }
+         authCompleted = true;
+         that.access_token = e.newValue;
+         window.removeEventListener('storage',storageChanged, false);
+         deffered.resolve(e.newValue);
+       }
+     }
+     window.addEventListener('storage', storageChanged,false);
+     return deffered.promise;
   }
+
 
   getTrack(trackId: string) {
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token)
@@ -156,7 +183,8 @@ export class SpotifyService {
     let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.access_token);
 
     this.albums_url = this.url_base + 'users/' + user_id + '/playlists/' + playlist_id;
-    return this.httpClient.get(this.albums_url, {headers: headers}).map(res => res).catch(this.handleError);
+    return this.httpClient.get(this.albums_url, {headers: headers}).map(res => res
+    ).catch(this.handleError);
   }
 
 
@@ -220,7 +248,7 @@ export class SpotifyService {
     return this.httpClient.post(this.token_url, {
       grant_type: 'authorization_code',
       code: auth_key,
-      redirect_uri: 'http://localhost:4200/login'
+      redirect_uri: 'https://upnext-efec3.firebaseapp.com/callback'
     }, {headers: headers}).pipe(catchError(this.handleError)).subscribe();
   }
 
