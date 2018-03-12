@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
     let that = this;
 
     //Get User ID
-    getUserInfo.toPromise().then((res: SpotifyUser) => {
+    await getUserInfo.toPromise().then((res: SpotifyUser) => {
         console.log('Login: GetUser: ' + res.id);
         this.spotifyUser = res;
         this.dataService.updateUserID(res);
@@ -124,61 +124,8 @@ export class LoginComponent implements OnInit {
         return this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, res.id, trackArray);
       });
     });
-
-    /*
-    .then(res => {
-      console.log('Populate Playlist: \n' + typeof res + ': ' + res.id);
-      return this.db.list<Track>('tracks').valueChanges().toPromise().then((data: Track[]) => {
-        console.log('Test');
-        let trackArray: Array<string> = [];
-        data.forEach(f => trackArray.push(f.id));
-        console.log(trackArray);
-        return trackArray;
-      }).then(trackArray => {
-        console.log('Called Add Function: ' + trackArray);
-
-        return this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, res[0].id, trackArray).toPromise().then(() => { console.log('added'); });
-      });
-    });
-
-     */
-
-
-
-
-    // .map((data: SpotifyUser)  => Object.assign({}, this.spotifyUser, { id: data.id}));
-
-    // Observable.merge(getUserInfo.mapTo(this.spotifyUser), playlistUpdate.mapTo(this.playlist)).take(2).subscribe(
-    //   (res) => {
-    //     if (typeof(res) === typeof(this.playlist)) {
-    //       console.log(typeof(res));
-    //       console.log(typeof(this.playlist));
-    //       console.log('Res.Playlist: ' + res);
-    //
-    //       this.playlist = res;
-    //       this.dataService.updatePlaylistID(res);
-    //     } else if (typeof(res) === typeof(this.spotifyUser)) {
-    //       console.log('Res.User: ' + res);
-    //
-    //       this.spotifyUser = res;
-    //       this.dataService.updateUserID(res);
-    //     }
-    //     // console.log('DATA>NEXT: \n' + res.next());
-    //     // this.dataService.updateUserID(res.spotifyUser);
-    //   },
-    //   err => console.log('Error: ' + err),
-    // );
-
-
-    // this.spotifyService.getUserInfo().subscribe((data: SpotifyUser) => {
-    //   this.spotifyUser = data,
-    //   this.dataService.updateUserID(this.spotifyUser);
-    // });
-    //now need to get playlists and if the name does not already exist create a playlist and populate it with songs from database
     this.router.navigate(['/home']);
 
-    // playlistUpdate.subscribe(
-    //   (data: Playlist) => { console.log('Updating Playlist ID'); this.dataService.updatePlaylistID(data); });
 
   }
 

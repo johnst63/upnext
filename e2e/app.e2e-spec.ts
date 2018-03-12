@@ -142,4 +142,18 @@ describe('up-next App', () => {
     expect(browser.element(by.cssContainingText('p', 'Scar Tissue')).isPresent()).toBe(true);
 
   });
+
+  it('should open up spotify', function () {
+    page.navigateTo('/login');
+    browser.element(by.id('login_here')).click();
+    browser.driver.sleep(2000);
+    expect(page.getURL()).toBe('http://localhost:5000/home');
+    browser.switchTo().frame(0);
+    browser.driver.sleep(1000);
+    browser.driver.findElement(by.id('play-button')).click();
+    browser.switchTo().defaultContent();
+    browser.waitForAngular();
+    browser.driver.sleep(5000);
+    expect(page.getURL()).toBe('http://localhost:5000/home');
+  });
 });

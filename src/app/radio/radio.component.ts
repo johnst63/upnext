@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SpotifyService} from '../angular5-spotify';
 import {Track, Tracks, TrackSearchResults} from '../models/track';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
@@ -7,6 +7,7 @@ import {SpotifyUser} from '../models/user.interface';
 import {AngularFirestore} from 'angularfire2/firestore';
 import {Observable} from 'rxjs/Observable';
 import {AngularFireDatabase} from 'angularfire2/database';
+import {resolveTiming} from '@angular/animations/browser/src/util';
 
 @Component({
   selector: 'app-radio',
@@ -22,6 +23,7 @@ export class RadioComponent implements OnInit {
   playlistToCreate: string = 'UpNextPlaylist';
   tracksFromFirestore: Observable<any[]>;
   playlistID: string;
+  private dbTrackList: Track[];
 
 
   constructor(public spotifyService: SpotifyService, private sanitizer: DomSanitizer,
@@ -31,6 +33,10 @@ export class RadioComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.db.list<Track>('tracks').valueChanges().subscribe((data: Track[]) => {
+      this.dbTrackList = data;
+      console.log(data);
+    });
   }
 
   onSearch() {
@@ -67,13 +73,20 @@ export class RadioComponent implements OnInit {
    * to allow the name/etc to be accessed/displayed on the HomeComponent.
    * @param {Track} track - The track to add
    */
-  onAddTrack(track: Track) {
+  async onAddTrack(track: Track) {
+    let check = false;
+    await this.dbTrackList.forEach(function (element) {
+      if (element.id === track.id) {
+        alert('Error: That track already exists in the playlist!');
+        check = true;
+      }
+    });
+    if (check) {
+      return;
+    }
     this.dataService.getUserID().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
     console.log('Logging Data: ' + this.spotifyUser.id);
     console.log('Track ID: ' + track.id);
-
-    //TODO need to now add the track to the playlist ...
-    this.spotifyService.addTracksToPlaylist(this.spotifyUser.id, this.spotifyService.playlist.id, ['spotify:track:' + track.id]);
     // this.spotifyService.createPlaylist(this.playlistToCreate, this.spotifyUser.id); //if can get angular5-spotify to work with createPlaylist
     // if playlist does not already exist create a playlist
     this.containsPlaylist(this.playlistToCreate).filter(result => !result).switchMap(() =>
