@@ -25,6 +25,7 @@ export interface Track {
   id: string;
   uri: string;
   votes: number;
+  is_playing: boolean;
   // url: SafeResourceUrl;
 }
 

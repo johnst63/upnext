@@ -34,7 +34,9 @@ export class SpotifyService {
   private track_url: string;
   private auth_url: string = 'https://accounts.spotify.com/authorize';
   private token_url: string = 'https://accounts.spotify.com/api/token/';
-  private redirect_url: string = 'https://upnext-efec3.firebaseapp.com/callback';
+  private redirect_url: string = 'http://localhost:5000/callback';
+  // private redirect_uri: string = 'https://upnext-efec3.firebaseapp.com/callback';
+
 
   private client_id = 'd4800b9ac98e4e09a15db22fc6a33f9f';
   private secret_key = 'c1988f4fc8f347918e0ac41b7409163b';
@@ -70,7 +72,7 @@ export class SpotifyService {
           cb(win);
         }
       } catch (e) {}
-    }, 5000);
+    }, 1500);
     return win;
   }
 
@@ -79,7 +81,9 @@ export class SpotifyService {
     let that = this;
     let params = {
       client_id: 'd4800b9ac98e4e09a15db22fc6a33f9f',
-      redirect_uri: 'https://upnext-efec3.firebaseapp.com/callback',
+      // redirect_uri: 'https://upnext-efec3.firebaseapp.com/callback',
+      redirect_uri: 'http://localhost:5000/callback',
+
       response_type: 'token'
     };
 
@@ -194,7 +198,7 @@ export class SpotifyService {
     headers = headers.append('Content-Type', 'application/json');
     headers = headers.append('Accept', 'application/json');
 
-    this.track_url = this.url_base + 'me/player/currently-playing';
+    this.track_url = this.url_base + 'me/player/currently-playing'; // TODO changed this
     return this.httpClient.get(this.track_url, {headers: headers}).map(res => res).catch(this.handleError);
   }
 

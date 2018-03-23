@@ -39,16 +39,16 @@ export class RadioComponent implements OnInit {
   }
 
   onSearch() {
-    if (this.queryterm === undefined || this.queryterm === '') {
-      alert('Error: Please type a search term in!');
-      return;
-    }
+    // if (this.queryterm === undefined || this.queryterm === '') {
+    //   alert('Error: Please type a search term in!');
+    //   return;
+    // }
     this.dataService.getUserID().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
 
-    if (this.spotifyUser.id === 'unidentified_user') {
-      alert('Error: Please login before searching a term!');
-      return;
-    }
+    // if (this.spotifyUser.id === 'unidentified_user') {
+    //   alert('Error: Please login before searching a term!');
+    //   return;
+    // }
     this.spotifyService.searchForTrack(this.queryterm)
       .subscribe(
         (data: TrackSearchResults) => {
@@ -70,16 +70,16 @@ export class RadioComponent implements OnInit {
    */
 
   async onAddTrack(track: Track) {
-    let check = false;
-    await this.dbTrackList.forEach(function (element) {
-      if (element.id === track.id) {
-        alert('Error: That track already exists in the playlist!');
-        check = true;
-      }
-    });
-    if (check) {
-      return;
-    }
+    // let check = false;
+    // await this.dbTrackList.forEach(function (element) {
+    //   if (element.id === track.id) {
+    //     alert('Error: That track already exists in the playlist!');
+    //     check = true;
+    //   }
+    // });
+    // if (check) {
+    //   return;
+    // }
     this.dataService.getUserID().subscribe((data: SpotifyUser) => this.spotifyUser = data); //gets user_id
     console.log('Logging Data: ' + this.spotifyUser.id);
     console.log('Track ID: ' + track.id);
@@ -91,7 +91,7 @@ export class RadioComponent implements OnInit {
 
     const items = this.db.list('tracks');
     let t2: Track = track;
-    t2.votes = 0;
+    t2.votes = 0; // TODO maybe add a random value to votes introducing a new bug
     items.push(t2);
   }
 

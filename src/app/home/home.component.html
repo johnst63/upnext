@@ -2,32 +2,32 @@
 <div class="row">
   <div class="col-md-4"></div>
   <div class="col-md-4 text-center">
-    <p *ngIf="spotifyUser.id == 'unidentified_user'">
+    <p >
       <button class="btn btn-primary" id="loginnow" routerLink="/login">Please Login</button>
     </p>
   </div>
   <div class="col-md-4"></div>
 </div>
-<!--<p> Playlist URL: {{dangerousPlaylistURL}} USER: {{spotifyUser.id}} </p>-->
-<div class="outer_spotify_frame_container" *ngIf="spotifyUser.id != 'unidentified_user'">
-  <div class="spotify_frame_container" *ngIf="playlistURL != null && spotifyUser.id != 'unidentified_user'">
+<div class="outer_spotify_frame_container" >
+  <div class="spotify_frame_container" *ngIf="playlistURL != null">
     <iframe [src]="playlistURL"
             frameborder="0" width="500px" height="200px" allow="encrypted-media" allowtransparency="true"></iframe>
   </div>
 </div>
 
 <div id="current_song_container" *ngIf="currentSong != null && currentSong.name != null">
-  <p id="current_song"> Now Playing: <em>{{currentSong.name}}</em> </p>
+  <p id="current_song" > Now Playing: <em>{{currentSong.name}}</em> </p>
 </div>
 
-<div id="tracks_list" *ngIf="spotifyUser.id != 'unidentified_user'">
+<div id="tracks_list" >
   <p *ngIf="tracklistTracks == null"> No Tracks Found </p>
   <ng-container *ngIf="tracklistTracks">
     <div class="track_container" *ngFor="let t of tracklistTracks">
       <div>
-        <button id="upvote" class="voting" (click)="upvote(t)"> ▲ </button>
-        <button id="downvote" class="voting" (click)="downvote(t)"> ▼ </button>
-        <p> {{ t | tracklistparsepipe}}: {{t.votes}}</p>
+        <button id="upvote" class="voting" (click)="downvote(t)"> ▲ </button>
+        <button id="downvote" class="voting" (click)="upvote(t)"> ▼ </button>
+        <p> {{ t | tracklistparsepipe}}: {{t.votes}}</p>         <!--TODO maybe change t.votes to t.votes+1-->
+
       </div>
     </div>
   </ng-container>

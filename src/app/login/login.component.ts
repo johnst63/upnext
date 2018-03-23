@@ -54,9 +54,8 @@ export class LoginComponent implements OnInit {
     this.submitted = true;
     this.user.loggedIn = true; // change later
     this.getUsername();
-    // console.log(JSON.stringify(this.user));
     console.log('Authenticating');
-    await this.spotifyService.authenticate();
+     this.spotifyService.authenticate();
 
 
     console.log('Requesting Tokens');
@@ -151,7 +150,7 @@ export class LoginComponent implements OnInit {
       });
 
     });
-    this.router.navigate(['/home']);
+     this.router.navigate(['/home']);
 
   }
 

@@ -50,7 +50,6 @@ export class HomeComponent implements OnInit {
       },
       error => console.log(error),
     );
-    // this.spotifyService.getPlaylist(this.spotifyUser.id, '');
     this.spotifyService.getCurrentSong().subscribe(
       (data) => { this.currentSong = data['item'];
       },
@@ -70,10 +69,10 @@ export class HomeComponent implements OnInit {
   }
 
   upvote(track: Track) {
-    if (this.spotifyUser.id === 'unidentified_user') {
-      return;
-    }
-    //console.log(this.tracklistKeys);
+
+    // if (this.spotifyUser.id === 'unidentified_user') {
+    //   return;
+    // }
     let values = this.tracklistTracks;
     let index = -1;
     for (let i = 0; i < this.tracklistTracks.length; i++) {
@@ -85,13 +84,13 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    if (track.votes > Number.MIN_SAFE_INTEGER && track.votes < Number.MAX_SAFE_INTEGER) {
-      console.log(track.name + ': ' + track.votes + ' to ' + (track.votes + 1));
-      // track.votes += 1;
-      console.log('upvote');
-      console.log('Key: ' + this.tracklistKeys[index] + 'Name: ' + this.tracklistTracks[index].name);
+    // if (track.votes > Number.MIN_SAFE_INTEGER && track.votes < Number.MAX_SAFE_INTEGER) {
+      // console.log(track.name + ': ' + track.votes + ' to ' + (track.votes + 1));
+      // // track.votes += 1;
+      // console.log('upvote');
+      // console.log('Key: ' + this.tracklistKeys[index] + 'Name: ' + this.tracklistTracks[index].name);
       return this.db.list('tracks').update(this.tracklistKeys[index], ({ votes: track.votes + 1}));
-    }
+    // }
 
   }
 
@@ -111,14 +110,14 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    if (track.votes > Number.MIN_SAFE_INTEGER && track.votes < Number.MAX_SAFE_INTEGER) {
-      console.log(track.name + ': ' + track.votes + ' to ' + (track.votes - 1));
-
-      // track.votes -= 1;
-      console.log('downvote');
-      console.log('Key: ' + this.tracklistKeys[index] + 'Name: ' + this.tracklistTracks[index].name);
+    // if (track.votes > Number.MIN_SAFE_INTEGER && track.votes < Number.MAX_SAFE_INTEGER) {
+    //   console.log(track.name + ': ' + track.votes + ' to ' + (track.votes - 1));
+    //
+    //   // track.votes -= 1;
+    //   console.log('downvote');
+    //   console.log('Key: ' + this.tracklistKeys[index] + 'Name: ' + this.tracklistTracks[index].name);
       return this.db.list('tracks').update(this.tracklistKeys[index], ({ votes: track.votes - 1}));
-    }
+    // }
 
   }
 }
